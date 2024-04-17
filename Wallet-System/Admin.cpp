@@ -1,7 +1,7 @@
 #include "Admin.h"
 #include "User.h"
 
-int Admin::get_Index(string user_name) {
+int getIndex(string user_name) {
 	for (int i = 0; i <= users.size(); i++) {
 		if (users[i].name == user_name) {
 			return i;
@@ -11,33 +11,43 @@ int Admin::get_Index(string user_name) {
 		}
 	}
 }
-//void Admin::delete_User(string deleted_User_Name) {
-//
-//	int position = Admin::get_Index(deleted_User_Name);
-//
-//	Admin::users.erase(position);
-//	unique_Users_Name.erase(deleted_User_Name);
-//}
-void Admin::suspendUsers(string suspended_User_Name) {
-	int position = Admin::get_Index(suspended_User_Name);
+
+void deleteUser(string deletedUserName) {
+
+	int position = getIndex(deletedUserName);
+	users.erase(position);
+	uniqueUserName.erase(deletedUserName);
+}
+
+void suspendUsers(string suspendedUserName) {
+	int position = getIndex(suspendedUserName);
 	users.at(position).susbended_Flag = true;
 }
-void Admin::adjust_User_Balance(string adjusted_user_name, int value) {
-	int position = Admin::get_Index(adjusted_user_name);
 
+void adjustUserBalance(string adjustedUserName, int value) {
+	int position = getIndex(adjustedUserName);
 	users.at(position).balance = value;
+}
 
-}
-void Admin::viewUsers()
+//void viewUsers()
+//{
+//	for (int i = 0; i <= users.size(); i++) {
+//		cout << "Username : " << users.at(i).name << "\t Balance : " << users.at(i).balance
+//			<< endl;
+//		for (int j = 0; j < users.at(i).transactions.size(); i++)
+//		{
+//			cout << "Transaction " << j + 1 << " :" << users.at(i).transactions.at(j);
+//		}
+//		cout << "************************************************************************";
+//	}
+//}
+vector<User> viewUsers()
 {
+	vector<User> userVec;
 	for (int i = 0; i <= users.size(); i++) {
-		cout << "Username : " << users.at(i).name << "\t Balance : " << users.at(i).balance
-			<< endl;
-		for (int j = 0; j < users.at(i).transactions.size(); i++)
-		{
-			cout << "Transaction " << j + 1 << " :" << users.at(i).transactions.at(j);
-		}
-		cout << "************************************************************************";
+		userVec.push_back(users.at(i))
 	}
+	return userVec;
 }
-	bool Admin::isUnique(string name) {return !unique_Users_Name.count(name);}
+
+bool isUnique(string name) { return !uniqueUserName.count(name); }
