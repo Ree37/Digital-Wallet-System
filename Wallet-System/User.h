@@ -12,8 +12,8 @@ private:
 	string password;
 	float balance;
 	bool susbended_Flag;
-	vector<Transaction> sentTransactions;
-	vector<Transaction> receivedTransactions;
+	vector<Transaction*> sentTransactions;
+	vector<Transaction*> receivedTransactions;
 	static vector<User*> users;
 public:
 	User(string username, string password);
@@ -27,8 +27,8 @@ public:
 	bool isUniqueUsername();
 	void addUser();
 	static vector<User*> getUsers();
-	vector<Transaction> getSentTranactions();
-	vector<Transaction> getReceivedTranactions();
+	vector<Transaction*> getSentTranactions();
+	vector<Transaction*> getReceivedTranactions();
 
 };
 
@@ -42,7 +42,6 @@ public:
 	Transaction(User sender, User recipient, float amount);
 	bool checkSenderBalance();
 	void sendAmount();
-	void addToSentTransactions();
-	void addToReceivedTransactions();
+	void addTransaction();
 };
 
