@@ -3,6 +3,7 @@
 #include <iostream>
 using namespace std;
 
+//Users functions
 User::User(string username, string password) {
 	// Input Validation: check if username or password is empty
 	if (username.empty() || password.empty()) {
@@ -29,4 +30,11 @@ void User::addUser() {
 }
 vector<User*> User::getUsers() {
 	return users;
+}
+
+//Transaction functions
+Transaction::Transaction(User sender, User recipient, float amount) {
+	this->sender = &sender;
+	this->recipient = &recipient;
+	this->amount = amount;
 }
