@@ -7,23 +7,25 @@ class Transaction;
 
 class User
 {
-private:
-	string username;
-	string password;
-	float balance;
-	static vector<User*> users;
-	vector<Transaction> sentTransictions;
-	vector<Transaction> receivedTransactions;
-public:
-	User(string username, string password);
-	string getUsername();
-	string getPassword();
-	float getBalance();
-	void setUsername(string newUsername);
-	void setPassword(string newPassword);
-	bool strongPassword();
-	bool isUniqueUsername();
-	void addUser();
+	public:
+		string username;
+		string password;
+		float balance;
+		bool susbended_Flag;
+		static vector<User*> users;
+		vector<Transaction> sentTransictions;
+		vector<Transaction> receivedTransactions;
+
+		User(string username, string password);
+		User(string id);
+		string getUsername();
+		string getPassword();
+		float getBalance();
+		void setUsername(string newUsername);
+		void setPassword(string newPassword);
+		bool strongPassword();
+		bool isUniqueUsername();
+		void addUser();
 
 };
 

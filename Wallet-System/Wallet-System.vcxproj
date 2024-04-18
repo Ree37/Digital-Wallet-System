@@ -130,6 +130,7 @@
     <ClCompile Include="Admin.cpp" />
     <ClCompile Include="CLI.cpp" />
     <ClCompile Include="Files.cpp" />
+    <ClCompile Include="Security\Utils.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="User.cpp" />
   </ItemGroup>
@@ -137,6 +138,7 @@
     <ClInclude Include="Admin.h" />
     <ClInclude Include="CLI.h" />
     <ClInclude Include="Files.h" />
+    <ClInclude Include="Security\Utils.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
