@@ -27,3 +27,6 @@ string User::getPassword() { return password; };
 void User::addUser() {
 	users.push_back(this);
 }
+vector<User*> User::getUsers() {
+	return users;
+}
