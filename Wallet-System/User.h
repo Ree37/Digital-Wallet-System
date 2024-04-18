@@ -12,7 +12,7 @@ private:
 	string password;
 	float balance;
 	bool susbended_Flag;
-	vector<Transaction> sentTransictions;
+	vector<Transaction> sentTransactions;
 	vector<Transaction> receivedTransactions;
 	static vector<User*> users;
 public:
@@ -27,6 +27,8 @@ public:
 	bool isUniqueUsername();
 	void addUser();
 	static vector<User*> getUsers();
+	vector<Transaction> getSentTranactions();
+	vector<Transaction> getReceivedTranactions();
 
 };
 

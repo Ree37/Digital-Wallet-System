@@ -31,6 +31,12 @@ void User::addUser() {
 vector<User*> User::getUsers() {
 	return users;
 }
+vector<Transaction> User::getSentTranactions() {
+	return sentTransactions;
+}
+vector<Transaction> User::getReceivedTranactions() {
+	return receivedTransactions;
+}
 
 //Transaction functions
 Transaction::Transaction(User sender, User recipient, float amount) {
