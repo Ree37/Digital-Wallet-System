@@ -7,15 +7,15 @@ class Transaction;
 
 class User
 {
-	public:
+private:
 		string username;
 		string password;
 		float balance;
 		bool susbended_Flag;
-		static vector<User*> users;
 		vector<Transaction> sentTransictions;
 		vector<Transaction> receivedTransactions;
-
+		static vector<User*> users;
+public:
 		User(string username, string password);
 		User(string id);
 		string getUsername();
@@ -26,6 +26,7 @@ class User
 		bool strongPassword();
 		bool isUniqueUsername();
 		void addUser();
+		static void getUsers();
 
 };
 
