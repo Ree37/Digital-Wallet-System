@@ -31,10 +31,10 @@ void User::addUser() {
 vector<User*> User::getUsers() {
 	return users;
 }
-vector<Transaction> User::getSentTranactions() {
+vector<Transaction*> User::getSentTranactions() {
 	return sentTransactions;
 }
-vector<Transaction> User::getReceivedTranactions() {
+vector<Transaction*> User::getReceivedTranactions() {
 	return receivedTransactions;
 }
 
@@ -43,4 +43,8 @@ Transaction::Transaction(User sender, User recipient, float amount) {
 	this->sender = &sender;
 	this->recipient = &recipient;
 	this->amount = amount;
+}
+void Transaction::addTransaction() {
+	sender->getSentTranactions().push_back(this);
+	recipient->getReceivedTranactions().push_back(this);
 }
