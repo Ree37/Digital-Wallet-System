@@ -1,48 +1,54 @@
 #include "Files.h"
+#include "User.h"
 #include <sstream>
 string transactionsData = "Transactions.csv";
 string userData = "UsersData.csv";
 void Files::create()
 {
+	// check if file already exists else create it
 	ofstream usersFile,Transactions;
-	usersFile.open(transactionsData);
+	Transactions.open(transactionsData);
 	usersFile.open(userData);
 	if (usersFile.is_open())
 	{
 		usersFile << "UserName" << ",";
 		usersFile << "Password" << ",";
-		usersFile << "Balance" << "," << endl;
+		usersFile << "Balance" << endl;
 	}
 	if (Transactions.is_open())
 	{
-		usersFile << "Sender" << ",";
-		usersFile << "recipient" << ",";
-		usersFile << "amount" << "," << endl;
+		Transactions << "Sender" << ",";
+		Transactions << "recipient" << ",";
+		Transactions << "amount" << endl;
 	}
 	usersFile.close();
 	Transactions.close();
 }
-void Files::writeUsersData(User inputUser)
+void Files::writeUsersData(User* inputUser)
 {
 	ofstream usersFile;
-	usersFile.open(userData);
+	usersFile.open(userData, ios::app); // Open the file in append mode
 	if (usersFile.is_open())
 	{
-		usersFile << inputUser.getUsername() << ",";
-		usersFile << inputUser.getPassword() << ",";
-		usersFile << inputUser.getBalance() << "," << endl;
+		// Input Sanitization: wrap in quotes to prevent comma insertion which breaks csv
+		// TODO: Sanitize Excel formula syntax to prevent csv injection
+		usersFile << "\"" << inputUser->getUsername() << "\",";
+        usersFile << "\"" << inputUser->getPassword() << "\",";
+        usersFile << "\"" << inputUser->getBalance() << "\"" << endl;
 	}
 	usersFile.close();
 }
 void Files::writeTransactionsData(string sender, string recipient, float amount)
 {
 	ofstream Transactionsfile;
-	Transactionsfile.open(transactionsData);
+	Transactionsfile.open(transactionsData, ios::app); // Open the file in append mode
 	if (Transactionsfile.is_open())
 	{
-		Transactionsfile << sender << ","; 
-		Transactionsfile << recipient << ",";
-		Transactionsfile << amount << "," << endl;
+		// Input Sanitization: wrap in quotes to prevent comma insertion which breaks csv
+		// TODO: Sanitize Excel formula syntax to prevent csv injection
+		Transactionsfile << "\"" << sender << "\",";
+		Transactionsfile << "\"" << recipient << "\",";
+		Transactionsfile << "\"" << amount << "\"," << endl;
 	}
 }
 void Files::updateBalance(User sender, User recipient, float amount)
@@ -77,7 +83,7 @@ void Files::updateBalance(User sender, User recipient, float amount)
 
 	
 }
-User Files::readData(string userName)
+User* Files::readData(string userName)
 {	
 	string password;
 	float balance;
@@ -111,6 +117,6 @@ User Files::readData(string userName)
 		
 	}
 	//// Constructor with balance 
-	//User  userDataFromCsv = new User(userName, password);
-	//return userDataFromCsv;
+	User*  userDataFromCsv = new User(userName, password);
+	return userDataFromCsv;
 }
