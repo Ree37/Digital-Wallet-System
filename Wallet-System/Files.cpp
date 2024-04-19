@@ -34,16 +34,17 @@ void Files::writeUsersData(User inputUser)
 	}
 	usersFile.close();
 }
-void Files::writeTransactionsData(string sender, string recipient, float amount)
+void Files::writeTransactionsData(User sender, User recipient, float amount)
 {
 	ofstream Transactionsfile;
 	Transactionsfile.open(transactionsData);
 	if (Transactionsfile.is_open())
 	{
-		Transactionsfile << sender << ","; 
-		Transactionsfile << recipient << ",";
+		Transactionsfile << sender.getUsername() << ","; 
+		Transactionsfile << recipient.getUsername() << ",";
 		Transactionsfile << amount << "," << endl;
 	}
+	updateBalance(sender, recipient, amount);
 }
 void Files::updateBalance(User sender, User recipient, float amount)
 {
