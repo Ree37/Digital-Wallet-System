@@ -1,6 +1,10 @@
+#ifndef CLI_H
+#define CLI_H
+
 #include <iostream>
 #include <vector>
 #include <string>
+#include <map>
 
 using namespace std;
 
@@ -15,8 +19,7 @@ public:
     static int getInput();
 };
 
-
-enum EnumMenus { mainMenu };
+/*
 
 class MenuItem {
 public:
@@ -29,12 +32,9 @@ public:
     string name;
     vector<MenuItem> subMenus;
 
-
-    EnumMenus enumMenus;
-
     MenuItem(string name, MenuItem* Back);
 
-    static void printMenu(MenuItem menuItem);
+    static void printMenu(MenuItem* menuItem);
 
     string getName();
 
@@ -50,6 +50,9 @@ public:
 
     bool update();
 
-    bool back();
+    virtual bool back();
 };
+*/
 
+
+#endif

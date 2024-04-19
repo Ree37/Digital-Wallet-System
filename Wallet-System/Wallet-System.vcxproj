@@ -131,6 +131,7 @@
     <ClCompile Include="CLI.cpp" />
     <ClCompile Include="Container.cpp" />
     <ClCompile Include="Files.cpp" />
+    <ClCompile Include="MenuItems.cpp" />
     <ClCompile Include="Security\Utils.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="User.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="CLI.h" />
     <ClInclude Include="Container.h" />
     <ClInclude Include="Files.h" />
+    <ClInclude Include="MenuItems.h" />
     <ClInclude Include="Security\Utils.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>

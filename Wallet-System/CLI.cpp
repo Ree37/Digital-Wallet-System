@@ -1,4 +1,5 @@
 #include "CLI.h"
+#include "MenuItems.h"
 #include <iostream>
 #include <cstdlib>
 using namespace std;
@@ -12,25 +13,46 @@ void CLI::start() {
 
 
 
-MenuItem mmainMenu("Main Menu", NULL);
+MainMenu mmainMenu("Main Menu", &mmainMenu);
 
-MenuItem desiredSubmenu("",NULL);
 
-MenuItem* MenuItem::currentMenuItem = &mmainMenu; //= mmainMenu;
+MenuItem* MenuItem::currentMenuItem = &mmainMenu;//new MainMenu("Main Menu", NULL); //= mmainMenu;
+
+    LoginUserMenu loginUser("Login User", MenuItem::currentMenuItem);
+
+        UserProfileMenu userProfile("User Profile", &loginUser);
+
+            MenuItem sendMoney("Send Money", &userProfile);
+            MenuItem requestMoney("Request Money", &userProfile);
+            MenuItem addMoney("Add Money", &userProfile);
+            MenuItem viewRequests("View Requests", &userProfile);
+            MenuItem viewTransactions("View Transactions", &userProfile);
+            MenuItem settings("Settings", &userProfile);
+
+
+
+
+    LoginUserMenu registerUser("Register User", MenuItem::currentMenuItem);
+
+    MenuItem loginAdmin("Login Admin", MenuItem::currentMenuItem);
+
 
 
 void CLI::initMenu() {
 
-    
-    MenuItem loginUser("Login User", MenuItem::currentMenuItem);
+    MenuItem::currentMenuItem->addSubMenu(&loginUser);
+    MenuItem::currentMenuItem->addSubMenu(&registerUser);
+    MenuItem::currentMenuItem->addSubMenu(&loginAdmin);
 
-    MenuItem registerUser("Register User", MenuItem::currentMenuItem);
+        loginUser.addSubMenu(&userProfile);
+        registerUser.addSubMenu(&userProfile);
 
-    MenuItem loginAdmin("Login Admin", MenuItem::currentMenuItem);
-
-    MenuItem::currentMenuItem->addSubMenu(loginUser);
-    MenuItem::currentMenuItem->addSubMenu(registerUser);
-    MenuItem::currentMenuItem->addSubMenu(loginAdmin);
+            userProfile.addSubMenu(&sendMoney);
+            userProfile.addSubMenu(&requestMoney);
+            userProfile.addSubMenu(&addMoney);
+            userProfile.addSubMenu(&viewRequests);
+            userProfile.addSubMenu(&viewTransactions);
+            userProfile.addSubMenu(&settings);
 
 }
 
@@ -64,14 +86,19 @@ void CLI::clearCli() {
 }
 void CLI::drawCli(bool isValid) {
 
-    clearCli();
+    if ( !dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem) ) {
+        clearCli();
+    }
+    
 
     if (!isValid) {
         cout << "\nInvalid choice. Please enter 'x' or a number between 1 and " + MenuItem::currentMenuItem->getSubMenus().size();
     }
 
-    cout << "\nCurrent Menu: " + MenuItem::currentMenuItem->getName() << "\n\n";
-    MenuItem::printMenu(*MenuItem::currentMenuItem);
+    if (!dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem)) {
+        cout << "\nCurrent Menu: " + MenuItem::currentMenuItem->getName() << "\n\n";
+    }
+    MenuItem::printMenu(MenuItem::currentMenuItem);
 
     string eofTerminal = "\033[9999H";
     cout << eofTerminal;
@@ -101,20 +128,21 @@ int CLI::getInput() {
     }
 }
 
+/*
 MenuItem::MenuItem(std::string name, MenuItem* Back) : name(name), Back(Back) {}
 
-void MenuItem::printMenu(MenuItem menuItem) {
+void MenuItem::printMenu(MenuItem* menuItem) {
 
 
-    for (size_t i = 0; i < menuItem.getSubMenus().size(); i++) {
+    for (size_t i = 0; i < menuItem->getSubMenus().size(); i++) {
         
-        cout << i+1 << "] " << menuItem.getSubMenus().at(i).name << "\n";
+        cout << i+1 << "] " << menuItem->getSubMenus().at(i).name << "\n";
     }
 
-    if (menuItem.enumMenus == EnumMenus::mainMenu) {
+    if (menuItem->Back == menuItem) {
         cout << "x] Exit" << std::endl;
     }
-    else if (menuItem.hasBack()) {
+    else if (menuItem->hasBack()) {
         cout << "x] Back" << std::endl;
     }
 }
@@ -172,5 +200,15 @@ bool MenuItem::back() {
     currentMenuItem = Back;
     return true;
 }
+*/
+/*
+MainMenu::MainMenu(string name, MenuItem* Back) : MenuItem(name, Back) {};
 
-//MenuItem* MenuItem::currentMenuItem = nullptr;
+bool MainMenu::back() {
+
+    CLI::clearCli();
+
+    cout << "Exiting...\n";
+
+    return false;
+};*/
