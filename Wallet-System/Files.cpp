@@ -88,6 +88,7 @@ User* Files::readData(string userName)
 	string password;
 	float balance;
 	ifstream data;
+	data.open(userData);
 	ifstream transactions; 
 	while (data.peek()!=EOF)
 	{
@@ -99,16 +100,21 @@ User* Files::readData(string userName)
 			// read username
 			if (getline(record , cell , ','))
 			{
+				cell = cell.substr(1, cell.length() - 2); // Strip Quotes
 				if (userName == cell)
 				{
 					if (getline(record,cell,','))
 					{
+						cell = cell.substr(1, cell.length() - 2);
 						password = cell;
 					}
 					if (getline(record, cell, ','))
 					{
+						cell = cell.substr(1, cell.length() - 2);
 						balance = stof (cell);
 					}
+					User* userDataFromCsv = new User(userName, password);
+					return userDataFromCsv;
 				}
 			}
 			
@@ -116,7 +122,5 @@ User* Files::readData(string userName)
 		}
 		
 	}
-	//// Constructor with balance 
-	User*  userDataFromCsv = new User(userName, password);
-	return userDataFromCsv;
+	return NULL;
 }
