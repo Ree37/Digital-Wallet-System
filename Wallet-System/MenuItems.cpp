@@ -1,5 +1,8 @@
 #include "MenuItems.h"
 #include "User.h"
+#include "Security/bcrypt/BCryptDLL.h"
+#include "Files.h"
+#include "Security/Utils.h"
 
 
 
@@ -108,10 +111,62 @@ bool MainMenu::back() {
 LoginUserMenu::LoginUserMenu(string name, MenuItem* Back) : MenuItem(name, Back) {};
 
 bool LoginUserMenu::update() {
+
+    bool isValid = true;
+    while (true) {
+
+        CLI::clearCli();
+        cout << "Input 'x' to leave login menu\n\n";
+
+        if (!isValid) {
+            cout << "Wrong Username or Password\n\n";
+            isValid = true;
+        }
+
+        string username, password;
+        
+
+        cout << "Enter Username: ";
+        cin >> username;
+
+        if (exitCommand(username))
+            return true;
+
+
+        cout << "Enter Password: ";
+        cin >> password;
+
+        if (exitCommand(password))
+            return true;
+
+        
+
+        User* userData = Files::readData(username);
+
+        if (!userData) {
+            isValid = false;
+            continue;
+        }
+        if (!BCryptDLL::validatePassword(password, userData->getPassword())) {
+            isValid = false;
+            continue;
+        }
+
+        MenuItem::user = userData;
+        currentMenuItem = currentMenuItem->getSubMenus()[0];
+
+        break;
+    }
+
+};
+
+RegisterUserMenu::RegisterUserMenu(string name, MenuItem* Back) : MenuItem(name, Back) {};
+
+bool RegisterUserMenu::update() {
     CLI::clearCli();
 
     string username, password;
-    cout << "Input 'x' to leave login menu\n";
+    cout << "Input 'x' to leave register menu\n";
 
     cout << "Enter Username: ";
     cin >> username;
@@ -121,20 +176,27 @@ bool LoginUserMenu::update() {
 
     while (true) {
         try {
-
             cout << "Enter Password: ";
             cin >> password;
 
             if (exitCommand(password))
                 return true;
 
+            if (!Utils::checkPasswordPolicy(password))
+            {
+                throw std::invalid_argument("Password is weak. It should include an uppercase letter, a lowercase letter, a number, a special character, and be at least 8 characters long.");
+            }
+            string hash = BCryptDLL::generateHash(password, 12);
+
+            MenuItem::user = new User(username, hash);
+
+            Files::writeUsersData(MenuItem::user);
+
             currentMenuItem = currentMenuItem->getSubMenus()[0];
-            MenuItem::user = new User(username, password);
+
             break;
         }
         catch (exception e) {
-            currentMenuItem = currentMenuItem->Back;
-
             CLI::clearCli();
             std::cout << e.what() << '\n';
         }
@@ -142,6 +204,7 @@ bool LoginUserMenu::update() {
 
 
 };
+
 
 UserProfileMenu::UserProfileMenu(string name, MenuItem* Back) : MenuItem(name, Back) {};
 

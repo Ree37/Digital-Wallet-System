@@ -32,7 +32,7 @@ MenuItem* MenuItem::currentMenuItem = &mmainMenu;//new MainMenu("Main Menu", NUL
 
 
 
-    LoginUserMenu registerUser("Register User", MenuItem::currentMenuItem);
+    RegisterUserMenu registerUser("Register User", MenuItem::currentMenuItem);
 
     MenuItem loginAdmin("Login Admin", MenuItem::currentMenuItem);
 

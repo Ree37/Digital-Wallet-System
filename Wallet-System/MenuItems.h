@@ -59,6 +59,15 @@ public:
 
 };
 
+class RegisterUserMenu : public MenuItem
+{
+public:
+    RegisterUserMenu(string name, MenuItem* Back);
+
+    bool update() override;
+
+};
+
 class UserProfileMenu : public MenuItem
 {
 public:

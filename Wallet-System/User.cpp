@@ -10,22 +10,11 @@ using namespace std;
 
 //Users functions
 User::User(string username, string password) {
-	// Input Validation: check if username or password is empty
 	if (username.empty() || password.empty()) {
 		throw std::invalid_argument("Error: Username or password is empty.");
 	}
 
-    // Input Validation: check if password matches a good password policy
-    if(!Utils::checkPasswordPolicy(password))
-    {
-        throw std::invalid_argument("Password is weak. It should include an uppercase letter, a lowercase letter, a number, a special character, and be at least 8 characters long.");
-    }
-	//std::string hash = BCryptDLL::generateHash(password, 12);
-    // store hash here
-
-    //check if entered password matches the stored hash
-    //std::cout << "checking right password: " << std::flush << BCryptDLL::validatePassword(password, hash) << std::endl;
-
+    
     this->suspendedFlag = false;
     this->balance = 0.0;
     this->username = username;
