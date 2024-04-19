@@ -8,13 +8,10 @@ using namespace std;
 
 class Admin
 {
-private:
 string name;
 string password;
 vector<User> users;
 set<string> uniqueUserName;
-public:
-Admin(string name, string password);
 bool isUnique(string name);
 void addUser();
 void viewUsers();

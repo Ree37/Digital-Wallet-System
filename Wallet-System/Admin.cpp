@@ -1,11 +1,7 @@
 #include "Admin.h"
 #include "User.h"
-Admin::Admin(std::string name, std::string password) {
-    this->name=name;
-    this->password=password;
 
-}
-int Admin::getIndex(string user_name) {
+int getIndex(string user_name) {
 	for (int i = 0; i <= users.size(); i++) {
 		if (users[i].name == user_name) {
 			return i;
@@ -16,24 +12,36 @@ int Admin::getIndex(string user_name) {
 	}
 }
 
-void Admin::deleteUser(string deletedUserName) {
+void deleteUser(string deletedUserName) {
 
 	int position = getIndex(deletedUserName);
 	users.erase(position);
 	uniqueUserName.erase(deletedUserName);
 }
 
-void Admin::suspendUsers(string suspendedUserName) {
+void suspendUsers(string suspendedUserName) {
 	int position = getIndex(suspendedUserName);
 	users.at(position).susbended_Flag = true;
 }
 
-void Admin::adjustUserBalance(string adjustedUserName, int value) {
+void adjustUserBalance(string adjustedUserName, int value) {
 	int position = getIndex(adjustedUserName);
 	users.at(position).balance = value;
 }
 
-vector<User> Admin::viewUsers()
+//void viewUsers()
+//{
+//	for (int i = 0; i <= users.size(); i++) {
+//		cout << "Username : " << users.at(i).name << "\t Balance : " << users.at(i).balance
+//			<< endl;
+//		for (int j = 0; j < users.at(i).transactions.size(); i++)
+//		{
+//			cout << "Transaction " << j + 1 << " :" << users.at(i).transactions.at(j);
+//		}
+//		cout << "************************************************************************";
+//	}
+//}
+vector<User> viewUsers()
 {
 	vector<User> userVec;
 	for (int i = 0; i <= users.size(); i++) {
@@ -41,9 +49,5 @@ vector<User> Admin::viewUsers()
 	}
 	return userVec;
 }
-vector<User> Admin::viewTransactions()
-{
-    return users;
-}
 
-bool Admin::isUnique(string name) { return !uniqueUserName.count(name); }
+bool isUnique(string name) { return !uniqueUserName.count(name); }

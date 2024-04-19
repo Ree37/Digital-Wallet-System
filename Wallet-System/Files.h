@@ -8,8 +8,10 @@ class Files
 {
 public:
 	void create();
-	void writeData(User inputUser);
-	User readData(string userName);
-
+	void writeUsersData(User inputUser);
+	void writeTransactionsData(User sender , User recipient , float amount);
+	void editUserProfile();
+	void updateBalance(User sender, User recipient, float amount);
+	User* readData(string userName);
 };
 
