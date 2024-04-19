@@ -104,11 +104,17 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>h_bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(MSBuildStartupDirectory)\x64\Debug;$(MSBuildProjectDirectory)\Security\bcrypt;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "$(MSBuildProjectDirectory)\Security\bcrypt\h_bcrypt.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -142,6 +148,7 @@
     <ClInclude Include="Container.h" />
     <ClInclude Include="Files.h" />
     <ClInclude Include="MenuItems.h" />
+    <ClInclude Include="Security\bcrypt\BCryptDLL.h" />
     <ClInclude Include="Security\Utils.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>
