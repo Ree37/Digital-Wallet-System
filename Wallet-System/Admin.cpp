@@ -1,32 +1,37 @@
 #include "Admin.h"
 #include "User.h"
+#include "Container.h"
 
-int getIndex(string user_name) {
-	for (int i = 0; i <= users.size(); i++) {
-		if (users[i].name == user_name) {
+int Admin::getIndex(string user_name) {
+	int i = 0;
+	for (; i <= Container::users.size(); i++) {
+		if (Container::users.at(i)->getUsername() == user_name) {
 			return i;
 		}
 		else {
 			continue;
 		}
 	}
+	return i;
 }
 
-void deleteUser(string deletedUserName) {
 
+void Admin::deleteUser(string deletedUserName) {
 	int position = getIndex(deletedUserName);
-	users.erase(position);
-	uniqueUserName.erase(deletedUserName);
+	if (position != -1) {
+		Container::users.erase(Container::users.begin() + position);
+		Admin::uniqueUserName.erase(deletedUserName);
+	}
 }
 
-void suspendUsers(string suspendedUserName) {
+void Admin::setSuspendUsers(string suspendedUserName) {
 	int position = getIndex(suspendedUserName);
-	users.at(position).susbended_Flag = true;
+	Container::users.at(position)->setSuspendedFlag();
 }
 
-void adjustUserBalance(string adjustedUserName, int value) {
+void Admin::adjustUserBalance(string adjustedUserName, float value) {
 	int position = getIndex(adjustedUserName);
-	users.at(position).balance = value;
+	Container::users.at(position)->setBalance(value);
 }
 
 //void viewUsers()
@@ -41,13 +46,14 @@ void adjustUserBalance(string adjustedUserName, int value) {
 //		cout << "************************************************************************";
 //	}
 //}
-vector<User> viewUsers()
+vector<User*> Admin::viewUsers()
 {
-	vector<User> userVec;
-	for (int i = 0; i <= users.size(); i++) {
-		userVec.push_back(users.at(i))
-	}
+	vector<User*> userVec;
+	for (int i = 0; i <= Container::users.size(); i++) {
+		userVec.push_back(Container::users.at(i));
+	};
 	return userVec;
 }
 
-bool isUnique(string name) { return !uniqueUserName.count(name); }
+
+bool Admin::isUnique(string name) { return !Admin::uniqueUserName.count(name); }
