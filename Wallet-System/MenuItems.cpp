@@ -140,22 +140,22 @@ bool LoginUserMenu::update() {
             return true;
 
 
+            Files files;
+            User* userData = files.readData(username);
 
-        //    User* userData = Files::readData(username);
+            if (!userData) {
+                isValid = false;
+                continue;
+            }
+            if (!BCryptDLL::validatePassword(password, userData->getPassword())) { // solve errors 
+                isValid = false;
+                continue;
+            }
 
-        //    if (!userData) {
-        //        isValid = false;
-        //        continue;
-        //    }
-        //    if (!BCryptDLL::validatePassword(password, userData->getPassword())) { // solve errors 
-        //        isValid = false;
-        //        continue;
-        //    }
+            MenuItem::user = userData;
+            currentMenuItem = currentMenuItem->getSubMenus()[0];
 
-        //    MenuItem::user = userData;
-        //    currentMenuItem = currentMenuItem->getSubMenus()[0];
-
-        //    break;
+            break;
     }
 
 };
@@ -190,7 +190,8 @@ bool RegisterUserMenu::update() {
 
             MenuItem::user = new User(username, hash);
 
-            //Files::writeUsersData(MenuItem::user); // solve error
+            Files files;
+            files.writeUsersData(*MenuItem::user);
 
             currentMenuItem = currentMenuItem->getSubMenus()[0];
 
