@@ -112,16 +112,9 @@ LoginUserMenu::LoginUserMenu(string name, MenuItem* Back) : MenuItem(name, Back)
 
 bool LoginUserMenu::update() {
 
-    bool isValid = true;
+    CLI::clearCli();
+    cout << "Input 'x' to leave login menu\n\n";
     while (true) {
-
-        CLI::clearCli();
-        cout << "Input 'x' to leave login menu\n\n";
-
-        if (!isValid) {
-            cout << "Wrong Username or Password\n\n";
-            isValid = true;
-        }
 
         string username, password;
 
@@ -142,16 +135,21 @@ bool LoginUserMenu::update() {
 
             Files files;
             User* userData = files.readData(username);
-
-            if (!userData) {
-                isValid = false;
+            try {
+                if (!userData) {
+                    throw exception();
+                }
+                if (!BCryptDLL::validatePassword(password, userData->getPassword())) {
+                    throw exception();
+                }
+            }
+            catch (exception e) {
+                CLI::clearCli();
+                cout << "Input 'x' to leave login menu\n\n";
+                cout << "Wrong Username or Password\n\n";
                 continue;
             }
-            if (!BCryptDLL::validatePassword(password, userData->getPassword())) { // solve errors 
-                isValid = false;
-                continue;
-            }
-
+           
             MenuItem::user = userData;
             currentMenuItem = currentMenuItem->getSubMenus()[0];
 
