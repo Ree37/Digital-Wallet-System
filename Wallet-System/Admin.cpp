@@ -1,47 +1,59 @@
-//#include "Admin.h"
-//#include "User.h"
-//
-//int Admin::get_Index(string user_name){
-//    for(int i =0;i<=users.size();i++){
-//        if(users[i].name==user_name){
-//            return i;
-//        }else{
-//            continue;
-//        }
-//
-//    }
-//}
-//void Admin::delete_User(string deleted_User_Name ){
-//
-//    int position= Admin::get_Index(deleted_User_Name);
-//
-//   Admin::users.erase(position);
-//   unique_Users_Name.erase(deleted_User_Name);
-//}
-//void Admin::suspend_User(string suspended_User_Name ){
-//  int position=  int position= Admin::get_Index(suspended_User_Name);
-//     users.at(position).susbended_Flag=true;
-//}
-//void Admin::adjust_User_Balance(string adjusted_user_name,int value){
-//    int position=  int position= Admin::get_Index(suspended_User_Name);
-//
-//    users.at(position).balance=value
-//
-//}
-//void Admin::view_Users()
+#include "Admin.h"
+#include "User.h"
+#include "Container.h"
+
+int Admin::getIndex(string user_name) {
+	int i = 0;
+	for (; i <= Container::users.size(); i++) {
+		if (Container::users.at(i)->getUsername() == user_name) {
+			return i;
+		}
+		else {
+			continue;
+		}
+	}
+	return i;
+}
+
+
+void Admin::deleteUser(string deletedUserName) {
+	int position = getIndex(deletedUserName);
+	if (position != -1) {
+		Container::users.erase(Container::users.begin() + position);
+		Admin::uniqueUserName.erase(deletedUserName);
+	}
+}
+
+void Admin::setSuspendUsers(string suspendedUserName) {
+	int position = getIndex(suspendedUserName);
+	Container::users.at(position)->setSuspendedFlag();
+}
+
+void Admin::adjustUserBalance(string adjustedUserName, float value) {
+	int position = getIndex(adjustedUserName);
+	Container::users.at(position)->setBalance(value);
+}
+
+//void viewUsers()
 //{
-//    for (int i = 0; i <= users.size(); i++) {
-//        cout << "Username : " << users.at(i).name << "\t Balance : " << users.at(i).balance
-//             << endl;
-//        for (int j = 0; j < users.at(i).transactions.size();i++)
-//        {
-//            cout << "transaction"<<j+1<<users.at(i).transactions.at(j);
-//        }
-//        cout<<"***************************************";
-//
+//	for (int i = 0; i <= users.size(); i++) {
+//		cout << "Username : " << users.at(i).name << "\t Balance : " << users.at(i).balance
+//			<< endl;
+//		for (int j = 0; j < users.at(i).transactions.size(); i++)
+//		{
+//			cout << "Transaction " << j + 1 << " :" << users.at(i).transactions.at(j);
+//		}
+//		cout << "************************************************************************";
+//	}
 //}
-//bool Admin::is_Unique(string name){
-//
-//    return !unique_Users_Name.count(name);
-//
-//}
+vector<User*> Admin::viewUsers()
+{
+	vector<User*> userVec;
+	for (int i = 0; i <= Container::users.size(); i++) {
+		userVec.push_back(Container::users.at(i));
+	};
+	return userVec;
+}
+
+
+bool Admin::isUnique(string name) { return !Admin::uniqueUserName.count(name); }

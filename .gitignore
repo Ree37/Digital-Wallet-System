@@ -429,3 +429,7 @@ FodyWeavers.xsd
 *.exe
 *.out
 *.app
+
+
+!h_bcrypt.dll
+!h_bcrypt.lib
