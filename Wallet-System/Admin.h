@@ -11,14 +11,18 @@ class Admin
 	public:
 		string name;
 		string password;
-		vector<User> users;
+		//vector<User*> *users;
+		//vector<User> users;
+
 		set<string> uniqueUserName;
+
+		Admin();
 		bool isUnique(string name);
 		//void addUser();
-		vector<User> viewUsers();
+		vector<User*> viewUsers();
 		//void editUsers(User edited_User);
 		//void viewTransactions();
-		void suspendUsers(string suspendedUserName);
+		void setSuspendUsers(string suspendedUserName);
 		void deleteUser(string deleted_User);
 		void adjustUserBalance(string adjustedUserName, float value);
 		int getIndex(string user_name);
