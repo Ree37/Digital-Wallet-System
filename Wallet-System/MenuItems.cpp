@@ -124,7 +124,7 @@ bool LoginUserMenu::update() {
         }
 
         string username, password;
-        
+
 
         cout << "Enter Username: ";
         cin >> username;
@@ -139,23 +139,23 @@ bool LoginUserMenu::update() {
         if (exitCommand(password))
             return true;
 
-        
 
-        User* userData = Files::readData(username);
 
-        if (!userData) {
-            isValid = false;
-            continue;
-        }
-        if (!BCryptDLL::validatePassword(password, userData->getPassword())) {
-            isValid = false;
-            continue;
-        }
+        //    User* userData = Files::readData(username);
 
-        MenuItem::user = userData;
-        currentMenuItem = currentMenuItem->getSubMenus()[0];
+        //    if (!userData) {
+        //        isValid = false;
+        //        continue;
+        //    }
+        //    if (!BCryptDLL::validatePassword(password, userData->getPassword())) { // solve errors 
+        //        isValid = false;
+        //        continue;
+        //    }
 
-        break;
+        //    MenuItem::user = userData;
+        //    currentMenuItem = currentMenuItem->getSubMenus()[0];
+
+        //    break;
     }
 
 };
@@ -190,7 +190,7 @@ bool RegisterUserMenu::update() {
 
             MenuItem::user = new User(username, hash);
 
-            Files::writeUsersData(MenuItem::user);
+            //Files::writeUsersData(MenuItem::user); // solve error
 
             currentMenuItem = currentMenuItem->getSubMenus()[0];
 
