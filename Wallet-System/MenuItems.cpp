@@ -197,7 +197,11 @@ bool RegisterUserMenu::update() {
         }
         catch (exception e) {
             CLI::clearCli();
-            std::cout << e.what() << '\n';
+            cout << "Input 'x' to leave register menu\n\n";
+
+            cout << e.what() << '\n';
+            cout << "Enter Username: " << username << "\n";
+
         }
     }
 
