@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="Admin.cpp" />
     <ClCompile Include="CLI.cpp" />
+    <ClCompile Include="Container.cpp" />
     <ClCompile Include="Files.cpp" />
     <ClCompile Include="Security\Utils.cpp" />
     <ClCompile Include="Source.cpp" />
@@ -137,6 +138,7 @@
   <ItemGroup>
     <ClInclude Include="Admin.h" />
     <ClInclude Include="CLI.h" />
+    <ClInclude Include="Container.h" />
     <ClInclude Include="Files.h" />
     <ClInclude Include="Security\Utils.h" />
     <ClInclude Include="User.h" />
