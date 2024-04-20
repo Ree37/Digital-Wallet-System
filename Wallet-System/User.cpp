@@ -42,6 +42,15 @@ vector<Transaction*> User::getSentTranactions() {
 vector<Transaction*> User::getReceivedTranactions() {
 	return receivedTransactions;
 }
+bool User::isUniqueUsername() {
+	for (int i = 0; i < Container::users.capacity(); i++)
+	{
+		if (this->username == Container::users[i]->username) {
+			return false;
+		}
+	}
+	return true;
+}
 
 //Transaction functions
 Transaction::Transaction(User sender, User recipient, float amount) {
