@@ -4,21 +4,22 @@
 #define MENUITEMS_H
 #include "CLI.h"
 #include "User.h"
+#include <stack>
+
 
 class MenuItem {
 public:
 
 
-    static MenuItem* currentMenuItem;
 
     static User* user;
 
-    MenuItem* Back;
+    static stack<MenuItem*> currentMenuItem;
 
     string name;
     vector<MenuItem*> subMenus;
 
-    MenuItem(string name, MenuItem* Back);
+    MenuItem(string name);
 
     static void printMenu(MenuItem* menuItem);
 
@@ -44,7 +45,7 @@ public:
 class MainMenu : public MenuItem
 {
 public:
-    MainMenu(string name, MenuItem* Back);
+    MainMenu(string name);
 
     bool back() override;
 
@@ -53,7 +54,7 @@ public:
 class LoginUserMenu : public MenuItem
 {
 public:
-    LoginUserMenu(string name, MenuItem* Back);
+    LoginUserMenu(string name);
 
     bool update() override;
 
@@ -62,7 +63,7 @@ public:
 class RegisterUserMenu : public MenuItem
 {
 public:
-    RegisterUserMenu(string name, MenuItem* Back);
+    RegisterUserMenu(string name);
 
     bool update() override;
 
@@ -73,7 +74,7 @@ class UserProfileMenu : public MenuItem
 public:
 
 
-    UserProfileMenu(string name, MenuItem* Back);
+    UserProfileMenu(string name);
 
     bool back() override;
     bool update() override;

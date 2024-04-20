@@ -6,11 +6,11 @@
 
 
 
-//MenuItem desiredSubmenu("", NULL);
 
 User* MenuItem::user;
+stack <MenuItem*> MenuItem::currentMenuItem;
 
-MenuItem::MenuItem(std::string name, MenuItem* Back) : name(name), Back(Back) {
+MenuItem::MenuItem(std::string name) : name(name) {
 }
 
 void MenuItem::printMenu(MenuItem* menuItem) {
@@ -21,10 +21,10 @@ void MenuItem::printMenu(MenuItem* menuItem) {
         cout << i + 1 << "] " << menuItem->getSubMenus().at(i)->name << "\n";
     }
 
-    if (dynamic_cast<MainMenu*>(MenuItem::currentMenuItem)) {
+    if ( dynamic_cast<MainMenu*>(MenuItem::currentMenuItem.top()) ) {
         cout << "x] Exit" << "\n";
     }
-    else if (dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem))
+    else if (dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem.top()))
     {
         cout << "x] Log Out" << "\n";
     }
@@ -49,8 +49,9 @@ bool MenuItem::hasSubMenus() {
     return !subMenus.empty();
 }
 
+
 bool MenuItem::hasBack() {
-    return Back != nullptr;
+    return true;
 }
 
 void MenuItem::addSubMenu(MenuItem* subMenu) {
@@ -76,13 +77,13 @@ bool MenuItem::update() {
         return back();
     }
     else {
-        currentMenuItem = currentMenuItem->getSubMenus()[choice - 1];
+        currentMenuItem.push(currentMenuItem.top()->getSubMenus()[choice - 1]);
     }
     return true;
 }
 
 bool MenuItem::back() {
-    currentMenuItem = Back;
+    currentMenuItem.pop();
     return true;
 }
 
@@ -96,7 +97,7 @@ bool MenuItem::exitCommand(string s) {
     return false;
 }
 
-MainMenu::MainMenu(string name, MenuItem* Back) : MenuItem(name, Back) {};
+MainMenu::MainMenu(string name) : MenuItem(name) {};
 
 bool MainMenu::back() {
 
@@ -108,7 +109,7 @@ bool MainMenu::back() {
 };
 
 
-LoginUserMenu::LoginUserMenu(string name, MenuItem* Back) : MenuItem(name, Back) {};
+LoginUserMenu::LoginUserMenu(string name) : MenuItem(name) {};
 
 bool LoginUserMenu::update() {
 
@@ -151,14 +152,14 @@ bool LoginUserMenu::update() {
             }
            
             MenuItem::user = userData;
-            currentMenuItem = currentMenuItem->getSubMenus()[0];
+            currentMenuItem.push(currentMenuItem.top()->getSubMenus()[0]);
 
             break;
     }
 
 };
 
-RegisterUserMenu::RegisterUserMenu(string name, MenuItem* Back) : MenuItem(name, Back) {};
+RegisterUserMenu::RegisterUserMenu(string name) : MenuItem(name) {};
 
 bool RegisterUserMenu::update() {
     CLI::clearCli();
@@ -191,7 +192,7 @@ bool RegisterUserMenu::update() {
             Files files;
             files.writeUsersData(*MenuItem::user);
 
-            currentMenuItem = currentMenuItem->getSubMenus()[0];
+            currentMenuItem.push(currentMenuItem.top()->getSubMenus()[0]);
 
             break;
         }
@@ -209,7 +210,7 @@ bool RegisterUserMenu::update() {
 };
 
 
-UserProfileMenu::UserProfileMenu(string name, MenuItem* Back) : MenuItem(name, Back) {};
+UserProfileMenu::UserProfileMenu(string name) : MenuItem(name) {};
 
 bool UserProfileMenu::update() {
 
@@ -224,7 +225,8 @@ bool UserProfileMenu::update() {
 };
 
 bool UserProfileMenu::back() {
-    currentMenuItem = Back->Back;
+    currentMenuItem.pop();
+    currentMenuItem.pop();
     return true;
 };
 
