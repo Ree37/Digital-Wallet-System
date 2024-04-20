@@ -3,6 +3,7 @@
 #include "Security/bcrypt/BCryptLib.h"
 #include "Files.h"
 #include "Security/Utils.h"
+#include "Security/totp/TOTPLib.h"
 
 
 
@@ -150,6 +151,25 @@ bool LoginUserMenu::update() {
                 cout << "Wrong Username or Password\n\n";
                 continue;
             }
+
+            /*std::string i_otp;
+            std::string secret = TOTPLib::generateSecret();
+            cout << "Enter 2FA Key: ";
+            cin >> i_otp;
+
+            if (exitCommand(i_otp))
+                return true;
+
+                /// Dummy TOTP 2FA Logic
+            
+            unsigned int otp = TOTPLib::getOTP(secret);
+
+            if(stoi(i_otp) != otp)
+            {
+                CLI::clearCli();
+                cout << "Invalid 2FA Key\n\n";
+                continue;
+            }*/
            
             MenuItem::user = userData;
             currentMenuItem.push(currentMenuItem.top()->getSubMenus()[0]);

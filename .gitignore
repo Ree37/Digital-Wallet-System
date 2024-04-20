@@ -437,3 +437,8 @@ FodyWeavers.xsd
 !h_bcrypt.lib
 /Debug/h_bcrypt.dll
 /Release/h_bcrypt.dll
+
+!totp.dll
+!totp.lib
+/Debug/totp.dll
+/Release/totp.dll
