@@ -24,6 +24,16 @@ void Admin::deleteUser(string deletedUserName) {
 	}
 }
 
+void Admin::setName(string name)
+{
+	this->name = name;
+}
+
+void Admin::setPassword(string password)
+{
+	this->password = password;
+}
+
 void Admin::setSuspendUsers(string suspendedUserName) {
 	int position = getIndex(suspendedUserName);
 	Container::users.at(position)->setSuspendedFlag();
@@ -55,5 +65,13 @@ vector<User*> Admin::viewUsers()
 	return userVec;
 }
 
+
+
+Admin::Admin(const std::string& usr, const std::string& pwd)
+{
+	Admin::setName(usr);
+	Admin::setPassword(pwd);
+}
+	
 
 bool Admin::isUnique(string name) { return !Admin::uniqueUserName.count(name); }
