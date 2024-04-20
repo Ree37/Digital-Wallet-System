@@ -2,13 +2,13 @@
 
 #include <string>
 
-#ifdef BCryptDLL_EXPORTS
-#define BCryptDLL_API __declspec(dllexport)
+#ifdef BCryptLib_EXPORTS
+#define BCryptLib_API __declspec(dllexport)
 #else
-#define BCryptDLL_API __declspec(dllimport)
+#define BCryptLib_API __declspec(dllimport)
 #endif
 
-class BCryptDLL_API BCryptDLL {
+class BCryptLib_API BCryptLib {
 public:
     static std::string generateHash(const std::string& password, int workFactor);
     static bool validatePassword(const std::string& password, const std::string& hash);

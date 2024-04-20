@@ -1,7 +1,6 @@
 #include "User.h"
 #include "Security/Utils.h"
 #include "Container.h"
-#include "Security/bcrypt/BCryptDLL.h"
 #include <iostream>
 
 using namespace std;

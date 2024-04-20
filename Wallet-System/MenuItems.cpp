@@ -1,6 +1,6 @@
 #include "MenuItems.h"
 #include "User.h"
-#include "Security/bcrypt/BCryptDLL.h"
+#include "Security/bcrypt/BCryptLib.h"
 #include "Files.h"
 #include "Security/Utils.h"
 
@@ -140,7 +140,7 @@ bool LoginUserMenu::update() {
                 if (!userData) {
                     throw exception();
                 }
-                if (!BCryptDLL::validatePassword(password, userData->getPassword())) {
+                if (!BCryptLib::validatePassword(password, userData->getPassword())) {
                     throw exception();
                 }
             }
@@ -185,7 +185,7 @@ bool RegisterUserMenu::update() {
             {
                 throw std::invalid_argument("Password is weak. It should include an uppercase letter, a lowercase letter, a number, a special character, and be at least 8 characters long.");
             }
-            string hash = BCryptDLL::generateHash(password, 12);
+            string hash = BCryptLib::generateHash(password, 12);
 
             MenuItem::user = new User(username, hash);
 

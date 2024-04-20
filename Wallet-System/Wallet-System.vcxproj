@@ -163,7 +163,7 @@
     <ClInclude Include="Container.h" />
     <ClInclude Include="Files.h" />
     <ClInclude Include="MenuItems.h" />
-    <ClInclude Include="Security\bcrypt\BCryptDLL.h" />
+    <ClInclude Include="Security\bcrypt\BCryptLib.h" />
     <ClInclude Include="Security\Utils.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>
