@@ -236,8 +236,8 @@ bool UserProfileMenu::update() {
 
     CLI::clearCli();
 
-    cout << "Current User: " << MenuItem::user->getUsername() << "\n";
-    cout << "Available Balance: " << MenuItem::user->getBalance() << "\n";
+    cout << "\nCurrent User: " << MenuItem::user->getUsername() << "\n\n";
+    cout << "Available Balance: " << MenuItem::user->getBalance() << "\n\n";
 
     MenuItem::update();
 
@@ -249,4 +249,32 @@ bool UserProfileMenu::back() {
     currentMenuItem.pop();
     return true;
 };
+
+
+ChangePasswordMenu::ChangePasswordMenu(string name) : MenuItem(name) {};
+
+
+//update yet to be implemented
+bool ChangePasswordMenu::update() {
+
+    MenuItem::update();
+
+    return true;
+};
+
+//override back if needed
+
+
+Enable2FAMenu::Enable2FAMenu(string name) : MenuItem(name) {};
+
+
+//update yet to be implemented
+bool Enable2FAMenu::update() {
+
+    MenuItem::update();
+
+    return true;
+}
+
+//override back if needed
 

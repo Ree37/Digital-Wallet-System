@@ -81,6 +81,28 @@ public:
 
 };
 
+class ChangePasswordMenu : public MenuItem
+{
+public:
+
+
+    ChangePasswordMenu(string name);
+    bool update() override;
+
+};
+
+class Enable2FAMenu : public MenuItem
+{
+public:
+
+
+    Enable2FAMenu(string name);
+    bool update() override;
+
+};
+
+
+
 
 #endif
 

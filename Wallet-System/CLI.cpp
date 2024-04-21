@@ -26,10 +26,9 @@ MainMenu mmainMenu("Main Menu");
             MenuItem viewRequests("View Requests");
             MenuItem viewTransactions("View Transactions");
             MenuItem settings("Settings");
-
-
-
-
+                ChangePasswordMenu changePassword("Change Password");
+                Enable2FAMenu enable2FA("Enable Two-Factor Authentication");
+   
     RegisterUserMenu registerUser("Register User");
 
     MenuItem loginAdmin("Login Admin");
@@ -53,6 +52,10 @@ void CLI::initMenu() {
             userProfile.addSubMenu(&viewRequests);
             userProfile.addSubMenu(&viewTransactions);
             userProfile.addSubMenu(&settings);
+
+                settings.addSubMenu(&changePassword);
+                settings.addSubMenu(&enable2FA);
+
 
 }
 
