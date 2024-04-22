@@ -25,7 +25,7 @@ MainMenu mmainMenu("Main Menu");
             MenuItem addMoney("Add Money");
             MenuItem viewRequests("View Requests");
             MenuItem viewTransactions("View Transactions");
-            MenuItem settings("Settings");
+            SettingsMenu settings("Settings");
                 ChangePasswordMenu changePassword("Change Password");
                 Enable2FAMenu enable2FA("Enable Two-Factor Authentication");
    

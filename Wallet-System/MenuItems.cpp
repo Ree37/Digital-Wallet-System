@@ -250,6 +250,24 @@ bool UserProfileMenu::back() {
     return true;
 };
 
+SettingsMenu::SettingsMenu(string name) : MenuItem(name) {};
+
+bool SettingsMenu::update() {
+
+    if (user->getIsHas2FA())
+    {
+        currentMenuItem.top()->getSubMenus().at(1)->name = "Disable Two-Factor Authentication";
+    }
+    else
+    {
+        currentMenuItem.top()->getSubMenus().at(1)->name = "Enable Two-Factor Authentication";
+    }
+
+    MenuItem::update();
+
+    return true;
+};
+
 
 ChangePasswordMenu::ChangePasswordMenu(string name) : MenuItem(name) {};
 
