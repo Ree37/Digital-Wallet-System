@@ -95,7 +95,7 @@ void CLI::drawCli(bool isValid) {
     
 
     if (!isValid) {
-        cout << "\nInvalid choice. Please enter 'x' or a number between 1 and " + MenuItem::currentMenuItem.top()->getSubMenus().size();
+        cout << "\nInvalid choice. Please enter 'x' or a number between 1 and " << MenuItem::currentMenuItem.top()->getSubMenus().size();
     }
 
     if (!dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem.top())) {
