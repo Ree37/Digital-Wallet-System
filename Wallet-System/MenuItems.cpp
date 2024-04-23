@@ -4,6 +4,10 @@
 #include "Files.h"
 #include "Security/Utils.h"
 #include "Security/totp/TOTPLib.h"
+#include "Security/qrcode/QrcodeLib.h"
+#include <windows.h>
+#include <synchapi.h>
+#include <conio.h>
 
 
 
@@ -152,8 +156,11 @@ bool LoginUserMenu::update() {
                 continue;
             }
 
-            /*std::string i_otp;
-            std::string secret = TOTPLib::generateSecret();
+            if(userData->getIsHas2FA())
+            {
+                string i_otp;
+                string secret = userData->getTotpSecret();
+                QrcodeLib* qrcode = new QrcodeLib(userData->getUsername(), secret);
             cout << "Enter 2FA Key: ";
             cin >> i_otp;
 
@@ -164,12 +171,14 @@ bool LoginUserMenu::update() {
             
             unsigned int otp = TOTPLib::getOTP(secret);
 
-            if(stoi(i_otp) != otp)
+                if (stoi(i_otp) != otp)
             {
                 CLI::clearCli();
                 cout << "Invalid 2FA Key\n\n";
                 continue;
-            }*/
+                }
+            }
+
            
             MenuItem::user = userData;
             currentMenuItem.push(currentMenuItem.top()->getSubMenus()[0]);
@@ -289,10 +298,88 @@ Enable2FAMenu::Enable2FAMenu(string name) : MenuItem(name) {};
 //update yet to be implemented
 bool Enable2FAMenu::update() {
 
-    MenuItem::update();
+    Files files;
 
+    CLI::clearCli();
+
+    if (user->getIsHas2FA())
+    {
+
+        std::string i_otp;
+
+        string secret = user->getTotpSecret();
+        QrcodeLib* qrcode = new QrcodeLib(user->getUsername(), secret);
+        cout << "Input 'x' to leave 2FA menu\n";
+        cout << "Enter 2FA Key: ";
+        cin >> i_otp;
+
+        if (exitCommand(i_otp))
+            return true;
+
+        unsigned int otp = TOTPLib::getOTP(secret);
+
+        if (stoi(i_otp) != otp)
+        {
+            CLI::clearCli();
+            cout << "Invalid 2FA Key\n\n";
+            return true;
+        }
+
+        CLI::clearCli();
+        cout << "Press any key to go back\n\n";
+        files.update2FA(user, false, "");
+        cout << "2FA has been disabled!\n";
+        while (!_kbhit()){}
+        _getch();
+        back();
+        return true;
+    }
+
+    string password;
+    cout << "Input 'x' to leave 2FA menu\n";
+    cout << "Enter Current Password to enable 2FA: ";
+    cin >> password;
+
+    if (exitCommand(password))
+        return true;
+
+    if (!BCryptLib::validatePassword(password, user->getPassword())) {
     return true;
 }
 
-//override back if needed
+    CLI::clearCli();
+
+    std::string secret = TOTPLib::generateSecret();
+    QrcodeLib* qrcode = new QrcodeLib(user->getUsername(), secret);
+
+    files.update2FA(user, true, secret);
+
+    qrcode->printQRCodeASCII();
+    cout << "Press any key to go back\n\n";
+
+    int width = Utils::getConsoleWidth();
+    int new_width;
+
+    while (!_kbhit())
+    {
+
+        new_width = Utils::getConsoleWidth();
+
+        if (new_width != width)
+        {
+            CLI::clearCli();
+            qrcode->printQRCodeASCII();
+            cout << "\nPress any key to go back\n\n";
+            width = new_width;
+        }
+
+        Sleep(300);
+    }
+
+    _getch();
+
+    back();
+
+    return true;
+}
 

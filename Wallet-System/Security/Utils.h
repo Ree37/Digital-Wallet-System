@@ -7,6 +7,6 @@ class Utils
 {
 public:
 	static bool checkPasswordPolicy(string password);
-
+	static int getConsoleWidth();
 };
 
