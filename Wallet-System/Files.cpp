@@ -190,7 +190,7 @@ User* Files::readData(string userName)
 	float balance;
 	bool isHas2FA;
 	string totpSecret;
-	Utils::encryptFiles(userData);
+	//Utils::encryptFiles(userData);
 	ifstream data;
 	data.open(userData);
 	ifstream transactions; 
