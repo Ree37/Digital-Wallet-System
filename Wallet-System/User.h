@@ -52,3 +52,8 @@ public:
 	void addTransaction();
 };
 
+class Notification {
+	User* notificationReceiver;
+	float requestedMoney;
+	Notification(User receiver, float requestedMoney);
+};

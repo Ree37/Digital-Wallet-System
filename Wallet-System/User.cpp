@@ -50,7 +50,7 @@ void User::addBalance(float value) {
 }
 
 vector<Transaction*> User::getTransactions() {
-	return transactions;
+	return Transactions;
 }
 bool User::isUniqueUsername() {
 	for (int i = 0; i < Container::users.capacity(); i++)
@@ -83,4 +83,10 @@ User* Transaction::getRecipient() {
 }
 User* Transaction::getSender() {
 	return sender;
+}
+
+//Notification functions
+Notification::Notification(User receiver, float requestedMoney) {
+	this->notificationReceiver = &receiver;
+	this->requestedMoney = requestedMoney;
 }
