@@ -1,5 +1,6 @@
 #include <string>
 #include <iostream>
+#include <Windows.h>
 #include "Utils.h"
 
 bool Utils::checkPasswordPolicy(std::string password) {
@@ -24,4 +25,11 @@ bool Utils::checkPasswordPolicy(std::string password) {
     }
 
 	return true;
+}
+
+int Utils::getConsoleWidth()
+{
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+    return csbi.srWindow.Right - csbi.srWindow.Left + 1;
 }

@@ -80,12 +80,13 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(MSBuildProjectDirectory)\Security\bcrypt\$(Configuration)\$(PlatformTarget);$(MSBuildProjectDirectory)\Security\totp\$(Configuration)\$(PlatformTarget)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>h_bcrypt.lib;totp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(MSBuildProjectDirectory)\Security\bcrypt\$(Configuration)\$(PlatformTarget);$(MSBuildProjectDirectory)\Security\totp\$(Configuration)\$(PlatformTarget);$(MSBuildProjectDirectory)\Security\qrcode\$(Configuration)\$(PlatformTarget);$(MSBuildProjectDirectory)\Security\AES\$(Configuration)\$(PlatformTarget)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>h_bcrypt.lib;totp.lib;totp_qrcode.lib;AES.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /d "$(MSBuildProjectDirectory)\Security\bcrypt\$(Configuration)\$(PlatformTarget)\h_bcrypt.dll" "$(OutDir)"
-xcopy /y /d "$(MSBuildProjectDirectory)\Security\totp\$(Configuration)\$(PlatformTarget)\totp.dll" "$(OutDir)"</Command>
+xcopy /y /d "$(MSBuildProjectDirectory)\Security\totp\$(Configuration)\$(PlatformTarget)\totp.dll" "$(OutDir)"
+xcopy /y /d "$(MSBuildProjectDirectory)\Security\qrcode\$(Configuration)\$(PlatformTarget)\totp_qrcode.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -102,12 +103,13 @@ xcopy /y /d "$(MSBuildProjectDirectory)\Security\totp\$(Configuration)\$(Platfor
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(MSBuildProjectDirectory)\Security\bcrypt\$(Configuration)\$(PlatformTarget);$(MSBuildProjectDirectory)\Security\totp\$(Configuration)\$(PlatformTarget)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>h_bcrypt.lib;totp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(MSBuildProjectDirectory)\Security\bcrypt\$(Configuration)\$(PlatformTarget);$(MSBuildProjectDirectory)\Security\totp\$(Configuration)\$(PlatformTarget);$(MSBuildProjectDirectory)\Security\qrcode\$(Configuration)\$(PlatformTarget);$(MSBuildProjectDirectory)\Security\AES\$(Configuration)\$(PlatformTarget)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>h_bcrypt.lib;totp.lib;totp_qrcode.lib;AES.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /d "$(MSBuildProjectDirectory)\Security\bcrypt\$(Configuration)\$(PlatformTarget)\h_bcrypt.dll" "$(OutDir)"
-xcopy /y /d "$(MSBuildProjectDirectory)\Security\totp\$(Configuration)\$(PlatformTarget)\totp.dll" "$(OutDir)"</Command>
+xcopy /y /d "$(MSBuildProjectDirectory)\Security\totp\$(Configuration)\$(PlatformTarget)\totp.dll" "$(OutDir)"
+xcopy /y /d "$(MSBuildProjectDirectory)\Security\qrcode\$(Configuration)\$(PlatformTarget)\totp_qrcode.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -121,12 +123,13 @@ xcopy /y /d "$(MSBuildProjectDirectory)\Security\totp\$(Configuration)\$(Platfor
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>h_bcrypt.lib;totp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(MSBuildProjectDirectory)\Security\bcrypt\$(Configuration)\$(PlatformTarget);$(MSBuildProjectDirectory)\Security\totp\$(Configuration)\$(PlatformTarget)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>h_bcrypt.lib;totp.lib;totp_qrcode.lib;AES.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(MSBuildProjectDirectory)\Security\bcrypt\$(Configuration)\$(PlatformTarget);$(MSBuildProjectDirectory)\Security\totp\$(Configuration)\$(PlatformTarget);$(MSBuildProjectDirectory)\Security\qrcode\$(Configuration)\$(PlatformTarget);$(MSBuildProjectDirectory)\Security\AES\$(Configuration)\$(PlatformTarget)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /d "$(MSBuildProjectDirectory)\Security\bcrypt\$(Configuration)\$(PlatformTarget)\h_bcrypt.dll" "$(OutDir)"
-xcopy /y /d "$(MSBuildProjectDirectory)\Security\totp\$(Configuration)\$(PlatformTarget)\totp.dll" "$(OutDir)"</Command>
+xcopy /y /d "$(MSBuildProjectDirectory)\Security\totp\$(Configuration)\$(PlatformTarget)\totp.dll" "$(OutDir)"
+xcopy /y /d "$(MSBuildProjectDirectory)\Security\qrcode\$(Configuration)\$(PlatformTarget)\totp_qrcode.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -143,12 +146,13 @@ xcopy /y /d "$(MSBuildProjectDirectory)\Security\totp\$(Configuration)\$(Platfor
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(MSBuildProjectDirectory)\Security\bcrypt\$(Configuration)\$(PlatformTarget);$(MSBuildProjectDirectory)\Security\totp\$(Configuration)\$(PlatformTarget)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>h_bcrypt.lib;totp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(MSBuildProjectDirectory)\Security\bcrypt\$(Configuration)\$(PlatformTarget);$(MSBuildProjectDirectory)\Security\totp\$(Configuration)\$(PlatformTarget);$(MSBuildProjectDirectory)\Security\qrcode\$(Configuration)\$(PlatformTarget);$(MSBuildProjectDirectory)\Security\AES\$(Configuration)\$(PlatformTarget)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>h_bcrypt.lib;totp.lib;totp_qrcode.lib;AES.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /d "$(MSBuildProjectDirectory)\Security\bcrypt\$(Configuration)\$(PlatformTarget)\h_bcrypt.dll" "$(OutDir)"
-xcopy /y /d "$(MSBuildProjectDirectory)\Security\totp\$(Configuration)\$(PlatformTarget)\totp.dll" "$(OutDir)"</Command>
+xcopy /y /d "$(MSBuildProjectDirectory)\Security\totp\$(Configuration)\$(PlatformTarget)\totp.dll" "$(OutDir)"
+xcopy /y /d "$(MSBuildProjectDirectory)\Security\qrcode\$(Configuration)\$(PlatformTarget)\totp_qrcode.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -167,7 +171,9 @@ xcopy /y /d "$(MSBuildProjectDirectory)\Security\totp\$(Configuration)\$(Platfor
     <ClInclude Include="Container.h" />
     <ClInclude Include="Files.h" />
     <ClInclude Include="MenuItems.h" />
+    <ClInclude Include="Security\AES\AES.h" />
     <ClInclude Include="Security\bcrypt\BCryptLib.h" />
+    <ClInclude Include="Security\qrcode\QrcodeLib.h" />
     <ClInclude Include="Security\totp\TOTPLib.h" />
     <ClInclude Include="Security\Utils.h" />
     <ClInclude Include="User.h" />

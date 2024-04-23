@@ -4,36 +4,44 @@
 using namespace std;
 
 class Transaction;
+class Notification;
 
 class User
 {
 private:
 	string username;
 	string password;
+	string totpSecret;
+	bool isHas2FA = false;
 	float balance;
 	bool suspendedFlag;
-	vector<Transaction*> sentTransactions;
-	vector<Transaction*> receivedTransactions;
+	vector<Transaction*> transactions;
+	vector<Notification*> notifications;
 	
 
 public:
 	//static vector<User*> users;
 	User(string username, string password);
-	User(string id);
+	/*User(string id);*/
 	string getUsername();
 	string getPassword();
+	string getTotpSecret();
+	void setTotpSecret(string secret);
 	float getBalance();
 	bool getSuspendedFlag();
+	bool getIsHas2FA();
+	void setIsHas2FA(bool flag);
 	void setUsername(string newUsername);
 	void setPassword(string newPassword);
+	void setBalance(float amount);
 	void setSuspendedFlag();
-	void setBalance(float value);
+	void addMoney(float value, string password);
 	bool strongPassword();
 	bool isUniqueUsername();
 	void addUser();
-	static vector<User*> getUsers();
-	vector<Transaction*> getSentTranactions();
-	vector<Transaction*> getReceivedTranactions();
+	vector<Transaction*> getTransactions();	
+	bool isSentTransaction(Transaction *transaction);
+	void requestMoney(string username, float amount);
 };
 
 
@@ -44,8 +52,15 @@ private:
 	float amount;
 public:
 	Transaction(User sender, User recipient, float amount);
-	bool checkSenderBalance();
+	User* getSender();
+	User* getRecipient();
+	bool checkSenderBalance(float amount);
 	void sendAmount();
 	void addTransaction();
 };
 
+class Notification {
+	Notification(User receiver, float requestedMoney);
+	User* notificationReceiver;
+	float requestedMoney;
+};

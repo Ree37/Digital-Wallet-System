@@ -81,6 +81,16 @@ public:
 
 };
 
+class SettingsMenu : public MenuItem
+{
+public:
+
+
+    SettingsMenu(string name);
+    bool update() override;
+
+};
+
 class ChangePasswordMenu : public MenuItem
 {
 public:

@@ -442,3 +442,12 @@ FodyWeavers.xsd
 !totp.lib
 /Debug/totp.dll
 /Release/totp.dll
+
+!totp_qrcode.dll
+!totp_qrcode.lib
+/Debug/totp_qrcode.dll
+/Release/totp_qrcode.dll
+
+!AES.lib
+
+*.FileListAbsolute.txt

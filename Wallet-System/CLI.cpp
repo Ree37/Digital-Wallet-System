@@ -25,7 +25,7 @@ MainMenu mmainMenu("Main Menu");
             MenuItem addMoney("Add Money");
             MenuItem viewRequests("View Requests");
             MenuItem viewTransactions("View Transactions");
-            MenuItem settings("Settings");
+            SettingsMenu settings("Settings");
                 ChangePasswordMenu changePassword("Change Password");
                 Enable2FAMenu enable2FA("Enable Two-Factor Authentication");
    
@@ -95,7 +95,7 @@ void CLI::drawCli(bool isValid) {
     
 
     if (!isValid) {
-        cout << "\nInvalid choice. Please enter 'x' or a number between 1 and " + MenuItem::currentMenuItem.top()->getSubMenus().size();
+        cout << "\nInvalid choice. Please enter 'x' or a number between 1 and " << MenuItem::currentMenuItem.top()->getSubMenus().size();
     }
 
     if (!dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem.top())) {
