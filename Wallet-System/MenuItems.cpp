@@ -20,7 +20,6 @@ MenuItem::MenuItem(std::string name) : name(name) {
 
 void MenuItem::printMenu(MenuItem* menuItem) {
 
-
     for (size_t i = 0; i < menuItem->getSubMenus().size(); i++) {
 
         cout << i + 1 << "] " << menuItem->getSubMenus().at(i)->name << "\n";
@@ -113,7 +112,6 @@ bool MainMenu::back() {
     return false;
 };
 
-
 LoginUserMenu::LoginUserMenu(string name) : MenuItem(name) {};
 
 bool LoginUserMenu::update() {
@@ -161,21 +159,19 @@ bool LoginUserMenu::update() {
                 string i_otp;
                 string secret = userData->getTotpSecret();
                 QrcodeLib* qrcode = new QrcodeLib(userData->getUsername(), secret);
-            cout << "Enter 2FA Key: ";
-            cin >> i_otp;
+                cout << "Enter 2FA Key: ";
+                cin >> i_otp;
 
-            if (exitCommand(i_otp))
-                return true;
+                if (exitCommand(i_otp))
+                    return true;
 
-                /// Dummy TOTP 2FA Logic
-            
-            unsigned int otp = TOTPLib::getOTP(secret);
+                unsigned int otp = TOTPLib::getOTP(secret);
 
                 if (stoi(i_otp) != otp)
-            {
-                CLI::clearCli();
-                cout << "Invalid 2FA Key\n\n";
-                continue;
+                {
+                    CLI::clearCli();
+                    cout << "Invalid 2FA Key\n\n";
+                    continue;
                 }
             }
 
@@ -295,7 +291,6 @@ bool ChangePasswordMenu::update() {
 Enable2FAMenu::Enable2FAMenu(string name) : MenuItem(name) {};
 
 
-//update yet to be implemented
 bool Enable2FAMenu::update() {
 
     Files files;
@@ -344,8 +339,8 @@ bool Enable2FAMenu::update() {
         return true;
 
     if (!BCryptLib::validatePassword(password, user->getPassword())) {
-    return true;
-}
+        return true;
+    }
 
     CLI::clearCli();
 
