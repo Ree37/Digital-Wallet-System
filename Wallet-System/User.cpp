@@ -19,22 +19,35 @@ User::User(string username, string password) {
     this->username = username;
     this->password = password;
 }
-float User::getBalance() { return balance; }
+string User::getUsername() { return username; };
 
-void User::setBalance(float value) {
-	balance = value;
-}
+string User::getPassword() { return password; };
+
+float User::getBalance() { return balance; }
 
 bool User::getSuspendedFlag()
 {
 	return suspendedFlag;
 }
+
+void User::setUsername(string newUsername)
+{
+	username = newUsername;
+}
+
+void User::setPassword(string newPassword)
+{
+	password = newPassword;
+}
+
 void User::setSuspendedFlag()
 {
 	suspendedFlag = !suspendedFlag;
 };
-string User::getUsername() { return username; };
-string User::getPassword() { return password; };
+
+void User::addBalance(float value) {
+	balance = value;
+}
 
 vector<Transaction*> User::getSentTranactions() {
 	return sentTransactions;
