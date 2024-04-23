@@ -46,7 +46,7 @@ void User::setSuspendedFlag()
 };
 
 void User::addBalance(float value) {
-	balance = value;
+	balance += value ;
 }
 
 vector<Transaction*> User::getTransactions() {
