@@ -36,7 +36,7 @@ public:
 	void setBalance(float amount);
 	void setSuspendedFlag();
 	void addMoney(float value, string password);
-	bool strongPassword();
+	bool strongPassword(string password);
 	bool isUniqueUsername();
 	void addUser();
 	vector<Transaction*> getTransactions();	
