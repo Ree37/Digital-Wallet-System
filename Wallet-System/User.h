@@ -12,7 +12,8 @@ private:
 	string password;
 	float balance;
 	bool suspendedFlag;
-	vector<Transaction*> Transactions;
+	vector<Transaction*> transactions;
+	vector<Notification*> notifications;
 	
 
 public:
@@ -30,10 +31,7 @@ public:
 	bool strongPassword();
 	bool isUniqueUsername();
 	void addUser();
-	static vector<User*> getUsers();
-	vector<Transaction*> getSentTranactions();
-	vector<Transaction*> getReceivedTranactions();
-	vector<Transaction*> getTransactions();
+	vector<Transaction*> getTransactions();	
 	bool isSentTransaction(Transaction *transaction);
 };
 
@@ -53,7 +51,8 @@ public:
 };
 
 class Notification {
+	Notification(User receiver, float requestedMoney);
 	User* notificationReceiver;
 	float requestedMoney;
-	Notification(User receiver, float requestedMoney);
+	
 };
