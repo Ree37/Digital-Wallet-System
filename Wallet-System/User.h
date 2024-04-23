@@ -28,7 +28,7 @@ public:
 	void setPassword(string newPassword);
 	void setBalance(float amount);
 	void setSuspendedFlag();
-	void addBalance(float value);
+	void addMoney(float value, string password);
 	bool strongPassword();
 	bool isUniqueUsername();
 	void addUser();

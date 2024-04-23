@@ -50,8 +50,10 @@ void User::setSuspendedFlag()
 	suspendedFlag = !suspendedFlag;
 };
 
-void User::addBalance(float value) {
-	balance += value ;
+void User::addMoney(float value, string password) {
+	if (password == this->password) {
+		balance += value;
+	}
 }
 
 vector<Transaction*> User::getTransactions() {
