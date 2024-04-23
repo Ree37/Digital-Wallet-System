@@ -40,6 +40,11 @@ void User::setPassword(string newPassword)
 	password = newPassword;
 }
 
+void User::setBalance(float amount)
+{
+	balance = amount;
+}
+
 void User::setSuspendedFlag()
 {
 	suspendedFlag = !suspendedFlag;
@@ -84,6 +89,9 @@ User* Transaction::getRecipient() {
 bool Transaction::checkSenderBalance(float amount)
 {
 	return (balance >= amount);
+}
+void Transaction::sendAmount()
+{
 }
 User* Transaction::getSender() {
 	return sender;

@@ -26,6 +26,7 @@ public:
 	bool getSuspendedFlag();
 	void setUsername(string newUsername);
 	void setPassword(string newPassword);
+	void setBalance(float amount);
 	void setSuspendedFlag();
 	void addBalance(float value);
 	bool strongPassword();
