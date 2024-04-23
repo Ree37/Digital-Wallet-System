@@ -92,6 +92,10 @@ bool Transaction::checkSenderBalance(float amount)
 }
 void Transaction::sendAmount()
 {
+	if (checkSenderBalance(amount)) {
+		sender->setBalance(sender->getBalance() - amount);
+		recipient->setBalance(recipient->getBalance() + amount);
+	}
 }
 User* Transaction::getSender() {
 	return sender;
