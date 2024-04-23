@@ -49,11 +49,8 @@ void User::addBalance(float value) {
 	balance = value;
 }
 
-vector<Transaction*> User::getSentTranactions() {
-	return sentTransactions;
-}
-vector<Transaction*> User::getReceivedTranactions() {
-	return receivedTransactions;
+vector<Transaction*> User::getTransactions() {
+	return transactions;
 }
 bool User::isUniqueUsername() {
 	for (int i = 0; i < Container::users.capacity(); i++)
@@ -72,6 +69,6 @@ Transaction::Transaction(User sender, User recipient, float amount) {
 	this->amount = amount;
 }
 void Transaction::addTransaction() {
-	sender->getSentTranactions().push_back(this);
-	recipient->getReceivedTranactions().push_back(this);
+	sender->getTransactions().push_back(this);
+	recipient->getTransactions().push_back(this);
 }
