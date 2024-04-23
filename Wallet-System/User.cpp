@@ -68,6 +68,10 @@ bool User::isUniqueUsername() {
 	}
 	return true;
 }
+void User::addUser()
+{
+	Container::addUser(this);
+}
 bool User::isSentTransaction(Transaction *transaction) {
 	if (transaction->getSender() == this) {
 		return true;
