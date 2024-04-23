@@ -49,6 +49,13 @@ void User::setSuspendedFlag()
 {
 	suspendedFlag = !suspendedFlag;
 };
+string User::getTotpSecret() { return totpSecret; };
+bool User::getIsHas2FA() { return isHas2FA; };
+
+void User::setTotpSecret(string secret) { this->totpSecret = secret; };
+void User::setIsHas2FA(bool flag) { this->isHas2FA = flag; };
+
+
 
 void User::addMoney(float value, string password) {
 	if (password == this->password) {

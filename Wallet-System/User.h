@@ -4,12 +4,15 @@
 using namespace std;
 
 class Transaction;
+class Notification;
 
 class User
 {
 private:
 	string username;
 	string password;
+	string totpSecret;
+	bool isHas2FA = false;
 	float balance;
 	bool suspendedFlag;
 	vector<Transaction*> transactions;
@@ -22,8 +25,12 @@ public:
 	/*User(string id);*/
 	string getUsername();
 	string getPassword();
+	string getTotpSecret();
+	void setTotpSecret(string secret);
 	float getBalance();
 	bool getSuspendedFlag();
+	bool getIsHas2FA();
+	void setIsHas2FA(bool flag);
 	void setUsername(string newUsername);
 	void setPassword(string newPassword);
 	void setBalance(float amount);
