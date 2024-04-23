@@ -1,17 +1,19 @@
 #pragma once
 #include <iostream>
+#include"Container.h"
 #include <string>
 #include"user.h"
 #include <fstream>
 using namespace std;
 class Files
 {
-public:
+private:
 	void create();
-	void writeUsersData(User inputUser);
-	void writeTransactionsData(User sender , User recipient , float amount);
-	void editUserProfile();
-	void updateBalance(User sender, User recipient, float amount);
-	User* readData(string userName);
+public:
+	void writeUsersDataFromContainerToFiles(vector <User*> users);
+	void writeTransactionsDataFromContainerToFiles(vector<Transaction>Transactions);
+	stringstream getLineFromData(ifstream &data);
+	string getCellFromLine(stringstream &record);
+	User* readDataFromCsvFile(string userName);
 };
 
