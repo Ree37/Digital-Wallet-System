@@ -31,6 +31,7 @@ public:
 	void addUser();
 	static vector<User*> getUsers();
 	vector<Transaction*> getTransactions();
+	bool isSentTransaction(Transaction *transaction);
 };
 
 
@@ -41,6 +42,8 @@ private:
 	float amount;
 public:
 	Transaction(User sender, User recipient, float amount);
+	User* getSender();
+	User* getRecipient();
 	bool checkSenderBalance();
 	void sendAmount();
 	void addTransaction();
