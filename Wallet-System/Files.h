@@ -1,13 +1,22 @@
 #pragma once
 #include <iostream>
+#include"Container.h"
 #include <string>
 #include"user.h"
 #include <fstream>
 using namespace std;
 class Files
 {
-public:
+private:
 	void create();
+<<<<<<< HEAD
+public:
+	void writeUsersDataFromContainerToFiles(vector <User*> users);
+	void writeTransactionsDataFromContainerToFiles(vector<Transaction>Transactions);
+	stringstream getLineFromData(ifstream &data);
+	string getCellFromLine(stringstream &record);
+	User* readDataFromCsvFile(string userName);
+=======
 	void writeUsersData(User inputUser);
 	void writeTransactionsData(User sender , User recipient , float amount);
 	void editUserProfile();
@@ -18,5 +27,6 @@ public:
 	User* readData(string userName);
 private:
 	bool getline(istream& is, string& str, char delim);
+>>>>>>> a804d5663436088e89f295512b47cd86722dd1e8
 };
 

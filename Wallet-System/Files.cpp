@@ -27,7 +27,7 @@ void Files::create()
 	usersFile.close();
 	Transactions.close();
 }
-void Files::writeUsersData(User inputUser)
+void Files::writeUsersDataFromContainerToFiles(vector <User*> users)
 {
 	ofstream usersFile;
 	usersFile.open(userData, ios::app); // Open the file in append mode
@@ -35,32 +35,87 @@ void Files::writeUsersData(User inputUser)
 	{
 		// Input Sanitization: wrap in quotes to prevent comma insertion which breaks csv
 		// TODO: Sanitize Excel formula syntax to prevent csv injection
+<<<<<<< HEAD
+		for (User* user : users)
+		{	
+		usersFile << "\"" << user->getUsername() << "\",";
+        usersFile << "\"" << user->getPassword() << "\",";
+        usersFile << "\"" << user->getBalance() << "\"" << endl;	
+		}
+			
+=======
 		usersFile << "\"" << inputUser.getUsername() << "\",";
         usersFile << "\"" << inputUser.getPassword() << "\",";
         usersFile << "\"" << inputUser.getBalance() << "\",";
 		usersFile << "\"" << inputUser.getIsHas2FA() << "\",";
 		usersFile << "\"" << inputUser.getTotpSecret() << "\"" << endl;
+>>>>>>> a804d5663436088e89f295512b47cd86722dd1e8
 	}
 	usersFile.close();
 }
-void Files::writeTransactionsData(User sender, User recipient, float amount)
+void Files::writeTransactionsDataFromContainerToFiles(vector<Transaction>Transactions)
 {
 	ofstream Transactionsfile;
 	Transactionsfile.open(transactionsData, ios::app); // Open the file in append mode
 	if (Transactionsfile.is_open())
 	{		
-		Transactionsfile << sender.getUsername() << ","; 
-		Transactionsfile << recipient.getUsername() << ",";
-		Transactionsfile << amount << "," << endl;
+		for (Transaction trans : Transactions)
+		{
+		/*	TransactionsFile << "\"" << trans.<< "\",";
+			usersFile << "\"" << trans->get() << "\","; 
+			usersFile << "\"" << trans->get() << "\"" << endl;*/ // Make getters for transaction class (Remo)
+		}
 
 	}
-	updateBalance(sender, recipient, amount);
 }
-void Files::updateBalance(User sender, User recipient, float amount)
+stringstream getLineFromData(ifstream& data)
 {
-	ifstream usersfile;
-	usersfile.open(userData);
 	string records;
+<<<<<<< HEAD
+	getline(data, records);
+	stringstream record(records);
+	return record;
+
+}
+string getCellFromLine(stringstream& record)
+{
+	string cell;
+	getline(record, cell, ',');
+	size_t start = cell.find_first_not_of(" \t");
+	size_t end = cell.find_last_not_of(" \t");
+	if (start == string::npos || end == string::npos)
+	{
+		cell = ""; // Empty string if no non-whitespace characters found
+	}
+	else
+	{
+		cell = cell.substr(start, end - start + 1);
+	}
+	return cell;
+}
+User* readDataFromCsvFile(string userName)
+{
+	ifstream names;
+	names.open("Names.csv");
+	while (names.peek() != EOF)
+	{
+		stringstream Line = getLineFromData(names);
+		string cell = getCellFromLine(Line);
+
+		if (userName == cell)
+		{
+			string storedPassword = getCellFromLine(Line);
+			float storedBalance = stof(getCellFromLine(Line));
+
+			User* user = new User(cell, storedPassword);
+			user->setBalance(storedBalance);
+			return user;
+		}
+	}
+	names.close();
+	return nullptr;
+}
+=======
 	while (std::getline(usersfile,records))
 	{
 		stringstream record(records);
@@ -248,3 +303,4 @@ bool Files::getline(std::istream& is, std::string& str, char delim) {
 	}
 	return false;
 }
+>>>>>>> a804d5663436088e89f295512b47cd86722dd1e8
