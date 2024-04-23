@@ -77,7 +77,7 @@ bool User::isUniqueUsername() {
 }
 void User::addUser()
 {
-	Container::addUser(this);
+	Container::users.push_back(this);
 }
 bool User::isSentTransaction(Transaction *transaction) {
 	if (transaction->getSender() == this) {
@@ -101,7 +101,7 @@ User* Transaction::getRecipient() {
 }
 bool Transaction::checkSenderBalance(float amount)
 {
-	return (balance >= amount);
+	return (sender->getBalance() >= amount);
 }
 void Transaction::sendAmount()
 {

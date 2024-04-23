@@ -39,9 +39,9 @@ void Admin::setSuspendUsers(string suspendedUserName) {
 	Container::users.at(position)->setSuspendedFlag();
 }
 
-void Admin::adjustUserBalance(string adjustedUserName, float value) {
+void Admin::adjustUserBalance(string adjustedUserName, float amount) {
 	int position = getIndex(adjustedUserName);
-	Container::users.at(position)->addBalance(value);
+	Container::users.at(position)->setBalance(amount);
 }
 
 //void viewUsers()
