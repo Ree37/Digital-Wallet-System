@@ -12,12 +12,13 @@ private:
 	string password;
 	float balance;
 	bool suspendedFlag;
-	vector<Transaction*> transactions;
+	vector<Transaction*> Transactions;
 	
 
 public:
+	//static vector<User*> users;
 	User(string username, string password);
-	User(string id);
+	/*User(string id);*/
 	string getUsername();
 	string getPassword();
 	float getBalance();
@@ -25,12 +26,13 @@ public:
 	void setUsername(string newUsername);
 	void setPassword(string newPassword);
 	void setSuspendedFlag();
-	void setBalance(float value);
+	void addBalance(float value);
 	bool strongPassword();
 	bool isUniqueUsername();
 	void addUser();
 	static vector<User*> getUsers();
-	vector<Transaction*> getTransactions();
+	vector<Transaction*> getSentTranactions();
+	vector<Transaction*> getReceivedTranactions();
 };
 
 
