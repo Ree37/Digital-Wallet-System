@@ -81,6 +81,10 @@ void Transaction::addTransaction() {
 User* Transaction::getRecipient() {
 	return recipient;
 }
+bool Transaction::checkSenderBalance(float amount)
+{
+	return (balance >= amount);
+}
 User* Transaction::getSender() {
 	return sender;
 }

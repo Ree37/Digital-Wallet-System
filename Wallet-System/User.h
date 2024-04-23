@@ -33,6 +33,7 @@ public:
 	void addUser();
 	vector<Transaction*> getTransactions();	
 	bool isSentTransaction(Transaction *transaction);
+	void requestMoney(string username, float amount);
 };
 
 
@@ -45,7 +46,7 @@ public:
 	Transaction(User sender, User recipient, float amount);
 	User* getSender();
 	User* getRecipient();
-	bool checkSenderBalance();
+	bool checkSenderBalance(float amount);
 	void sendAmount();
 	void addTransaction();
 };
@@ -54,5 +55,4 @@ class Notification {
 	Notification(User receiver, float requestedMoney);
 	User* notificationReceiver;
 	float requestedMoney;
-	
 };
