@@ -61,6 +61,12 @@ bool User::isUniqueUsername() {
 	}
 	return true;
 }
+bool User::isSentTransaction(Transaction *transaction) {
+	if (transaction->getSender() == this) {
+		return true;
+	}
+	return false;
+}
 
 //Transaction functions
 Transaction::Transaction(User sender, User recipient, float amount) {
@@ -71,4 +77,10 @@ Transaction::Transaction(User sender, User recipient, float amount) {
 void Transaction::addTransaction() {
 	sender->getTransactions().push_back(this);
 	recipient->getTransactions().push_back(this);
+}
+User* Transaction::getRecipient() {
+	return recipient;
+}
+User* Transaction::getSender() {
+	return sender;
 }
