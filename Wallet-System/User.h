@@ -12,8 +12,7 @@ private:
 	string password;
 	float balance;
 	bool suspendedFlag;
-	vector<Transaction*> sentTransactions;
-	vector<Transaction*> receivedTransactions;
+	vector<Transaction*> Transactions;
 	
 
 public:
