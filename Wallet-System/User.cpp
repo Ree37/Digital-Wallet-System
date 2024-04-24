@@ -2,6 +2,7 @@
 #include "Security/Utils.h"
 #include "Container.h"
 #include <iostream>
+#include <regex>
 
 using namespace std;
 
@@ -37,7 +38,10 @@ void User::setUsername(string newUsername)
 
 void User::setPassword(string newPassword)
 {
-	password = newPassword;
+	if (strongPassword(newPassword)) {
+		password = newPassword;
+	}
+	
 }
 
 void User::setBalance(float amount)
@@ -61,6 +65,13 @@ void User::addMoney(float value, string password) {
 	if (password == this->password) {
 		balance += value;
 	}
+}
+
+bool User::strongPassword(string password)
+{
+	regex pattern("(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+=])(?=\\S+$).{8,}");
+	return (regex_match(password, pattern));
+
 }
 
 vector<Transaction*> User::getTransactions() {
