@@ -40,8 +40,8 @@ void Admin::editUser(string name, string newName)
 }
 
 void Admin::addUser(string userName, string userPassword) {
-    User newUser(userName,userPassword);
-    Container::addUser(&newUser);
+    User *newUser = new User (userName,userPassword);
+    Container::addUser(newUser);
 }
 
 vector<User*> Admin::viewUsers()
