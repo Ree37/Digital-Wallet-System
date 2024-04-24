@@ -45,9 +45,9 @@ void User::setBalance(float amount)
 	balance = amount;
 }
 
-void User::setSuspendedFlag()
+void User::setSuspendedFlag(bool flag)
 {
-	suspendedFlag = !suspendedFlag;
+	suspendedFlag = flag;
 };
 string User::getTotpSecret() { return totpSecret; };
 bool User::getIsHas2FA() { return isHas2FA; };
@@ -66,25 +66,25 @@ void User::addMoney(float value, string password) {
 vector<Transaction*> User::getTransactions() {
 	return transactions;
 }
-bool User::isUniqueUsername() {
-	for (int i = 0; i < Container::users.capacity(); i++)
-	{
-		if (this->username == Container::users[i]->username) {
-			return false;
-		}
-	}
-	return true;
-}
-void User::addUser()
-{
-	Container::users.push_back(this);
-}
-bool User::isSentTransaction(Transaction *transaction) {
-	if (transaction->getSender() == this) {
-		return true;
-	}
-	return false;
-}
+//bool User::isUniqueUsername() {
+//	for (int i = 0; i < Container::users.capacity(); i++)
+//	{
+//		if (this->username == Container::users[i]->username) {
+//			return false;
+//		}
+//	}
+//	return true;
+//}
+//void User::addUser()
+//{
+//	Container::users.push_back(this);
+//}
+//bool User::isSentTransaction(Transaction *transaction) {
+//	if (transaction->getSender() == this) {
+//		return true;
+//	}
+//	return false;
+//}
 
 //Transaction functions
 Transaction::Transaction(User sender, User recipient, float amount) {

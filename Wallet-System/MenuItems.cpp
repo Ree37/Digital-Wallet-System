@@ -8,6 +8,7 @@
 #include <windows.h>
 #include <synchapi.h>
 #include <conio.h>
+#include"Container.h"
 
 
 
@@ -138,7 +139,7 @@ bool LoginUserMenu::update() {
 
 
             Files files;
-            User* userData = files.readData(username);
+            User* userData = Container::getUser(username);
             try {
                 if (!userData) {
                     throw exception();
@@ -214,8 +215,8 @@ bool RegisterUserMenu::update() {
 
             MenuItem::user = new User(username, hash);
 
-            Files files;
-            files.writeUsersData(*MenuItem::user);
+            
+            Container::addUser(MenuItem::user);
 
             currentMenuItem.push(currentMenuItem.top()->getSubMenus()[0]);
 

@@ -1,14 +1,20 @@
 #include "Container.h"
-#include "Files.h"
-vector<Transaction> Container:: Transactions;
-vector<User*> Container::users; // why This variable here and why pointer ?
 
-void Container::addUser(User* user) {
-	Container::users.push_back(user);
-}
-void Container::addTransaction(User sender, User recipient, float amount)
-{
-	Transaction newTransaction(sender,recipient,amount);
-	Transactions.push_back(newTransaction);
-}
 
+unordered_map<string, User *> Container::Users;
+
+void Container::addUser(User *user) {
+  Users.insert({user->getUsername(), user});
+}
+User* Container:: getUser(string userName) {
+  if (Users.count(userName)) {
+    return Users[userName];
+  } else {
+    return NULL;
+  }
+}
+  //
+//void Container::addTransaction(User* sender, User* recipient, float amount) {
+//  Transaction *newTransaction= new Transaction(sender, recipient, amount);
+//  Users.push_back(newTransaction);//delete newTransaction
+//}

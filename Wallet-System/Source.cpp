@@ -5,6 +5,8 @@
 #include "CLI.h"
 using namespace std;
 int main() {
-	Admin admin("Admin1", "Admin1");
+	//Admin admin("Admin1", "Admin1");
+  Files::readDataFromCsvFile();
 	CLI::start();
+  Files::writeUsersDataFromContainerToFiles(Container::Users);
 }

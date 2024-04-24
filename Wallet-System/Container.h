@@ -1,15 +1,11 @@
 #pragma once
-#include <vector>
 #include "User.h"
 #include <Unordered_Map>
-class Container
-{
+#include <vector>
+class Container {
 public:
-	static vector<User*> users;
-	static vector<Transaction> Transactions;
-	static unordered_map<string, User> UsersData;
-	void addUser(User* user);
-	void addTransaction(User sender, User recipient, float amount);
-	
+  static unordered_map<string, User *> Users;
+  static void addUser(User *user);
+  static User *getUser(string userName);
+ // void addTransaction(User *sender, User *recipient, float amount);
 };
-

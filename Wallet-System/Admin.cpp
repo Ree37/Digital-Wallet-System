@@ -2,7 +2,7 @@
 #include "User.h"
 #include "Container.h"
 
-int Admin::getIndex(string user_name) {
+/* int Admin::getIndex(string user_name) {
 	int i = 0;
 	for (; i <= Container::users.size(); i++) {
 		if (Container::users.at(i)->getUsername() == user_name) {
@@ -74,4 +74,6 @@ Admin::Admin(const std::string& usr, const std::string& pwd)
 }
 	
 
-bool Admin::isUnique(string name) { return !Admin::uniqueUserName.count(name); }
+bool Admin::isUnique(string name) {
+  return !Admin::uniqueUserName.count(name);
+}*/

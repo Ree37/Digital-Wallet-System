@@ -1,4 +1,4 @@
-#pragma once
+/* #pragma once
 #include<iostream>
 #include<string>
 #include<set>
@@ -30,4 +30,4 @@ class Admin
 		void deleteUser(string deleted_User);
 		void adjustUserBalance(string adjustedUserName, float value);
 		int getIndex(string user_name);
-};
+};*/
