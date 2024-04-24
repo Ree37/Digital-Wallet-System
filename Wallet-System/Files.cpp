@@ -32,7 +32,6 @@ void Files::create() {
 
 void Files::writeUsersDataFromContainerToFiles(unordered_map<string, User*>& User) {
 	ofstream usersFile;
-
 	// Open the file in append mode
 	usersFile.open(userData);
 
@@ -60,10 +59,13 @@ void Files::writeUsersDataFromContainerToFiles(unordered_map<string, User*>& Use
 	}
 
 	usersFile.close();
+	Utils::encryptFiles(userData);
 }
 
 void Files::readDataFromCsvFile() {
 	ifstream usersFile;
+
+	//std::stringstream stream = Utils::decryptFiles(userData);
 	usersFile.open(userData);
 
 	// Skip header
