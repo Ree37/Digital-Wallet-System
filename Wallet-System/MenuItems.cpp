@@ -246,57 +246,71 @@ bool UserProfileMenu::back() {
 AddMoneyMenu::AddMoneyMenu(string name) : MenuItem(name) {};
 
 bool AddMoneyMenu::update() {
+
+
 	CLI::clearCli();
-
 	cout << "Input 'x' to leave menu\n";
-	cout << "Enter Password: ";
-	string password;
-	cin >> password;
 
-	if (exitCommand(password))
-	{
-		return true;
-	}
+	while (true) {
+		cout << "Enter Password: ";
+		string password;
+		cin >> password;
 
-	if ( BCryptLib::validatePassword( password, user->getPassword() ) ) {
-		string input;
-		float amount;
-		bool isValid;
+		if (exitCommand(password))
+		{
+			return true;
+		}
 
-		isValid = true;
-
-		while(true) {
-			CLI::clearCli();
-			if (!isValid)
+		try {
+			if (!BCryptLib::validatePassword(password, user->getPassword()))
 			{
-				cout << "Please enter valid amount (positive number)\n\n";
+				throw invalid_argument("Wrong password");
 			}
-			cout << "Enter amount: ";
-			cin >> input;
-
-			if (exitCommand(input))
-			{
-				return true;
-			}
-			
-			try {
-				amount = stof(input);
-			}
-			catch (exception e)
-			{
-				isValid = false;
-				continue;
-			}
-
-			if (!user->addMoney(amount))
-			{
-				isValid = false;
-				continue;
-			}
-			back();
 			break;
 		}
+		catch (exception e) {
+			CLI::clearCli();
+			cout << "Input 'x' to leave menu\n\n";
+			cout << e.what() << "\n\n";
+		}
+	}
 	
+	string input;
+	float amount;
+	bool isValid;
+
+	isValid = true;
+	while(true) {
+		CLI::clearCli();
+		if (!isValid)
+		{
+			cout << "Please enter valid amount (positive number)\n\n";
+		}
+		cout << "Enter amount: ";
+		cin >> input;
+
+		if (exitCommand(input))
+		{
+			return true;
+		}
+			
+		try {
+			amount = stof(input);
+		}
+		catch (exception e)
+		{
+			isValid = false;
+			continue;
+		}
+
+		if (!user->addMoney(amount))
+		{
+			isValid = false;
+			continue;
+		}
+		back();
+		break;
+		
 	}
 
 	return true;
