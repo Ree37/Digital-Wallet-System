@@ -172,7 +172,7 @@ bool LoginUserMenu::update() {
 
 		break;
 	}
-
+	return true;
 };
 
 RegisterUserMenu::RegisterUserMenu(string name) : MenuItem(name) {};
@@ -219,6 +219,7 @@ bool RegisterUserMenu::update() {
 			cout << "Enter Username: " << username << "\n";
 		}
 	}
+	return true;
 };
 
 
@@ -338,7 +339,6 @@ bool SettingsMenu::update() {
 
 ChangePasswordMenu::ChangePasswordMenu(string name) : MenuItem(name) {};
 
-//update yet to be implemented
 bool ChangePasswordMenu::update() {
 
 	string oldPassword;
@@ -406,8 +406,6 @@ bool ChangePasswordMenu::update() {
 
 	return true;
 };
-
-//override back if needed
 
 Enable2FAMenu::Enable2FAMenu(string name) : MenuItem(name) {};
 
