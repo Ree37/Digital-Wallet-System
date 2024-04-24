@@ -44,5 +44,16 @@ void Admin::addUser(string userName, string userPassword) {
     Container::addUser(&newUser);
 }
 
+vector<User*> Admin::viewUsers()
+{
+	vector<User*> usrVec;
+	unordered_map<string, User*>::iterator it;
+	for (it = Container::Users.begin() ; it != Container::Users.end() ;it++)
+	{
+		usrVec.push_back(it->second);
+	}
+	return usrVec;
+}
+
 
 //TODO edit
