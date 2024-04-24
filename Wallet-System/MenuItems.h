@@ -60,6 +60,14 @@ public:
 	bool update() override;
 };
 
+class AddMoneyMenu : public MenuItem
+{
+public:
+	AddMoneyMenu(string name);
+	bool update() override;
+
+};
+
 class SettingsMenu : public MenuItem
 {
 public:

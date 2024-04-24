@@ -17,7 +17,7 @@ MainMenu mmainMenu("Main Menu");
         UserProfileMenu userProfile("User Profile");
             MenuItem sendMoney("Send Money");
             MenuItem requestMoney("Request Money");
-            MenuItem addMoney("Add Money");
+            AddMoneyMenu addMoney("Add Money");
             MenuItem viewRequests("View Requests");
             MenuItem viewTransactions("View Transactions");
             SettingsMenu settings("Settings");

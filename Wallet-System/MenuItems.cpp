@@ -242,6 +242,69 @@ bool UserProfileMenu::back() {
 	return true;
 };
 
+
+AddMoneyMenu::AddMoneyMenu(string name) : MenuItem(name) {};
+
+bool AddMoneyMenu::update() {
+	CLI::clearCli();
+
+	cout << "Input 'x' to leave Add Money menu\n";
+	cout << "Enter Password: ";
+	string password;
+	cin >> password;
+
+	if (exitCommand(password))
+	{
+		return true;
+	}
+
+	if ( BCryptLib::validatePassword( password, user->getPassword() ) ) {
+		string input;
+		float amount;
+		bool isValid;
+
+		isValid = true;
+
+		while(true) {
+			CLI::clearCli();
+			if (!isValid)
+			{
+				cout << "Please enter valid amount (positive number)\n";
+			}
+			cout << "Enter amount: ";
+			cin >> input;
+
+			if (exitCommand(input))
+			{
+				return true;
+			}
+			
+			try {
+				amount = stof(input);
+			}
+			catch (exception e)
+			{
+				isValid = false;
+				continue;
+			}
+
+			if (!user->addMoney(amount))
+			{
+				isValid = false;
+				continue;
+			}
+			back();
+			break;
+		}
+	
+	}
+
+	return true;
+};
+
+
+
+
 SettingsMenu::SettingsMenu(string name) : MenuItem(name) {};
 
 bool SettingsMenu::update() {

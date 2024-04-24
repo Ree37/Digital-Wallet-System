@@ -82,11 +82,13 @@ void User::setIsHas2FA(bool flag)
 	this->isHas2FA = flag;
 }
 
-void User::addMoney(float value, string password) 
+bool User::addMoney(float value) 
 {
-	if (password == this->password) {
+	if (value > 0) {
 		balance += value;
+		return true;
 	}
+	return false;
 }
 
 bool User::strongPassword(string password)

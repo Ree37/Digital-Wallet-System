@@ -27,7 +27,7 @@ public:
 	void setSuspendedFlag(bool flag);
 
 	bool isUniqueUsername();
-	void addMoney(float value, string password);
+	bool addMoney(float value);
 	bool strongPassword(string password);
 	void addUser();
 	vector<Transaction*> getTransactions();
