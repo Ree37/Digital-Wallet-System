@@ -75,6 +75,13 @@ public:
 	bool update() override;
 };
 
+class ChangeUserNameMenu : public MenuItem
+{
+public:
+	ChangeUserNameMenu(string name);
+	bool update() override;
+};
+
 class ChangePasswordMenu : public MenuItem
 {
 public:

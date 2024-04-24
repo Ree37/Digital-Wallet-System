@@ -21,7 +21,7 @@ public:
 
 	void setTotpSecret(string secret);
 	void setIsHas2FA(bool flag);
-	void setUsername(string newUsername);
+	bool setUsername(string newUsername);
 	void setPassword(string newPassword);
 	void setBalance(float amount);
 	void setSuspendedFlag(bool flag);

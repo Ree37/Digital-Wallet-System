@@ -40,9 +40,15 @@ bool User::getSuspendedFlag()
 	return suspendedFlag;
 }
 
-void User::setUsername(string newUsername)
+bool User::setUsername(string newUsername)
 {
+	if (Container::Users.count(newUsername))
+	{
+		return false;
+	}
+
 	username = newUsername;
+	return true;
 }
 
 void User::setPassword(string newPassword)
