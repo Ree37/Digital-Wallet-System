@@ -1,6 +1,7 @@
 #include "Admin.h"
 #include "User.h"
 #include "Container.h"
+
 Admin Admin::adminInstance("Admin","12345678");
 
 void Admin::deleteUser(string deletedUserName) {
@@ -30,7 +31,7 @@ void Admin::setSuspendUsers(string suspendedUserName) {
 }
 
 void Admin::adjustUserBalance(string adjustedUserName, float amount) {
-	Container::users.at(adjustedUserName)->setBalance(amount);
+	Container::Users.at(adjustedUserName)->setBalance(amount);
 }
 
 Admin::Admin(const std::string& usr, const std::string& pwd)
@@ -38,15 +39,13 @@ Admin::Admin(const std::string& usr, const std::string& pwd)
 	Admin::setName(usr);
 	Admin::setPassword(pwd);
 }
-bool Admin::isUnique(string name) {
-  return !Admin::uniqueUserName.count(name);
-}
+
 void Admin::addUser(string userName, string userPassword) {
     User newUser(userName,userPassword);
-    Container::addUser(newUser);
+    Container::addUser(&newUser);
 }
-Admin&  Admin::getInstance() {
-    return adminInstance;
-}
+// Admin& Admin::getInstance() {
+//    return adminInstance;
+//}
 
 //TODO edit

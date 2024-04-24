@@ -23,7 +23,7 @@ class Admin
 		void setSuspendUsers(string suspendedUserName);
 		void deleteUser(string deleted_User);
 		void adjustUserBalance(string adjustedUserName, float value);
-    Admin& adminGetInstance();
+		static Admin& adminGetInstance();
 
 private:
     Admin(const string& usr, const string& pwd);
