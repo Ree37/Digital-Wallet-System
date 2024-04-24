@@ -114,7 +114,7 @@ LoginUserMenu::LoginUserMenu(string name) : MenuItem(name) {};
 bool LoginUserMenu::update() {
 
 	CLI::clearCli();
-	cout << "Input 'x' to leave login menu\n\n";
+	cout << "Input 'x' to leave menu\n\n";
 	while (true) {
 		string username, password;
 
@@ -133,16 +133,16 @@ bool LoginUserMenu::update() {
 		User* userData = Container::getUser(username);
 		try {
 			if (!userData) {
-				throw exception();
+				throw invalid_argument("Wrong Username or Password");
 			}
 			if (!BCryptLib::validatePassword(password, userData->getPassword())) {
-				throw exception();
+				throw invalid_argument("Wrong Username or Password");
 			}
 		}
 		catch (exception e) {
 			CLI::clearCli();
-			cout << "Input 'x' to leave login menu\n\n";
-			cout << "Wrong Username or Password\n\n";
+			cout << "Input 'x' to leave menu\n\n";
+			cout << e.what() << "\n\n";
 			continue;
 		}
 
@@ -181,7 +181,7 @@ bool RegisterUserMenu::update() {
 	CLI::clearCli();
 
 	string username, password;
-	cout << "Input 'x' to leave register menu\n";
+	cout << "Input 'x' to leave menu\n";
 
 	cout << "Enter Username: ";
 	cin >> username;
@@ -213,7 +213,7 @@ bool RegisterUserMenu::update() {
 		}
 		catch (exception e) {
 			CLI::clearCli();
-			cout << "Input 'x' to leave register menu\n\n";
+			cout << "Input 'x' to leave menu\n\n";
 
 			cout << e.what() << '\n';
 			cout << "Enter Username: " << username << "\n";
@@ -248,7 +248,7 @@ AddMoneyMenu::AddMoneyMenu(string name) : MenuItem(name) {};
 bool AddMoneyMenu::update() {
 	CLI::clearCli();
 
-	cout << "Input 'x' to leave Add Money menu\n";
+	cout << "Input 'x' to leave menu\n";
 	cout << "Enter Password: ";
 	string password;
 	cin >> password;
@@ -269,7 +269,7 @@ bool AddMoneyMenu::update() {
 			CLI::clearCli();
 			if (!isValid)
 			{
-				cout << "Please enter valid amount (positive number)\n";
+				cout << "Please enter valid amount (positive number)\n\n";
 			}
 			cout << "Enter amount: ";
 			cin >> input;
@@ -327,7 +327,68 @@ ChangePasswordMenu::ChangePasswordMenu(string name) : MenuItem(name) {};
 //update yet to be implemented
 bool ChangePasswordMenu::update() {
 
-	MenuItem::update();
+	string oldPassword;
+	string newPassword;
+
+
+	CLI::clearCli();
+	cout << "Input 'x' to leave menu\n\n";
+
+	while (true) {
+		cout << "Enter old password: ";
+		cin >> oldPassword;
+
+		if (exitCommand(oldPassword))
+		{
+			return true;
+		}
+
+		try {
+			if (!BCryptLib::validatePassword(oldPassword, user->getPassword())) {
+				throw invalid_argument("Wrong Password");
+			}
+
+			break;
+		}
+		catch (exception e){
+			CLI::clearCli();
+			cout << "Input 'x' to leave menu\n\n";
+			cout << e.what() << "\n\n";
+	
+		}
+	}
+
+	while (true)
+	{
+		cout << "Enter new password: ";
+		cin >> newPassword;
+
+		if (exitCommand(newPassword))
+		{
+			return true;
+		}
+
+		try {
+			if (!Utils::checkPasswordPolicy(newPassword)) {
+				throw std::invalid_argument("Password is weak. It should include an uppercase letter, a lowercase letter, a number, a special character, and be at least 8 characters long.");
+			}
+
+			string hash = BCryptLib::generateHash(newPassword, 12);
+			user->setPassword(hash);
+
+			back();
+			break;
+		}
+		catch (exception e)
+		{
+			CLI::clearCli();
+			cout << "Input 'x' to leave menu\n\n";
+			cout << e.what() << "\n\n";
+			cout << "Enter old password: " << oldPassword << "\n";
+
+		}
+	}
+
 
 	return true;
 };
@@ -345,7 +406,7 @@ bool Enable2FAMenu::update() {
 
 		string secret = user->getTotpSecret();
 		QrcodeLib* qrcode = new QrcodeLib(user->getUsername(), secret);
-		cout << "Input 'x' to leave 2FA menu\n";
+		cout << "Input 'x' to leave menu\n";
 		cout << "Enter 2FA Key: ";
 		cin >> i_otp;
 

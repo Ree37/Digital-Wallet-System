@@ -47,9 +47,9 @@ void User::setUsername(string newUsername)
 
 void User::setPassword(string newPassword)
 {
-	if (strongPassword(newPassword)) {
-		password = newPassword;
-	}
+	
+	password = newPassword;
+	
 }
 
 void User::setBalance(float amount)
