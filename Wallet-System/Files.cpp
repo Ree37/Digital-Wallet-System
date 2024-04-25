@@ -64,7 +64,7 @@ void Files::writeUsersData(unordered_map<string, User *> &User) {
       usersFile << "\"" << user.second->getBalance() << "\",";
       usersFile << "\"" << user.second->getIsHas2FA() << "\",";
       usersFile << "\"" << user.second->getTotpSecret() << "\",";
-      usersFile << "\"" << user.second->getSuspendedFlag() << "\"," << endl;
+      usersFile << "\"" << user.second->getSuspendedFlag() << "\"" << endl;
     }
   }
 
@@ -96,7 +96,7 @@ void Files::writeTransactionsData(vector<Transaction *> allTransactions) {
       TransactionsFile << "\"" << T->getRecipientUserName() << "\",";
       TransactionsFile << "\"" << T->getAmount() << "\",";
       TransactionsFile << "\"" << T->getIsPending() << "\",";
-      TransactionsFile << "\"" << Utils::timePointToString(T->getDateTime()) << "\"," << endl;
+      TransactionsFile << "\"" << Utils::timePointToString(T->getDateTime()) << "\"" << endl;
     }
   }
 
