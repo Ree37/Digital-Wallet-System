@@ -15,7 +15,7 @@ void CLI::start() {
 MainMenu mmainMenu("Main Menu");
     LoginUserMenu loginUser("Login User");
         UserProfileMenu userProfile("User Profile");
-            MenuItem sendMoney("Send Money");
+            SendMoneyMenu sendMoney("Send Money");
             MenuItem requestMoney("Request Money");
             AddMoneyMenu addMoney("Add Money");
             MenuItem viewRequests("View Requests");

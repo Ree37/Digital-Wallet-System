@@ -120,13 +120,17 @@ string Utils::timePointToString(const chrono::system_clock::time_point& timePoin
     }
     string readable_time_str(readable_time_c);
 
-    return readable_time_str;
+    string str = readable_time_str.substr(0,24);
+    return str;
 }
 
 std::chrono::system_clock::time_point Utils::stringToTimePoint(const std::string& str) {
     std::tm tm = {};
     std::istringstream iss(str);
-    iss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S");
+
+    if (!(iss >> std::get_time(&tm, "%a %b %d %H:%M:%S %Y"))) {
+        throw invalid_argument("Failed to parse time");
+    }
 
     std::time_t t = std::mktime(&tm);
 

@@ -70,6 +70,7 @@ Transaction::Transaction(string sender, string recipient, float amount) {
   this->recipient = recipient;
   this->amount = amount;
   this->dateTime = chrono::system_clock::now();
+  this->isPending = false;
 }
 void Transaction::setIsPending(bool pending) { this->isPending = pending; }
 void Transaction::setDateTime(chrono::system_clock::time_point date) { this->dateTime = date; }
@@ -81,15 +82,17 @@ chrono::system_clock::time_point Transaction::getDateTime() { return dateTime; }
 
 
 bool Transaction::checkSenderBalance(float amount) {
-  return (Container::Users[sender]->getBalance() >= amount);
+  return (Container::Users[sender]->getBalance() >= amount && amount > 0);
 }
 
-void Transaction::sendAmount() {
+bool Transaction::sendAmount() {
   if (checkSenderBalance(amount)) {
     Container::Users[sender]->setBalance(
         Container::Users[sender]->getBalance() - amount);
     Container::Users[recipient]->setBalance(
         Container::Users[recipient]->getBalance() + amount);
+    return true;
   }
+  return false;
 }
 string Transaction::getSenderUserName() { return sender; }

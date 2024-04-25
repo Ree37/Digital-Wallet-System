@@ -243,6 +243,97 @@ bool UserProfileMenu::back() {
 	return true;
 };
 
+SendMoneyMenu::SendMoneyMenu(string name) : MenuItem(name) {};
+
+bool SendMoneyMenu::update() {
+
+	CLI::clearCli();
+	cout << "Input 'x' to leave menu\n\n";
+
+	User* recepient;
+	string recepientName;
+
+	while (true) {
+
+		cout << "Enter Reciepient Username: ";
+
+		cin >> recepientName;
+
+		if (exitCommand(recepientName)) {
+			return true;
+		}
+
+		try {
+			if (!Container::Users.count(recepientName)) {
+				throw invalid_argument("User Doesn't Exist!");
+			}
+			recepient = Container::Users[recepientName];
+			break;
+		}
+		catch (exception e)
+		{
+			CLI::clearCli();
+			cout << "Input 'x' to leave menu\n\n";
+			cout << e.what() << "\n\n";
+		}
+
+	}
+
+
+	string input;
+	float amount;
+	
+	bool isValid = true;
+	while (true) {
+		CLI::clearCli();
+		if (!isValid)
+		{
+			cout << "Please enter valid amount (positive number)\n\n";
+		}
+		cout << "Enter amount: ";
+		cin >> input;
+
+		if (exitCommand(input))
+		{
+			return true;
+		}
+
+		try {
+			amount = stof(input);
+		}
+		catch (exception e)
+		{
+			isValid = false;
+			continue;
+		}
+
+		Transaction* t = new Transaction(user->getUsername(), recepient->getUsername(), amount);
+
+		if (!t->sendAmount())
+		{
+			isValid = false;
+			delete t;
+			continue;
+		}
+
+		Container::addTransaction(t);
+
+		cout << "\nTransaction Successfully made\n";
+		cout << "Press any key to continue..\n";
+
+		while (!_kbhit()) {
+		}
+		_getch();
+
+		back();
+		break;
+
+	}
+
+	return true;
+
+
+}
 
 AddMoneyMenu::AddMoneyMenu(string name) : MenuItem(name) {};
 
@@ -360,7 +451,7 @@ bool ChangeUserNameMenu::update(){
 				Container::Users.erase(oldUserName);
 				Container::Users.insert({ newUserName, user });
 
-				cout << "Username succesfully updated!\n";
+				cout << "\nUsername succesfully updated!\n";
 				cout << "Press any key to continue..\n";
 
 				while (!_kbhit()) {
@@ -439,7 +530,7 @@ bool ChangePasswordMenu::update() {
 			string hash = BCryptLib::generateHash(newPassword, 12);
 			user->setPassword(hash);
 
-			cout << "Password succesfully updated!\n";
+			cout << "\nPassword succesfully updated!\n";
 			cout << "Press any key to continue..\n";
 
 			while (!_kbhit()) {

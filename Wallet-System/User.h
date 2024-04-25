@@ -59,6 +59,6 @@ public:
   void setDateTime(chrono::system_clock::time_point date);
   void setIsPending(bool pending);
   bool checkSenderBalance(float amount);
-  void sendAmount();
+  bool sendAmount();
   void addTransaction();
 };
