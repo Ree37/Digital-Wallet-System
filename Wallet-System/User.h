@@ -61,4 +61,10 @@ public:
   bool checkSenderBalance(float amount);
   bool sendAmount();
   void addTransaction();
+  void getAllTransaction();
+  void getPendingTransaction();
+  void getReceivedTransaction();
+  void getSentTransaction();
+  bool makeTransaction(string receiver, float amount);
+  
 };
