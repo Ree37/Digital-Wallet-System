@@ -16,7 +16,7 @@ MainMenu mmainMenu("Main Menu");
     LoginUserMenu loginUser("Login User");
         UserProfileMenu userProfile("User Profile");
             SendMoneyMenu sendMoney("Send Money");
-            MenuItem requestMoney("Request Money");
+            RequestMoneyMenu requestMoney("Request Money");
             AddMoneyMenu addMoney("Add Money");
             MenuItem viewRequests("View Requests");
             MenuItem viewTransactions("View Transactions");

@@ -60,11 +60,25 @@ public:
 	bool update() override;
 };
 
-class SendMoneyMenu : public MenuItem
+class TransferMoneyMenu : public MenuItem
+{
+public:
+	TransferMoneyMenu(string name);
+	bool update() override;
+public:
+	bool isSend;
+};
+
+class SendMoneyMenu : public TransferMoneyMenu
 {
 public:
 	SendMoneyMenu(string name);
-	bool update() override;
+};
+
+class RequestMoneyMenu : public TransferMoneyMenu
+{
+public:
+	RequestMoneyMenu(string name);
 };
 
 class AddMoneyMenu : public MenuItem

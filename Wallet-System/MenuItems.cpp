@@ -243,9 +243,17 @@ bool UserProfileMenu::back() {
 	return true;
 };
 
-SendMoneyMenu::SendMoneyMenu(string name) : MenuItem(name) {};
+TransferMoneyMenu::TransferMoneyMenu(string name) : MenuItem(name) {};
 
-bool SendMoneyMenu::update() {
+bool TransferMoneyMenu::update() {
+	string state;
+	if (isSend)
+	{
+		state = "recepient";
+	}
+	else {
+		state = "requested";
+	}
 
 	CLI::clearCli();
 	cout << "Input 'x' to leave menu\n\n";
@@ -255,7 +263,7 @@ bool SendMoneyMenu::update() {
 
 	while (true) {
 
-		cout << "Enter Reciepient Username: ";
+		cout << "Enter " << state << " Username: ";
 
 		cin >> recepientName;
 
@@ -306,25 +314,32 @@ bool SendMoneyMenu::update() {
 			isValid = false;
 			continue;
 		}
+		
+		if (isSend) {
+			Transaction* t = new Transaction(user->getUsername(), recepient->getUsername(), amount);
 
-		Transaction* t = new Transaction(user->getUsername(), recepient->getUsername(), amount);
-
-		if (!t->sendAmount())
-		{
-			isValid = false;
-			delete t;
-			continue;
+			if (!t->sendAmount())
+			{
+				isValid = false;
+				delete t;
+				continue;
+			}
+			Container::addTransaction(t);
+			cout << "\nTransaction Successfully made\n";
+			
 		}
-
-		Container::addTransaction(t);
-
-		cout << "\nTransaction Successfully made\n";
+		else {
+			Transaction* t = new Transaction(user->getUsername(), recepient->getUsername(), amount);
+			t->setIsPending(true);
+			Container::addTransaction(t);
+			cout << "\nRequest Successfully made\n";
+		}
+		
 		cout << "Press any key to continue..\n";
 
 		while (!_kbhit()) {
 		}
 		_getch();
-
 		back();
 		break;
 
@@ -334,6 +349,9 @@ bool SendMoneyMenu::update() {
 
 
 }
+SendMoneyMenu::SendMoneyMenu(string name) : TransferMoneyMenu(name) { isSend = true; };
+
+RequestMoneyMenu::RequestMoneyMenu(string name) : TransferMoneyMenu(name) { isSend = false; };
 
 AddMoneyMenu::AddMoneyMenu(string name) : MenuItem(name) {};
 
