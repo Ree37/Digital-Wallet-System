@@ -32,6 +32,12 @@ public:
   bool isSentTransaction(Transaction *transaction);
   void requestMoney(string username, float amount);
 
+  vector<Transaction*> getAllTransactions();
+  vector<Transaction*> getPendingTransaction();
+  vector<Transaction*> getReceivedTransaction();
+  vector<Transaction*> getSentTransaction();
+  bool makeTransaction(string receiver, float amount);
+
 private:
   string username;
   string password;
@@ -61,10 +67,4 @@ public:
   bool checkSenderBalance(float amount);
   bool sendAmount();
   void addTransaction();
-  void getAllTransaction();
-  void getPendingTransaction();
-  void getReceivedTransaction();
-  void getSentTransaction();
-  bool makeTransaction(string receiver, float amount);
-  
 };

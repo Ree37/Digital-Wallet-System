@@ -95,4 +95,5 @@ bool Transaction::sendAmount() {
   }
   return false;
 }
+
 string Transaction::getSenderUserName() { return sender; }
