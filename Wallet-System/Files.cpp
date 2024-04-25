@@ -1,10 +1,7 @@
 #include "Files.h"
 #include <cassert>
-#include <chrono>
-#include <ctime>
-#include <iomanip>
 #include <sstream>
-
+#include <chrono>
 #include "Container.h"
 #include "Security/Utils.h"
 #include "User.h"
@@ -36,30 +33,8 @@ void Files::create() {
     usersFile << "isSuspended" << endl;
   }
 }
-//std::string timePointToString(const std::chrono::system_clock::time_point &timePoint) {
-//  std::time_t t = std::chrono::system_clock::to_time_t(timePoint);
-//  std::tm tm = {};
-//
-//#ifdef _WIN32
-//  localtime_s(&tm, &t);
-//#else
-//  localtime_r(&t, &tm);
-//#endif
-//
-//  std::ostringstream oss;
-//  oss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
-//
-//  return oss.str();
-//}
-//std::chrono::system_clock::time_point stringToTimePoint(const std::string &str) {
-//  std::tm tm = {};
-//  std::istringstream iss(str);
-//  iss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S");
-//
-//  std::time_t t = std::mktime(&tm);
-//
-//  return std::chrono::system_clock::from_time_t(t);
-//}
+
+
 void Files::writeUsersData(unordered_map<string, User *> &User) {
   ofstream usersFile;
   // Open the file in append mode
@@ -120,8 +95,8 @@ void Files::writeTransactionsData(vector<Transaction *> allTransactions) {
       TransactionsFile << "\"" << T->getSenderUserName() << "\",";
       TransactionsFile << "\"" << T->getRecipientUserName() << "\",";
       TransactionsFile << "\"" << T->getAmount() << "\",";
-      TransactionsFile << "\"" << T->getIsPending() << "\"," << endl;
-     ///* TransactionsFile << "\"" << timePointToString(T->getDateTime()) << "\","*/ << endl;
+      TransactionsFile << "\"" << T->getIsPending() << "\",";
+      TransactionsFile << "\"" << Utils::timePointToString(T->getDateTime()) << "\"," << endl;
     }
   }
 
@@ -173,11 +148,11 @@ void Files::readTransactionsData() {
     string recipient = getCellFromLine(Line);
     float amount = stof(getCellFromLine(Line));
     bool isPending = stoi(getCellFromLine(Line));
-    //chrono::system_clock::time_point Date = stringToTimePoint(getCellFromLine(Line));
+    chrono::system_clock::time_point Date = Utils::stringToTimePoint(getCellFromLine(Line));
 
     Transaction *t = new Transaction(sender, recipient, amount);
     t->setIsPending(isPending);
-   /* t->setDateTime(Date);*/
+    t->setDateTime(Date);
     Container::addTransaction(t);
   }
   TransactionsFile.close();

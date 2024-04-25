@@ -107,3 +107,28 @@ std::stringstream Utils::decryptFiles(std::string inputFile) {
 }
 
 
+string Utils::timePointToString(const chrono::system_clock::time_point& timePoint) {
+    // Get the current time as a time_t value
+    time_t current_time = chrono::system_clock::to_time_t(timePoint);
+
+    // Convert to a human-readable string using std::ctime
+    char readable_time_c[26];
+    errno_t err = ctime_s(readable_time_c, sizeof(readable_time_c), &current_time);
+
+    if (err != 0) {
+        throw invalid_argument("Error getting the current time.");
+    }
+    string readable_time_str(readable_time_c);
+
+    return readable_time_str;
+}
+
+std::chrono::system_clock::time_point Utils::stringToTimePoint(const std::string& str) {
+    std::tm tm = {};
+    std::istringstream iss(str);
+    iss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S");
+
+    std::time_t t = std::mktime(&tm);
+
+    return std::chrono::system_clock::from_time_t(t);
+}

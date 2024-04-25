@@ -72,6 +72,8 @@ Transaction::Transaction(string sender, string recipient, float amount) {
   this->dateTime = chrono::system_clock::now();
 }
 void Transaction::setIsPending(bool pending) { this->isPending = pending; }
+void Transaction::setDateTime(chrono::system_clock::time_point date) { this->dateTime = date; }
+
 string Transaction::getRecipientUserName() { return recipient; }
 float Transaction::getAmount() { return amount; }
 bool Transaction::getIsPending() { return isPending; }
