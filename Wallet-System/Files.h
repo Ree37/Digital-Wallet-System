@@ -18,7 +18,7 @@ public:
 private:
 	static stringstream getLineFromData(ifstream& data);
 	static string getCellFromLine(stringstream& record);
-    static string timePointToString(const std::chrono::system_clock::time_point &timePoint);
-    static chrono::system_clock::time_point stringToTimePoint(const std::string &str);
+  /*  static string timePointToString(const std::chrono::system_clock::time_point &timePoint);
+    static chrono::system_clock::time_point stringToTimePoint(const std::string &str);*/
 };
 
