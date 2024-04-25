@@ -7,7 +7,9 @@
 #include "Container.h"
 
 int main() {
-	Files::readDataFromCsvFile();
+	Files::readUsersData();
+    Files::readTransactionsData();
 	CLI::start();
-	Files::writeUsersDataFromContainerToFiles(Container::Users);
+	Files::writeUsersData(Container::Users);
+    Files::writeTransactionsData(Container::allTransactions);
 }
