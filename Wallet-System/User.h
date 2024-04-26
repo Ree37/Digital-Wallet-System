@@ -35,7 +35,7 @@ public:
   vector<Transaction*> getAllTransactions();
   vector<Transaction*> getRequests();
   vector<Transaction*> getReceivedTransactions();
-  vector<Transaction*> getSentTransaction();
+  vector<Transaction*> getSentTransactions();
   void makeTransaction(string receiver, float amount);
   void makeRequest(string requested, float amount);
 
