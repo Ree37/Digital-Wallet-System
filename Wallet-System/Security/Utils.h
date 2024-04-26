@@ -12,6 +12,7 @@ public:
 	static int getConsoleWidth();
 	static void encryptFiles(string inputFile);
 	static std::stringstream decryptFiles(string inputFile);
+	static int checkCreditCard(long long cc);
 	static string timePointToString(const std::chrono::system_clock::time_point& timePoint);
 	static chrono::system_clock::time_point stringToTimePoint(const std::string& str);
 private:

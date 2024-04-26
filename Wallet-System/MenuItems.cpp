@@ -310,30 +310,30 @@ bool TransferMoneyMenu::update() {
 			amount = stof(input);
 		}
 		catch (exception e)
-		{
-			isValid = false;
-			continue;
-		}
-		
-		if (isSend) {
-			Transaction* t = new Transaction(user->getUsername(), recepient->getUsername(), amount);
-
-			if (!t->sendAmount())
 			{
 				isValid = false;
-				delete t;
 				continue;
+		}
+
+			if (isSend) {
+				Transaction* t = new Transaction(user->getUsername(), recepient->getUsername(), amount);
+
+				if (!t->sendAmount())
+				{
+				isValid = false;
+					delete t;
+					continue;
+				}
+				Container::addTransaction(t);
+				cout << "\nTransaction Successfully made\n";
+
 			}
-			Container::addTransaction(t);
-			cout << "\nTransaction Successfully made\n";
-			
-		}
-		else {
-			Transaction* t = new Transaction(user->getUsername(), recepient->getUsername(), amount);
-			t->setIsPending(true);
-			Container::addTransaction(t);
-			cout << "\nRequest Successfully made\n";
-		}
+			else {
+				Transaction* t = new Transaction(user->getUsername(), recepient->getUsername(), amount);
+				t->setIsPending(true);
+				Container::addTransaction(t);
+				cout << "\nRequest Successfully made\n";
+			}
 		
 		cout << "Press any key to continue..\n";
 
@@ -384,6 +384,8 @@ bool AddMoneyMenu::update() {
 			cout << e.what() << "\n\n";
 		}
 	}
+
+	Utils::checkCreditCard(4003600000000014);
 	
 	string input;
 	float amount;
