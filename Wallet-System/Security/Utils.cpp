@@ -106,6 +106,54 @@ std::stringstream Utils::decryptFiles(std::string inputFile) {
     return stream;
 }
 
+int Utils::checkCreditCard(long long cc)
+{
+    // Applying Luhn Algorithm
+    int digit_count = 0;
+    int sum = 0;
+    int amex = cc / pow(10, 13);
+    int master = cc / pow(10, 14);
+    int visa[2];
+    visa[0] = cc / pow(10, 12);
+    visa[1] = cc / pow(10, 15);
+
+    while (cc > 0)
+    {
+        int digit = cc % 10;
+        cc /= 10;
+        digit_count++;
+
+        if (digit_count % 2 == 0)
+        {
+            digit *= 2;
+            if (digit > 9)
+            {
+                digit -= 9;
+            }
+        }
+
+        sum += digit;
+    }
+
+    if (sum % 10 != 0)
+        return -1;
+
+    if (amex == 34 || amex == 37)
+    {
+        return 1; // AMEX
+    }
+    if (master == 51 || master == 52 || master == 53 || master == 54 || master == 55)
+    {
+        return 2; // MASTERCARD
+    }
+    if (visa[0] == 4 || visa[1] == 4)
+    {
+        return 3; // VISA
+    }
+
+    return -1;
+}
+
 
 string Utils::timePointToString(const chrono::system_clock::time_point& timePoint) {
     // Get the current time as a time_t value
