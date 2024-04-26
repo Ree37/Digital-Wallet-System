@@ -33,7 +33,7 @@ public:
   void requestMoney(string username, float amount);
 
   vector<Transaction*> getAllTransactions();
-  vector<Transaction*> getPendingTransaction();
+  vector<Transaction*> getRequests();
   vector<Transaction*> getReceivedTransaction();
   vector<Transaction*> getSentTransaction();
   void makeTransaction(string receiver, float amount);

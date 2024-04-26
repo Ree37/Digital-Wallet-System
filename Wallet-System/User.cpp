@@ -65,6 +65,11 @@ bool User::strongPassword(string password) {
   return (regex_match(password, pattern));
 }
 
+vector<Transaction*> User::getAllTransactions()
+{
+    return Container::getAllUserTransaction(this->username);
+}
+
 
 void User::makeTransaction(string receiver, float amount) {
     Transaction* t = new Transaction();
