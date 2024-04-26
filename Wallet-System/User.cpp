@@ -70,6 +70,11 @@ vector<Transaction*> User::getAllTransactions()
     return Container::getAllUserTransaction(this->username);
 }
 
+vector<Transaction*> User::getReceivedTransactions()
+{
+    return Container::getRecipientTransaction(this->username);
+}
+
 
 void User::makeTransaction(string receiver, float amount) {
     Transaction* t = new Transaction();
