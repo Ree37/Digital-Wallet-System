@@ -246,6 +246,7 @@ bool UserProfileMenu::back() {
 TransferMoneyMenu::TransferMoneyMenu(string name) : MenuItem(name) {};
 
 bool TransferMoneyMenu::update() {
+	/*
 	string state;
 	if (isSend)
 	{
@@ -344,10 +345,10 @@ bool TransferMoneyMenu::update() {
 		break;
 
 	}
-
+	*/
 	return true;
 
-
+	
 }
 SendMoneyMenu::SendMoneyMenu(string name) : TransferMoneyMenu(name) { isSend = true; };
 

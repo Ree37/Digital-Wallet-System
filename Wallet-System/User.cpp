@@ -90,6 +90,15 @@ void User::makeRequest(string requested, float amount) {
 }
 
 // Transaction functions
+Transaction::Transaction() {
+    this->sender = "";
+    this->recipient = "";
+    this->amount = 0;
+    this->dateTime = chrono::system_clock::now();
+    this->isPending = false;
+
+}
+
 Transaction::Transaction(string sender, string recipient, float amount) {
   this->sender = sender;
   this->recipient = recipient;
