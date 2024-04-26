@@ -36,7 +36,8 @@ public:
   vector<Transaction*> getPendingTransaction();
   vector<Transaction*> getReceivedTransaction();
   vector<Transaction*> getSentTransaction();
-  bool makeTransaction(string receiver, float amount);
+  void makeTransaction(string receiver, float amount);
+  void makeRequest(string requested, float amount);
 
 private:
   string username;
@@ -56,6 +57,7 @@ private:
   chrono::system_clock::time_point dateTime;
 
 public:
+  Transaction();
   Transaction(string sender, string recipient, float amount);
   string getSenderUserName();
   string getRecipientUserName();
@@ -64,7 +66,12 @@ public:
   chrono::system_clock::time_point getDateTime();
   void setDateTime(chrono::system_clock::time_point date);
   void setIsPending(bool pending);
-  bool checkSenderBalance(float amount);
-  bool sendAmount();
+  void setSenderUsername(string username);
+  void setRecipientUsername(string username);
+  void setAmount(float amount);
+
+  void checkSenderBalance(float amount);
+  void checkUserExist(string username);
+  void sendAmount();
   void addTransaction();
 };

@@ -64,6 +64,31 @@ bool User::strongPassword(string password) {
       "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+=])(?=\\S+$).{8,}");
   return (regex_match(password, pattern));
 }
+
+
+void User::makeTransaction(string receiver, float amount) {
+    Transaction* t = new Transaction();
+
+    t->setSenderUsername(this->getUsername());
+    t->setRecipientUsername(receiver);
+    t->setAmount(amount);
+    t->setIsPending(false);
+    t->sendAmount();
+
+    Container::addTransaction(t);
+
+}
+void User::makeRequest(string requested, float amount) {
+    Transaction* t = new Transaction();
+
+    t->setSenderUsername(requested);
+    t->setRecipientUsername(this->getUsername());
+    t->setAmount(amount);
+    t->setIsPending(true);
+
+    Container::addTransaction(t);
+}
+
 // Transaction functions
 Transaction::Transaction(string sender, string recipient, float amount) {
   this->sender = sender;
@@ -71,6 +96,35 @@ Transaction::Transaction(string sender, string recipient, float amount) {
   this->amount = amount;
   this->dateTime = chrono::system_clock::now();
   this->isPending = false;
+}
+
+void Transaction::setSenderUsername(string username) {
+    checkUserExist(username);
+    this->sender = username;
+}
+
+void Transaction::setRecipientUsername(string username) {
+    checkUserExist(username);
+
+    if (sender == username)
+    {  
+        throw invalid_argument("Can't send to self");   
+    }
+    this->recipient = username;
+}
+
+void Transaction::setAmount(float amount) {
+
+    float constexpr inf = numeric_limits<float>::infinity();
+
+    if (amount < 0)
+    {
+        throw invalid_argument("Please Enter a Positive Number");
+    }
+    if (amount == inf || amount == -inf) {
+        throw invalid_argument("Amount Can't be infinity");
+    }
+
 }
 void Transaction::setIsPending(bool pending) { this->isPending = pending; }
 void Transaction::setDateTime(chrono::system_clock::time_point date) { this->dateTime = date; }
@@ -95,19 +149,15 @@ void Transaction::checkUserExist(string username) {
         throw invalid_argument(username + " doesn't exist");
     }
 
-bool Transaction::checkSenderBalance(float amount) {
-  return (Container::Users[sender]->getBalance() >= amount && amount > 0);
 }
 
-bool Transaction::sendAmount() {
-  if (checkSenderBalance(amount)) {
-    Container::Users[sender]->setBalance(
-        Container::Users[sender]->getBalance() - amount);
-    Container::Users[recipient]->setBalance(
-        Container::Users[recipient]->getBalance() + amount);
-    return true;
-  }
-  return false;
+void Transaction::sendAmount() {
+
+    checkSenderBalance(amount);
+
+    Container::Users[sender]->setBalance(Container::Users[sender]->getBalance() - amount);
+    Container::Users[recipient]->setBalance(Container::Users[recipient]->getBalance() + amount);
+   
 }
 
 string Transaction::getSenderUserName() { return sender; }
