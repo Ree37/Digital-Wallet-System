@@ -81,6 +81,20 @@ bool Transaction::getIsPending() { return isPending; }
 chrono::system_clock::time_point Transaction::getDateTime() { return dateTime; }
 
 
+void Transaction::checkSenderBalance(float amount) {
+    if (Container::Users[sender]->getBalance() <= amount)
+    {
+        throw invalid_argument("Insufficient balance");
+    }
+}
+
+void Transaction::checkUserExist(string username) {
+
+    if (!Container::Users.count(username))
+    {
+        throw invalid_argument(username + " doesn't exist");
+    }
+
 bool Transaction::checkSenderBalance(float amount) {
   return (Container::Users[sender]->getBalance() >= amount && amount > 0);
 }
