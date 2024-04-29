@@ -324,21 +324,33 @@ bool AddMoneyMenu::update() {
 
 	CLI::clearCli();
 	cout << "Input 'x' to leave menu\n";
-
+	int type;
 	while (true) {
-		cout << "Enter Password: ";
-		string password;
-		cin >> password;
+		cout << "Enter Credit Card (16 numbers): ";
+		string input;
+		cin >> input;
 
-		if (exitCommand(password))
+		if (exitCommand(input))
 		{
 			return true;
 		}
 
+
+		long long cc;
 		try {
-			if (!BCryptLib::validatePassword(password, user->getPassword()))
+			try {
+				cc = std::stoll(input);
+			}
+			catch (exception e)
 			{
-				throw invalid_argument("Wrong password");
+				throw invalid_argument("Please enter a number");
+			}
+
+			type = Utils::checkCreditCard(cc);
+
+			if (type == -1)
+			{
+				throw invalid_argument("Please enter a valid credit card number");
 			}
 			break;
 		}
@@ -349,7 +361,7 @@ bool AddMoneyMenu::update() {
 		}
 	}
 
-	Utils::checkCreditCard(4003600000000014);
+	
 	
 	string input;
 	float amount;
@@ -384,6 +396,23 @@ bool AddMoneyMenu::update() {
 			isValid = false;
 			continue;
 		}
+
+		string card;
+
+		switch (type)
+		{
+		case 1: card = "AMERICAN EXPRESS"; break;
+		case 2: card = "MASTERCARD"; break;
+		case 3: card = "VISA"; 
+		}
+
+		cout << "\nYou succesfully added " << amount << " through a " << card << " card\n";
+
+		cout << "\npress any key to continue..";
+
+		while (!_kbhit()) {
+		}
+		_getch();
 		back();
 		break;
 		
