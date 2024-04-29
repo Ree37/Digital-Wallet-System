@@ -27,7 +27,7 @@ void Admin::setPassword(string password)
 //}
 void Admin::setSuspendUsers(string suspendedUserName) {
 	Container::Users.at(suspendedUserName)->setSuspendedFlag(
-            !Container::Users.at(suspendedUserName)->getSuspendedFlag());
+		!Container::Users.at(suspendedUserName)->getSuspendedFlag());
 }
 
 void Admin::adjustUserBalance(string adjustedUserName, float amount) {
@@ -41,20 +41,42 @@ void Admin::editUser(string name, string newPwd)
 }
 
 void Admin::addUser(string userName, string userPassword) {
-    User *newUser = new User (userName,userPassword);
-    Container::addUser(newUser);
+	User* newUser = new User(userName, userPassword);
+	Container::addUser(newUser);
 }
 
 vector<User*> Admin::viewUsers()
 {
 	vector<User*> usrVec;
 	unordered_map<string, User*>::iterator it;
-	for (it = Container::Users.begin() ; it != Container::Users.end() ;it++)
+	for (it = Container::Users.begin(); it != Container::Users.end(); it++)
 	{
 		usrVec.push_back(it->second);
 	}
 	return usrVec;
 }
 
+vector<Transaction*>Admin::viewAllUsersTransactions() {
+	unordered_map<string, vector<Transaction*>>::iterator it;
 
+	it = Container::userKeyTransactions.begin();
+	vector<Transaction*> returnedTransaction;
+	vector<Transaction*> specificUserTransacions;
+	while (it != Container::userKeyTransactions.end()) {
+		specificUserTransacions = Container::getAllUserTransaction(it->first);
+		for (int i = 0; i < specificUserTransacions.size(); i++) {
+			returnedTransaction.push_back(specificUserTransacions[i]);
+		}
+
+		it++;
+	}
+	return returnedTransaction;
+}
+vector<Transaction*> Admin::viewSpecicTranactioBySenderName(string senderUserName) {
+	return Container::getSentTransaction(senderUserName);
+}
+vector<Transaction*> Admin::viewSpecicTranactioByRecipientName(string recipientName) {
+
+	return Container::getRecipientTransaction(recipientName);
+}
 //TODO edit
