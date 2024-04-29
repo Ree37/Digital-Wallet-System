@@ -474,11 +474,11 @@ SettingsMenu::SettingsMenu(string name) : MenuItem(name) {};
 bool SettingsMenu::update() {
 	if (user->getIsHas2FA())
 	{
-		currentMenuItem.top()->getSubMenus().at(2)->name = "Disable Two-Factor Authentication";
+		currentMenuItem.top()->getSubMenus().at(1)->name = "Disable Two-Factor Authentication";
 	}
 	else
 	{
-		currentMenuItem.top()->getSubMenus().at(2)->name = "Enable Two-Factor Authentication";
+		currentMenuItem.top()->getSubMenus().at(1)->name = "Enable Two-Factor Authentication";
 	}
 
 	MenuItem::update();
@@ -486,54 +486,6 @@ bool SettingsMenu::update() {
 	return true;
 };
 
-
-ChangeUserNameMenu::ChangeUserNameMenu(string name) : MenuItem(name) {};
-
-
-bool ChangeUserNameMenu::update(){
-
-	string oldUserName = user->getUsername();
-	string newUserName;
-
-	CLI::clearCli();
-	cout << "Input 'x' to leave menu\n\n";
-
-	while (true) {
-		cout << "Current username: " << oldUserName << "\n";
-		cout << "New username: ";
-		cin >> newUserName;
-
-		try {
-			if (user->setUsername(newUserName))
-			{
-				Container::Users.erase(oldUserName);
-				Container::Users.insert({ newUserName, user });
-
-				cout << "\nUsername succesfully updated!\n";
-				cout << "Press any key to continue..\n";
-
-				while (!_kbhit()) {
-				}
-				_getch();
-
-				back();
-				return true;
-			}
-			else {
-				throw invalid_argument("username already exists!");
-			}
-			
-		}
-		catch (exception e) {
-			CLI::clearCli();
-			cout << "Input 'x' to leave menu\n\n";
-			cout << e.what() << "\n\n";
-		}
-	}
-	
-	return true;
-
-}
 
 ChangePasswordMenu::ChangePasswordMenu(string name) : MenuItem(name) {};
 

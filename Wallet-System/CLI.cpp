@@ -24,7 +24,6 @@ MainMenu mmainMenu("Main Menu");
 				ViewUserRecievedTransactionsMenu viewRecievedTransactions("Recieved Transactions");
 				ViewUserAllTransactionsMenu viewAllTransactions("All Transactions");
             SettingsMenu settings("Settings");
-				ChangeUserNameMenu changeUserName("Change Username");
                 ChangePasswordMenu changePassword("Change Password");
                 Enable2FAMenu enable2FA("Enable Two-Factor Authentication");
     RegisterUserMenu registerUser("Register User");
@@ -53,7 +52,6 @@ void CLI::initMenu() {
 
 	userProfile.addSubMenu(&settings);
 
-	settings.addSubMenu(&changeUserName);
 	settings.addSubMenu(&changePassword);
 	settings.addSubMenu(&enable2FA);
 }
