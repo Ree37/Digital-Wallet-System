@@ -70,6 +70,18 @@ vector<Transaction*> User::getAllTransactions()
     return Container::getAllUserTransaction(this->username);
 }
 
+vector<Transaction*> User::getRequests()
+{
+    vector<Transaction*> requested;
+    for (auto i : getAllTransactions()) {
+        if (Transaction::getIsPending(i)) {
+            requested.insert(, getAllTransactions(i));
+        }
+    }
+    return vector<Transaction*>(requested);
+}
+
+
 vector<Transaction*> User::getReceivedTransactions()
 {
     return Container::getRecipientTransaction(this->username);
