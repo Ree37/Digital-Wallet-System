@@ -34,9 +34,10 @@ void Admin::adjustUserBalance(string adjustedUserName, float amount) {
 	Container::Users.at(adjustedUserName)->setBalance(amount);
 }
 
-void Admin::editUser(string name, string newName)
+void Admin::editUser(string name, string newPwd)
 {
-	Container::getUser(name)->setUsername(newName);
+	//Container::getUser(name)->setUsername(newName);
+	Container::getUser(name)->setPassword(newPwd);
 }
 
 void Admin::addUser(string userName, string userPassword) {

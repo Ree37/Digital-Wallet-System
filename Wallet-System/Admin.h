@@ -10,7 +10,7 @@ using namespace std;
 
 class Admin
 {
-	public:
+public:
 		bool isUnique(string name);
 		void addUser(string userName,string userPassword);
 		vector<User*> viewUsers();
@@ -21,7 +21,7 @@ class Admin
 		void setSuspendUsers(string suspendedUserName);
 		void deleteUser(string deleted_User);
 		void adjustUserBalance(string adjustedUserName, float value);
-		void editUser(string name, string newName);
+		void editUser(string name, string newPwd);
 private:
 	string name;
 	string password;
