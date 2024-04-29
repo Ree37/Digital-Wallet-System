@@ -78,13 +78,26 @@ void CLI::clearCli() {
 	}
 }
 
+
+void CLI::drawInvalid() {
+	if (dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem.top())) {
+		clearCli();
+		cout << "\nInvalid choice. Please enter 'x' or a number between 1 and " << MenuItem::currentMenuItem.top()->getSubMenus().size();
+		cout << "\nCurrent User: " << MenuItem::user->getUsername() << "\n\n";
+		cout << "Available Balance: " << MenuItem::user->getBalance() << "\n\n";
+	}
+	else {
+		cout << "\nInvalid choice. Please enter 'x' or a number between 1 and " << MenuItem::currentMenuItem.top()->getSubMenus().size();
+	}
+
+}
 void CLI::drawCli(bool isValid) {
 	if (!dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem.top())) {
 		clearCli();
 	}
 
 	if (!isValid) {
-		cout << "\nInvalid choice. Please enter 'x' or a number between 1 and " << MenuItem::currentMenuItem.top()->getSubMenus().size();
+		drawInvalid();
 	}
 
 	if (!dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem.top())) {

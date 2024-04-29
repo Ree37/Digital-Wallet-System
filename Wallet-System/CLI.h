@@ -7,5 +7,6 @@ public:
     static void navMenu();
     static void clearCli();
     static void drawCli(bool isValid);
+    static void drawInvalid();
     static int getInput();
 };
