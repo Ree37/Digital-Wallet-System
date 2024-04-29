@@ -84,11 +84,18 @@ vector<Transaction*> User::getSentTransactions()
 void User::makeTransaction(string receiver, float amount) {
     Transaction* t = new Transaction();
 
-    t->setSenderUsername(this->getUsername());
-    t->setRecipientUsername(receiver);
-    t->setAmount(amount);
-    t->setIsPending(false);
-    t->sendAmount();
+    try {
+        t->setSenderUsername(this->getUsername());
+        t->setRecipientUsername(receiver);
+        t->setAmount(amount);
+        t->setIsPending(false);
+        t->sendAmount();
+    }
+    catch (exception e)
+    {
+        delete t;
+        throw e;
+    }
 
     Container::addTransaction(t);
 
@@ -148,6 +155,8 @@ void Transaction::setAmount(float amount) {
     if (amount == inf || amount == -inf) {
         throw invalid_argument("Amount Can't be infinity");
     }
+
+    this->amount = amount;
 
 }
 void Transaction::setIsPending(bool pending) { this->isPending = pending; }

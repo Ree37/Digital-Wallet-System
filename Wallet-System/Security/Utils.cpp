@@ -180,7 +180,11 @@ std::chrono::system_clock::time_point Utils::stringToTimePoint(const std::string
         throw invalid_argument("Failed to parse time");
     }
 
+    
+
     std::time_t t = std::mktime(&tm);
 
+    if (tm.tm_isdst == 1)
+        t -= 60 * 60; //adjust for daylight saving
     return std::chrono::system_clock::from_time_t(t);
 }

@@ -246,7 +246,8 @@ bool UserProfileMenu::back() {
 TransferMoneyMenu::TransferMoneyMenu(string name) : MenuItem(name) {};
 
 bool TransferMoneyMenu::update() {
-	/*
+	string input;
+	float amount;
 	string state;
 	if (isSend)
 	{
@@ -272,11 +273,33 @@ bool TransferMoneyMenu::update() {
 			return true;
 		}
 
+		cout << "Enter amount: ";
+		cin >> input;
+
+		if (exitCommand(input))
+		{
+			return true;
+		}
+		
+
 		try {
-			if (!Container::Users.count(recepientName)) {
-				throw invalid_argument("User Doesn't Exist!");
+
+			try {
+				amount = stof(input);
 			}
-			recepient = Container::Users[recepientName];
+			catch (exception e)
+			{
+				throw invalid_argument("Please enter a number");
+			}
+
+			if (isSend)
+			{
+				user->makeTransaction(recepientName, amount);
+			}
+			else {
+				user->makeRequest(recepientName, amount);
+			}
+			back();
 			break;
 		}
 		catch (exception e)
@@ -285,71 +308,12 @@ bool TransferMoneyMenu::update() {
 			cout << "Input 'x' to leave menu\n\n";
 			cout << e.what() << "\n\n";
 		}
-
 	}
-
-
-	string input;
-	float amount;
-	
-	bool isValid = true;
-	while (true) {
-		CLI::clearCli();
-		if (!isValid)
-		{
-			cout << "Please enter valid amount (positive number)\n\n";
-		}
-		cout << "Enter amount: ";
-		cin >> input;
-
-		if (exitCommand(input))
-		{
-			return true;
-		}
-
-		try {
-			amount = stof(input);
-		}
-		catch (exception e)
-			{
-				isValid = false;
-				continue;
-		}
-
-			if (isSend) {
-				Transaction* t = new Transaction(user->getUsername(), recepient->getUsername(), amount);
-
-				if (!t->sendAmount())
-				{
-				isValid = false;
-					delete t;
-					continue;
-				}
-				Container::addTransaction(t);
-				cout << "\nTransaction Successfully made\n";
-
-			}
-			else {
-				Transaction* t = new Transaction(user->getUsername(), recepient->getUsername(), amount);
-				t->setIsPending(true);
-				Container::addTransaction(t);
-				cout << "\nRequest Successfully made\n";
-			}
-		
-		cout << "Press any key to continue..\n";
-
-		while (!_kbhit()) {
-		}
-		_getch();
-		back();
-		break;
-
-	}
-	*/
 	return true;
 
+	}
 	
-}
+
 SendMoneyMenu::SendMoneyMenu(string name) : TransferMoneyMenu(name) { isSend = true; };
 
 RequestMoneyMenu::RequestMoneyMenu(string name) : TransferMoneyMenu(name) { isSend = false; };
