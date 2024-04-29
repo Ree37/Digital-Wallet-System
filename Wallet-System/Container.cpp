@@ -35,12 +35,13 @@ vector<Transaction *> Container::getRecipientTransaction(string RecipientUserNam
   vector<Transaction *> allUserTransaction =  userKeyTransactions[RecipientUserName];
   vector<Transaction *> RecipientUserTransactions;
   for (auto t : allUserTransaction) {
-    if (t->getSenderUserName() == RecipientUserName) {
+    if (t->getRecipientUserName() == RecipientUserName) {
       RecipientUserTransactions.push_back(t);
     }
   }
   return RecipientUserTransactions;
 }
+
 vector<Transaction *> Container::getAllUserTransaction(string UserName) {
   return userKeyTransactions[UserName];
 }

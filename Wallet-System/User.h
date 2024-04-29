@@ -74,4 +74,7 @@ public:
   void checkUserExist(string username);
   void sendAmount();
   void addTransaction();
+
+  friend std::ostream& operator<<(std::ostream& os, const Transaction& t);
+
 };

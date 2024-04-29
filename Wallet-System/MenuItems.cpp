@@ -260,7 +260,6 @@ bool TransferMoneyMenu::update() {
 	CLI::clearCli();
 	cout << "Input 'x' to leave menu\n\n";
 
-	User* recepient;
 	string recepientName;
 
 	while (true) {
@@ -395,6 +394,51 @@ bool AddMoneyMenu::update() {
 
 
 
+ViewUserTransactionsMenu::ViewUserTransactionsMenu(string name) : MenuItem(name) {};
+bool ViewUserTransactionsMenu::update() {
+	
+	vector<Transaction*> v;
+
+	CLI::clearCli();
+	cout << "Current Menu: " << currentMenuItem.top()->name << "\n\n";
+	switch (mode)
+	{
+	case 1:	v = user->getSentTransactions();
+			break;
+	case 2:	v = user->getReceivedTransactions();
+		break; 
+	case 3:	v = user->getAllTransactions();
+					 break;
+	}
+
+	if (!v.empty())
+	{
+		for (int i = 0; i < v.size(); i++)
+		{
+			cout << i + 1 << "] " << *v[i] << '\n';
+
+		}
+	}
+	else {
+		cout << "No transactions found...\n";
+	}
+
+	cout << "\nPress any key to go back..\n";
+
+	while (!_kbhit()) {
+	}
+	_getch();
+	back();
+	return true;
+
+}
+
+
+ViewUserSentTransactionsMenu::ViewUserSentTransactionsMenu(string name) :ViewUserTransactionsMenu(name) { mode = 1; };
+
+ViewUserRecievedTransactionsMenu::ViewUserRecievedTransactionsMenu(string name) : ViewUserTransactionsMenu(name) { mode = 2; };
+
+ViewUserAllTransactionsMenu::ViewUserAllTransactionsMenu(string name) : ViewUserTransactionsMenu(name) { mode = 3; };
 
 SettingsMenu::SettingsMenu(string name) : MenuItem(name) {};
 

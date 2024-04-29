@@ -194,3 +194,8 @@ void Transaction::sendAmount() {
 }
 
 string Transaction::getSenderUserName() { return sender; }
+
+std::ostream& operator<<(std::ostream& os, const Transaction& t) {
+    os << "Sender: " << t.sender << " | Recepient: " << t.recipient << " | Amount: " << t.amount << " | Date: " << Utils::timePointToString(t.dateTime);
+    return os;
+}

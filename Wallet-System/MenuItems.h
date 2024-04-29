@@ -89,6 +89,34 @@ public:
 
 };
 
+class ViewUserTransactionsMenu : public MenuItem
+{
+public:
+	ViewUserTransactionsMenu(string name);
+	bool update() override;
+
+public:
+	int mode;
+
+};
+class ViewUserSentTransactionsMenu : public ViewUserTransactionsMenu
+{
+public:
+	ViewUserSentTransactionsMenu(string name);
+};
+class ViewUserRecievedTransactionsMenu : public ViewUserTransactionsMenu
+{
+public:
+	ViewUserRecievedTransactionsMenu(string name);
+};
+class ViewUserAllTransactionsMenu : public ViewUserTransactionsMenu
+{
+public:
+	ViewUserAllTransactionsMenu(string name);
+};
+
+
+
 class SettingsMenu : public MenuItem
 {
 public:

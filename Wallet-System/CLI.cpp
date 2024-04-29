@@ -19,7 +19,10 @@ MainMenu mmainMenu("Main Menu");
             RequestMoneyMenu requestMoney("Request Money");
             AddMoneyMenu addMoney("Add Money");
             MenuItem viewRequests("View Requests");
-            MenuItem viewTransactions("View Transactions");
+			MenuItem viewTransactions("View Transactions");
+				ViewUserSentTransactionsMenu viewSentTransactions("Sent Transactions");
+				ViewUserRecievedTransactionsMenu viewRecievedTransactions("Recieved Transactions");
+				ViewUserAllTransactionsMenu viewAllTransactions("All Transactions");
             SettingsMenu settings("Settings");
 				ChangeUserNameMenu changeUserName("Change Username");
                 ChangePasswordMenu changePassword("Change Password");
@@ -42,6 +45,12 @@ void CLI::initMenu() {
 	userProfile.addSubMenu(&addMoney);
 	userProfile.addSubMenu(&viewRequests);
 	userProfile.addSubMenu(&viewTransactions);
+	
+	viewTransactions.addSubMenu(&viewSentTransactions);
+	viewTransactions.addSubMenu(&viewRecievedTransactions);
+	viewTransactions.addSubMenu(&viewAllTransactions);
+
+
 	userProfile.addSubMenu(&settings);
 
 	settings.addSubMenu(&changeUserName);
