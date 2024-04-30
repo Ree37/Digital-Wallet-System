@@ -51,6 +51,12 @@ void User::setTotpSecret(string secret) { this->totpSecret = secret; }
 
 void User::setIsHas2FA(bool flag) { this->isHas2FA = flag; }
 
+bool User::isUniqueUsername()
+{
+    auto uniqueUsername = Container::Users.find(this->username);
+    return (uniqueUsername == Container::Users.end());
+}
+
 bool User::addMoney(float value) {
   if (value > 0) {
     balance += value;
