@@ -53,7 +53,7 @@ private:
   string sender;
   string recipient;
   float amount;
-  bool isPending;
+  int isPending;
   chrono::system_clock::time_point dateTime;
 
 public:
@@ -62,13 +62,16 @@ public:
   string getSenderUserName();
   string getRecipientUserName();
   float getAmount();
-  bool getIsPending();
+  int getIsPending();
   chrono::system_clock::time_point getDateTime();
   void setDateTime(chrono::system_clock::time_point date);
-  void setIsPending(bool pending);
+  void setIsPending(int pending);
   void setSenderUsername(string username);
   void setRecipientUsername(string username);
   void setAmount(float amount);
+
+  void declineTransaction();
+  void acceptTransaction();
 
   void checkSenderBalance(float amount);
   void checkUserExist(string username);

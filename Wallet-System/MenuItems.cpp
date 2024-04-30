@@ -15,7 +15,10 @@
 using namespace std;
 
 User* MenuItem::user;
+Transaction* MenuItem::transaction;
+
 stack <MenuItem*> MenuItem::currentMenuItem;
+
 
 MenuItem::MenuItem(std::string name) : name(name) {}
 
@@ -422,6 +425,87 @@ bool AddMoneyMenu::update() {
 };
 
 
+ViewUserRequestsMenu::ViewUserRequestsMenu(string name) : MenuItem(name) {};
+bool ViewUserRequestsMenu::update() {
+
+	vector<Transaction*> v = user->getRequests();
+
+	int size = v.size();
+
+	int choice;
+	bool isValid = true;
+	do {
+		
+		CLI::clearCli();
+
+		if (!isValid) {
+			cout << CLI::invalidMessage(size) << "\n\n";
+		}
+		cout << "Current Menu: " << currentMenuItem.top()->name << "\n\n";
+		if (!v.empty())
+		{
+			for (int i = 0; i < size; i++)
+			{
+				cout << i + 1 << "] " << *v[i] << '\n';
+
+			}
+		}
+		else {
+			cout << "No transactions found...\n";
+			cout << "\nPress any key to go back..\n";
+
+			while (!_kbhit()) {
+			}
+			_getch();
+			back();
+			return true;
+		}
+
+		string eofTerminal = "\033[9999H";
+		cout << eofTerminal;
+
+		cout << "Enter your choice: ";
+		choice = CLI::getInput(true, size);
+
+		if (choice == 0) {
+			isValid = false;
+		}
+		else {
+			isValid = true;
+		}
+	} while (!isValid);
+
+	if (choice == 'x') {
+		back();
+		return true;
+	}
+
+	transaction = v[choice - 1];
+
+	currentMenuItem.push(currentMenuItem.top()->getSubMenus().at(0));
+
+
+}
+
+ViewRequestSettingsMenu::ViewRequestSettingsMenu(string name) : MenuItem(name) {};
+bool ViewRequestSettingsMenu::update() {
+	CLI::clearCli();
+
+	cout << "\nCurrent Request: " << transaction->getAmount() << " to " << transaction->getRecipientUserName() << "\n\n";
+	cout << "Your Balance: " << MenuItem::user->getBalance() << "\n\n";
+
+	MenuItem::update();
+
+	return true;
+}
+
+AcceptRequestMenu::AcceptRequestMenu(string name) : MenuItem(name) {};
+
+
+DeclineRequestMenu::DeclineRequestMenu(string name) : MenuItem(name) {};
+
+
+
 
 ViewUserTransactionsMenu::ViewUserTransactionsMenu(string name) : MenuItem(name) {};
 bool ViewUserTransactionsMenu::update() {
@@ -452,11 +536,6 @@ bool ViewUserTransactionsMenu::update() {
 		cout << "No transactions found...\n";
 	}
 
-	cout << "\nPress any key to go back..\n";
-
-	while (!_kbhit()) {
-	}
-	_getch();
 	back();
 	return true;
 

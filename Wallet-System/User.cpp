@@ -73,12 +73,13 @@ vector<Transaction*> User::getAllTransactions()
 vector<Transaction*> User::getRequests()
 {
     vector<Transaction*> requested;
-    for (auto i : getAllTransactions()) {
-        if (Transaction::getIsPending(i)) {
-            requested.insert(, getAllTransactions(i));
+    vector<Transaction*> all = getAllTransactions();
+    for (auto t : all) {
+        if (t->getIsPending() && t->getSenderUserName() == username) {
+            requested.push_back(t);
         }
     }
-    return vector<Transaction*>(requested);
+    return requested;
 }
 
 
@@ -100,7 +101,7 @@ void User::makeTransaction(string receiver, float amount) {
         t->setSenderUsername(this->getUsername());
         t->setRecipientUsername(receiver);
         t->setAmount(amount);
-        t->setIsPending(false);
+        t->setIsPending(0);
         t->sendAmount();
     }
     catch (exception e)
@@ -118,7 +119,7 @@ void User::makeRequest(string requested, float amount) {
     t->setSenderUsername(requested);
     t->setRecipientUsername(this->getUsername());
     t->setAmount(amount);
-    t->setIsPending(true);
+    t->setIsPending(1);
 
     Container::addTransaction(t);
 }
@@ -129,7 +130,7 @@ Transaction::Transaction() {
     this->recipient = "";
     this->amount = 0;
     this->dateTime = chrono::system_clock::now();
-    this->isPending = false;
+    this->isPending = 0;
 
 }
 
@@ -138,7 +139,7 @@ Transaction::Transaction(string sender, string recipient, float amount) {
   this->recipient = recipient;
   this->amount = amount;
   this->dateTime = chrono::system_clock::now();
-  this->isPending = false;
+  this->isPending = 0;
 }
 
 void Transaction::setSenderUsername(string username) {
@@ -171,12 +172,12 @@ void Transaction::setAmount(float amount) {
     this->amount = amount;
 
 }
-void Transaction::setIsPending(bool pending) { this->isPending = pending; }
+void Transaction::setIsPending(int pending) { this->isPending = pending; }
 void Transaction::setDateTime(chrono::system_clock::time_point date) { this->dateTime = date; }
 
 string Transaction::getRecipientUserName() { return recipient; }
 float Transaction::getAmount() { return amount; }
-bool Transaction::getIsPending() { return isPending; }
+int Transaction::getIsPending() { return isPending; }
 chrono::system_clock::time_point Transaction::getDateTime() { return dateTime; }
 
 
@@ -207,7 +208,29 @@ void Transaction::sendAmount() {
 
 string Transaction::getSenderUserName() { return sender; }
 
+
+
+void Transaction::declineTransaction(){
+
+    this->isPending = 2;
+    this->dateTime = chrono::system_clock::now();
+
+}
+
+
+void Transaction::acceptTransaction(){
+    sendAmount();
+    this->isPending = 0;
+}
+
 std::ostream& operator<<(std::ostream& os, const Transaction& t) {
-    os << "Sender: " << t.sender << " | Recepient: " << t.recipient << " | Amount: " << t.amount << " | Date: " << Utils::timePointToString(t.dateTime) << (t.isPending ? " | Pending" : " | Completed");
+    string s;
+    switch (t.isPending) {
+    case 0: s = "Completed"; break;
+    case 1: s = "Pending"; break;
+    case 2: s = "Declined";
+    }
+    os << "Sender: " << t.sender << " | Recepient: " << t.recipient << " | Amount: " << t.amount << " | Date: " << Utils::timePointToString(t.dateTime) << " | " << s;
     return os;
 }
+

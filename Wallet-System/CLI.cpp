@@ -18,7 +18,10 @@ MainMenu mmainMenu("Main Menu");
             SendMoneyMenu sendMoney("Send Money");
             RequestMoneyMenu requestMoney("Request Money");
             AddMoneyMenu addMoney("Add Money");
-            MenuItem viewRequests("View Requests");
+            ViewUserRequestsMenu viewRequests("View Requests");
+				ViewRequestSettingsMenu requestSettings("Reqeust Settings");
+					AcceptRequestMenu acceptRequest("Accept");
+					DeclineRequestMenu declineRequest("Decline");
 			MenuItem viewTransactions("View Transactions");
 				ViewUserSentTransactionsMenu viewSentTransactions("Sent Transactions");
 				ViewUserRecievedTransactionsMenu viewRecievedTransactions("Recieved Transactions");
@@ -43,6 +46,12 @@ void CLI::initMenu() {
 	userProfile.addSubMenu(&requestMoney);
 	userProfile.addSubMenu(&addMoney);
 	userProfile.addSubMenu(&viewRequests);
+
+	viewRequests.addSubMenu(&requestSettings);
+
+	requestSettings.addSubMenu(&acceptRequest);
+	requestSettings.addSubMenu(&declineRequest);
+
 	userProfile.addSubMenu(&viewTransactions);
 	
 	viewTransactions.addSubMenu(&viewSentTransactions);
@@ -77,20 +86,33 @@ void CLI::clearCli() {
 }
 
 
+string CLI::invalidMessage(int size){
+	return "\nInvalid choice. Please enter 'x' or a number between 1 and " + std::to_string(size);
+}
+
 void CLI::drawInvalid() {
+	int size = MenuItem::currentMenuItem.top()->getSubMenus().size();
+
 	if (dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem.top())) {
 		clearCli();
-		cout << "\nInvalid choice. Please enter 'x' or a number between 1 and " << MenuItem::currentMenuItem.top()->getSubMenus().size();
+		cout << invalidMessage(size) << "\n";
 		cout << "\nCurrent User: " << MenuItem::user->getUsername() << "\n\n";
 		cout << "Available Balance: " << MenuItem::user->getBalance() << "\n\n";
 	}
+	else if(dynamic_cast<ViewRequestSettingsMenu*>(MenuItem::currentMenuItem.top())){
+		clearCli();
+		cout << invalidMessage(size) << "\n";
+		cout << "\nCurrent Request: " << MenuItem::transaction->getAmount() << " to " << MenuItem::transaction->getRecipientUserName() << "\n\n";
+		cout << "Your Balance: " << MenuItem::user->getBalance() << "\n\n";
+
+	}
 	else {
-		cout << "\nInvalid choice. Please enter 'x' or a number between 1 and " << MenuItem::currentMenuItem.top()->getSubMenus().size();
+		cout << invalidMessage(size) << "\n";
 	}
 
 }
 void CLI::drawCli(bool isValid) {
-	if (!dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem.top())) {
+	if (!dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem.top()) && !dynamic_cast<ViewRequestSettingsMenu*>(MenuItem::currentMenuItem.top())) {
 		clearCli();
 	}
 
@@ -98,7 +120,7 @@ void CLI::drawCli(bool isValid) {
 		drawInvalid();
 	}
 
-	if (!dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem.top())) {
+	if (!dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem.top()) && !dynamic_cast<ViewRequestSettingsMenu*>(MenuItem::currentMenuItem.top())) {
 		cout << "\nCurrent Menu: " + MenuItem::currentMenuItem.top()->getName() << "\n\n";
 	}
 	MenuItem::printMenu(MenuItem::currentMenuItem.top());
@@ -109,7 +131,10 @@ void CLI::drawCli(bool isValid) {
 	cout << "Enter your choice: ";
 }
 
-int CLI::getInput() {
+int CLI::getInput(bool overwrite, int size) {
+	
+	int sizee = overwrite ? size : MenuItem::currentMenuItem.top()->getSubMenus().size();
+
 	int choice;
 	string input;
 
@@ -122,7 +147,7 @@ int CLI::getInput() {
 		choice = input[0];
 	}
 
-	if ((choice < 1 || choice > MenuItem::currentMenuItem.top()->getSubMenus().size()) && choice != 'x') {
+	if ((choice < 1 || choice > sizee) && choice != 'x') {
 		return 0;
 	}
 	else {

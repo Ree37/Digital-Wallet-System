@@ -25,6 +25,7 @@ public:
 
 public:
 	static User* user;
+	static Transaction* transaction;
 	static stack<MenuItem*> currentMenuItem;
 	string name;
 	vector<MenuItem*> subMenus;
@@ -87,6 +88,33 @@ public:
 	AddMoneyMenu(string name);
 	bool update() override;
 
+};
+
+class ViewUserRequestsMenu : public MenuItem
+{
+public:
+	ViewUserRequestsMenu(string name);
+	bool update() override;
+};
+
+class ViewRequestSettingsMenu : public MenuItem
+{
+public:
+	ViewRequestSettingsMenu(string name);
+	bool update() override;
+};
+
+class AcceptRequestMenu : public MenuItem
+{
+public:
+	AcceptRequestMenu(string name);
+
+};
+class DeclineRequestMenu : public MenuItem
+{
+public:
+	DeclineRequestMenu(string name);
+	
 };
 
 class ViewUserTransactionsMenu : public MenuItem
