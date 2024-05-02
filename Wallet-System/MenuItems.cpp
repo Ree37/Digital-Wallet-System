@@ -506,7 +506,7 @@ bool AcceptRequestMenu::update() {
 	try{
 		transaction->acceptTransaction();
 
-		cout << "Transaction made successfully..\n";
+		cout << "You succesfully sent " << transaction->getAmount() << " to " << transaction->getRecipientUserName() <<"..\n\n";
 		cout << "Press any key to continue..\n";
 		
 
