@@ -71,32 +71,55 @@ bool User::strongPassword(string password) {
   return (regex_match(password, pattern));
 }
 
-vector<Transaction*> User::getAllTransactions()
-{
-    return Container::getAllUserTransaction(this->username);
-}
-
 vector<Transaction*> User::getRequests()
 {
     vector<Transaction*> requested;
-    vector<Transaction*> all = getAllTransactions();
+    vector<Transaction*> all = Container::getSentTransaction(this->username);
     for (auto t : all) {
-        if (t->getIsPending() && t->getSenderUserName() == username) {
+        if (t->getIsPending() == 1) {
             requested.push_back(t);
         }
     }
     return requested;
 }
 
+vector<Transaction*> User::getAllTransactions()
+{
+    vector<Transaction*> resultAll;
+    vector<Transaction*> all = Container::getAllUserTransaction(this->username);
+    for (auto t : all) {
+        if (t->getIsPending() != 1) {
+            resultAll.push_back(t);
+        }
+    }
+    return resultAll;
+}
+
+
 
 vector<Transaction*> User::getReceivedTransactions()
 {
-    return Container::getRecipientTransaction(this->username);
+    vector<Transaction*> recieved;
+    vector<Transaction*> all = Container::getRecipientTransaction(this->username);
+    for (auto t : all) {
+        if (t->getIsPending() != 1) {
+            recieved.push_back(t);
+        }
+    }
+    return recieved;
+    
 }
 
 vector<Transaction*> User::getSentTransactions()
 {
-    return Container::getSentTransaction(this->username);
+    vector<Transaction*> sent;
+    vector<Transaction*> all = Container::getSentTransaction(this->username);
+    for (auto t : all) {
+        if (t->getIsPending() != 1) {
+            sent.push_back(t);
+        }
+    }
+    return sent;
 }
 
 
@@ -227,6 +250,7 @@ void Transaction::declineTransaction(){
 void Transaction::acceptTransaction(){
     sendAmount();
     this->isPending = 0;
+    this->dateTime = chrono::system_clock::now();
 }
 
 std::ostream& operator<<(std::ostream& os, const Transaction& t) {

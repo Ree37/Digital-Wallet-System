@@ -147,7 +147,7 @@ void Files::readTransactionsData() {
     string sender = getCellFromLine(Line);
     string recipient = getCellFromLine(Line);
     float amount = stof(getCellFromLine(Line));
-    bool isPending = stoi(getCellFromLine(Line));
+    int isPending = stoi(getCellFromLine(Line));
     chrono::system_clock::time_point Date = Utils::stringToTimePoint(getCellFromLine(Line));
 
     Transaction *t = new Transaction(sender, recipient, amount);

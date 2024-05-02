@@ -108,13 +108,15 @@ class AcceptRequestMenu : public MenuItem
 {
 public:
 	AcceptRequestMenu(string name);
+	bool update() override;
 
 };
 class DeclineRequestMenu : public MenuItem
 {
 public:
 	DeclineRequestMenu(string name);
-	
+	bool update() override;
+
 };
 
 class ViewUserTransactionsMenu : public MenuItem

@@ -500,11 +500,54 @@ bool ViewRequestSettingsMenu::update() {
 }
 
 AcceptRequestMenu::AcceptRequestMenu(string name) : MenuItem(name) {};
+bool AcceptRequestMenu::update() {
 
+	CLI::clearCli();
+	try{
+		transaction->acceptTransaction();
+
+		cout << "Transaction made successfully..\n";
+		cout << "Press any key to continue..\n";
+		
+
+		while(!_kbhit()){}
+		_getch();
+		back();
+		back();
+		return true;
+
+	}
+	catch (exception e){
+		cout << "Transaction failed: " << e.what() << "\n";
+		cout << "Press any key to continue..\n";
+		while (!_kbhit()) {}
+		_getch();
+		back();
+		return true;
+	}
+
+
+}
 
 DeclineRequestMenu::DeclineRequestMenu(string name) : MenuItem(name) {};
 
+bool DeclineRequestMenu::update() {
+	CLI::clearCli();
+	
+	transaction->declineTransaction();
 
+	cout << "Request declined..\n";
+	cout << "Press any key to continue..\n";
+
+
+	while (!_kbhit()) {}
+	_getch();
+	back();
+	back();
+	return true;
+
+
+}
 
 
 ViewUserTransactionsMenu::ViewUserTransactionsMenu(string name) : MenuItem(name) {};
@@ -531,6 +574,11 @@ bool ViewUserTransactionsMenu::update() {
 			cout << i + 1 << "] " << *v[i] << '\n';
 
 		}
+		cout << "Press any key to continue..\n";
+
+		while (!_kbhit()) {
+		}
+		_getch();
 	}
 	else {
 		cout << "No transactions found...\n";
