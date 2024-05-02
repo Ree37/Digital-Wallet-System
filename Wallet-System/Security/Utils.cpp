@@ -159,11 +159,13 @@ string Utils::timePointToString(const chrono::system_clock::time_point& timePoin
     // Get the current time as a time_t value
     time_t current_time = chrono::system_clock::to_time_t(timePoint);
 
-    // Convert to a human-readable string using std::ctime
+    // Convert to a human-readable string using strftime
     char readable_time_c[26];
-    errno_t err = ctime_s(readable_time_c, sizeof(readable_time_c), &current_time);
+    tm tm_result;
+    localtime_s(&tm_result, &current_time);
+    int err = strftime(readable_time_c, sizeof(readable_time_c), "%a %b %d %H:%M:%S %Y", &tm_result);
 
-    if (err != 0) {
+    if (err == 0) {
         throw invalid_argument("Error getting the current time.");
     }
     string readable_time_str(readable_time_c);
