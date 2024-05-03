@@ -18,10 +18,12 @@ MainMenu mmainMenu("Main Menu");
             SendMoneyMenu sendMoney("Send Money");
             RequestMoneyMenu requestMoney("Request Money");
             AddMoneyMenu addMoney("Add Money");
-            ViewUserRequestsMenu viewRequests("View Requests");
-				ViewRequestSettingsMenu requestSettings("Reqeust Settings");
-					AcceptRequestMenu acceptRequest("Accept");
-					DeclineRequestMenu declineRequest("Decline");
+			MenuItem viewRequests("View Requests");
+				ViewToUserRequestsMenu toRequests("Requests to you");
+				ViewFromUserRequestsMenu fromRequests("Requests from you");
+					ViewRequestSettingsMenu requestSettings("Reqeust Settings");
+						AcceptRequestMenu acceptRequest("Accept");
+						DeclineRequestMenu declineRequest("Decline");
 			MenuItem viewTransactions("View Transactions");
 				ViewUserSentTransactionsMenu viewSentTransactions("Sent Transactions");
 				ViewUserRecievedTransactionsMenu viewRecievedTransactions("Recieved Transactions");
@@ -47,7 +49,9 @@ void CLI::initMenu() {
 	userProfile.addSubMenu(&addMoney);
 	userProfile.addSubMenu(&viewRequests);
 
-	viewRequests.addSubMenu(&requestSettings);
+	viewRequests.addSubMenu(&toRequests);
+	toRequests.addSubMenu(&requestSettings);
+	viewRequests.addSubMenu(&fromRequests);
 
 	requestSettings.addSubMenu(&acceptRequest);
 	requestSettings.addSubMenu(&declineRequest);
@@ -86,10 +90,10 @@ void CLI::clearCli() {
 }
 
 
-string CLI::invalidMessage(int size){
-	return "\nInvalid choice. Please enter 'x' or a number between 1 and " + std::to_string(size);
-}
+string CLI::invalidMessage(int size, bool sorted) {
 
+	return sorted ? "Invalid choice. Please enter 'x', 'r', 'o' or a number between 1 and " + std::to_string(size) : "Invalid choice. Please enter 'x' or a number between 1 and " + std::to_string(size);
+}
 void CLI::drawInvalid() {
 	int size = MenuItem::currentMenuItem.top()->getSubMenus().size();
 
@@ -131,7 +135,7 @@ void CLI::drawCli(bool isValid) {
 	cout << "Enter your choice: ";
 }
 
-int CLI::getInput(bool overwrite, int size) {
+int CLI::getInput(bool overwrite, int size, bool sorted) {
 	
 	int sizee = overwrite ? size : MenuItem::currentMenuItem.top()->getSubMenus().size();
 
@@ -147,11 +151,20 @@ int CLI::getInput(bool overwrite, int size) {
 		choice = input[0];
 	}
 
-	if ((choice < 1 || choice > sizee) && choice != 'x') {
-		return 0;
-	}
-	else {
+	if (choice >= 1 && choice <= sizee) {
 		return choice;
 	}
+
+	if (tolower(choice) == 'x') {
+		return choice;
+	}
+
+	if ((tolower(choice) == 'r' || tolower(choice) == 'o') && sorted) {
+		return choice;
+	}
+
+
+	return false;
+	
 }
 

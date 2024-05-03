@@ -33,7 +33,7 @@ void MenuItem::printMenu(MenuItem* menuItem) {
 	else if (dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem.top())) {
 		cout << "x] Log Out" << "\n";
 	}
-	else if (menuItem->hasBack()) {
+	else {
 		cout << "x] Back" << "\n";
 	}
 }
@@ -50,13 +50,6 @@ std::vector<MenuItem*> MenuItem::getSubMenus() {
 	return this->subMenus;
 }
 
-bool MenuItem::hasSubMenus() {
-	return !subMenus.empty();
-}
-
-bool MenuItem::hasBack() {
-	return true;
-}
 
 void MenuItem::addSubMenu(MenuItem* subMenu) {
 	subMenus.push_back(subMenu);
@@ -425,21 +418,27 @@ bool AddMoneyMenu::update() {
 };
 
 
-ViewUserRequestsMenu::ViewUserRequestsMenu(string name) : MenuItem(name) {};
-bool ViewUserRequestsMenu::update() {
+ViewToUserRequestsMenu::ViewToUserRequestsMenu(string name) : MenuItem(name) {};
+bool ViewToUserRequestsMenu::update() {
 
-	vector<Transaction*> v = user->getRequests();
+	vector<Transaction*> v;
 
-	int size = v.size();
+	
 
 	int choice;
+	int size;
 	bool isValid = true;
+	bool loop = false;
+	bool recent = true;
 	do {
-		
+		v = user->getRequests(recent);
+		size = v.size();
+
 		CLI::clearCli();
+		cout << "Enter 'r' for most recent or 'o' for oldest\n\n";
 
 		if (!isValid) {
-			cout << CLI::invalidMessage(size) << "\n\n";
+			cout << CLI::invalidMessage(size, true) << "\n\n";
 		}
 		cout << "Current Menu: " << currentMenuItem.top()->name << "\n\n";
 		if (!v.empty())
@@ -449,6 +448,7 @@ bool ViewUserRequestsMenu::update() {
 				cout << i + 1 << "] " << *v[i] << '\n';
 
 			}
+			cout << "x] Back";
 		}
 		else {
 			cout << "No transactions found...\n";
@@ -465,15 +465,22 @@ bool ViewUserRequestsMenu::update() {
 		cout << eofTerminal;
 
 		cout << "Enter your choice: ";
-		choice = CLI::getInput(true, size);
+		choice = CLI::getInput(true, size, true);
 
 		if (choice == 0) {
 			isValid = false;
+			loop = false;
+		}
+		else if ((tolower(choice) == 'r' || tolower(choice) == 'o')) {
+			isValid = true;
+			loop = true;
+			recent = tolower(choice) == 'r';
 		}
 		else {
 			isValid = true;
+			loop = false;
 		}
-	} while (!isValid);
+	} while (!isValid || loop);
 
 	if (choice == 'x') {
 		back();
@@ -487,11 +494,17 @@ bool ViewUserRequestsMenu::update() {
 
 }
 
+
+
+ViewFromUserRequestsMenu::ViewFromUserRequestsMenu(string name) : ViewUserTransactionsMenu(name) { mode = 4; };
+
+
+
 ViewRequestSettingsMenu::ViewRequestSettingsMenu(string name) : MenuItem(name) {};
 bool ViewRequestSettingsMenu::update() {
 	CLI::clearCli();
 
-	cout << "\nCurrent Request: " << transaction->getAmount() << " to " << transaction->getRecipientUserName() << "\n\n";
+	cout << "\n\nCurrent Request: " << transaction->getAmount() << " to " << transaction->getRecipientUserName() << "\n\n";
 	cout << "Your Balance: " << MenuItem::user->getBalance() << "\n\n";
 
 	MenuItem::update();
@@ -554,38 +567,56 @@ ViewUserTransactionsMenu::ViewUserTransactionsMenu(string name) : MenuItem(name)
 bool ViewUserTransactionsMenu::update() {
 	
 	vector<Transaction*> v;
+	bool recent = true;
+	while (true) {
 
-	CLI::clearCli();
-	cout << "Current Menu: " << currentMenuItem.top()->name << "\n\n";
-	switch (mode)
-	{
-	case 1:	v = user->getSentTransactions();
-			break;
-	case 2:	v = user->getReceivedTransactions();
-		break; 
-	case 3:	v = user->getAllTransactions();
-					 break;
-	}
 
-	if (!v.empty())
-	{
-		for (int i = 0; i < v.size(); i++)
+		CLI::clearCli();
+		cout << "Current Menu: " << currentMenuItem.top()->name << "\n\n";
+		switch (mode)
 		{
-			cout << i + 1 << "] " << *v[i] << '\n';
-
+		case 1:	v = user->getSentTransactions(recent);
+			break;
+		case 2:	v = user->getReceivedTransactions(recent);
+			break;
+		case 3:	v = user->getAllTransactions(recent);
+			break;
+		case 4: v = user->getFromRequests(recent);
 		}
-		cout << "Press any key to continue..\n";
 
-		while (!_kbhit()) {
+		if (!v.empty())
+		{
+			for (int i = 0; i < v.size(); i++)
+			{
+				cout << i + 1 << "] " << *v[i] << '\n';
+
+			}
+			cout << "Press 'r' to view by most recent, 'o' to view by oldest, any other key to go back..\n";
+
+			while (!_kbhit()) {
+			}
+			char c = _getch();
+
+
+			switch (tolower(c)) {
+			case 'r': recent = true; break;
+			case 'o': recent = false; break;
+			default: back(); return true;
+			}
 		}
-		_getch();
-	}
-	else {
-		cout << "No transactions found...\n";
-	}
+		else {
+			cout << "No transactions found...\n";
+			cout << "\nPress any key to go back..\n";
 
-	back();
-	return true;
+			while (!_kbhit()) {
+			}
+			_getch();
+
+			back();
+			return true;
+		}
+	}
+	
 
 }
 

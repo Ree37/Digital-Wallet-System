@@ -15,8 +15,6 @@ public:
 	string getName();
 	void setName(string name);
 
-	bool hasSubMenus();
-	bool hasBack();
 	void addSubMenu(MenuItem* subMenu);
 	bool exitCommand(string s);
 
@@ -90,10 +88,10 @@ public:
 
 };
 
-class ViewUserRequestsMenu : public MenuItem
+class ViewToUserRequestsMenu : public MenuItem
 {
 public:
-	ViewUserRequestsMenu(string name);
+	ViewToUserRequestsMenu(string name);
 	bool update() override;
 };
 
@@ -129,6 +127,13 @@ public:
 	int mode;
 
 };
+
+class ViewFromUserRequestsMenu : public ViewUserTransactionsMenu
+{
+public:
+	ViewFromUserRequestsMenu(string name);
+};
+
 class ViewUserSentTransactionsMenu : public ViewUserTransactionsMenu
 {
 public:

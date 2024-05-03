@@ -32,10 +32,12 @@ public:
   bool isSentTransaction(Transaction *transaction);
   void requestMoney(string username, float amount);
 
-  vector<Transaction*> getAllTransactions();
-  vector<Transaction*> getRequests();
-  vector<Transaction*> getReceivedTransactions();
-  vector<Transaction*> getSentTransactions();
+  vector<Transaction*> getAllTransactions(bool recent = true);
+  vector<Transaction*> getRequests(bool recent = true);
+  vector<Transaction*> getFromRequests(bool recent = true);
+
+  vector<Transaction*> getReceivedTransactions(bool recent = true);
+  vector<Transaction*> getSentTransactions(bool recent = true);
   void makeTransaction(string receiver, float amount);
   void makeRequest(string requested, float amount);
 
@@ -79,5 +81,11 @@ public:
   void addTransaction();
 
   friend std::ostream& operator<<(std::ostream& os, const Transaction& t);
+
+  static bool recentDate(Transaction* t1, Transaction* t2);
+
+  static bool oldestDate(Transaction* t1, Transaction* t2);
+
+
 
 };

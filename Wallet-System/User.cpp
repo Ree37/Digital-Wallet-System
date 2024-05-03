@@ -71,7 +71,7 @@ bool User::strongPassword(string password) {
   return (regex_match(password, pattern));
 }
 
-vector<Transaction*> User::getRequests()
+vector<Transaction*> User::getRequests(bool recent)
 {
     vector<Transaction*> requested;
     vector<Transaction*> all = Container::getSentTransaction(this->username);
@@ -80,10 +80,27 @@ vector<Transaction*> User::getRequests()
             requested.push_back(t);
         }
     }
+    auto comparator = (recent) ? Transaction::recentDate : Transaction::oldestDate;
+
+    sort(requested.begin(), requested.end(), comparator);
     return requested;
 }
 
-vector<Transaction*> User::getAllTransactions()
+vector<Transaction*> User::getFromRequests(bool recent) {
+    vector<Transaction*> requested;
+    vector<Transaction*> all = Container::getRecipientTransaction(this->username);
+    for (auto t : all) {
+        if (t->getIsPending() == 1) {
+            requested.push_back(t);
+        }
+    }
+    auto comparator = (recent) ? Transaction::recentDate : Transaction::oldestDate;
+
+    sort(requested.begin(), requested.end(), comparator);
+    return requested;
+}
+
+vector<Transaction*> User::getAllTransactions(bool recent)
 {
     vector<Transaction*> resultAll;
     vector<Transaction*> all = Container::getAllUserTransaction(this->username);
@@ -92,12 +109,17 @@ vector<Transaction*> User::getAllTransactions()
             resultAll.push_back(t);
         }
     }
+
+    auto comparator = (recent) ? Transaction::recentDate : Transaction::oldestDate;
+
+    sort(resultAll.begin(), resultAll.end(), comparator);
+
     return resultAll;
 }
 
 
 
-vector<Transaction*> User::getReceivedTransactions()
+vector<Transaction*> User::getReceivedTransactions(bool recent)
 {
     vector<Transaction*> recieved;
     vector<Transaction*> all = Container::getRecipientTransaction(this->username);
@@ -106,11 +128,15 @@ vector<Transaction*> User::getReceivedTransactions()
             recieved.push_back(t);
         }
     }
+    auto comparator = (recent) ? Transaction::recentDate : Transaction::oldestDate;
+
+    sort(recieved.begin(), recieved.end(), comparator);
+
     return recieved;
     
 }
 
-vector<Transaction*> User::getSentTransactions()
+vector<Transaction*> User::getSentTransactions(bool recent)
 {
     vector<Transaction*> sent;
     vector<Transaction*> all = Container::getSentTransaction(this->username);
@@ -119,6 +145,10 @@ vector<Transaction*> User::getSentTransactions()
             sent.push_back(t);
         }
     }
+    auto comparator = (recent) ? Transaction::recentDate : Transaction::oldestDate;
+
+    sort(sent.begin(), sent.end(), comparator);
+
     return sent;
 }
 
@@ -264,3 +294,10 @@ std::ostream& operator<<(std::ostream& os, const Transaction& t) {
     return os;
 }
 
+bool Transaction::oldestDate(Transaction* t1, Transaction* t2) {
+    return t1->dateTime < t2->dateTime;
+}
+
+bool Transaction::recentDate(Transaction* t1, Transaction* t2) {
+    return t1->dateTime > t2->dateTime;
+}

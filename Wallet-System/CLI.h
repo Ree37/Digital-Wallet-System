@@ -10,7 +10,7 @@ public:
     static void navMenu();
     static void clearCli();
     static void drawCli(bool isValid);
-    static std::string invalidMessage(int size);
+    static std::string invalidMessage(int size, bool sorted = false);
     static void drawInvalid();
-    static int getInput(bool overwrite = false, int size = 0);
+    static int getInput(bool overwrite = false, int size = 0, bool sorted = false);
 };
