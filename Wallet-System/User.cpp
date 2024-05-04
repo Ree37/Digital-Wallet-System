@@ -43,7 +43,18 @@ bool User::setUsername(string newUsername) {
 
 void User::setPassword(string newPassword) { password = newPassword; }
 
-void User::setBalance(float amount) { balance = amount; }
+void User::setBalance(float amount) { 
+
+    if (amount < 0)
+    {
+        throw invalid_argument("Please Enter a Positive Number");
+    }
+    if (!isfinite(amount)) {
+        throw invalid_argument("Balance Can't be infinity or nan");
+    }
+
+    this->balance = amount;
+}
 
 void User::setSuspendedFlag(bool flag) { suspendedFlag = flag; }
 
@@ -85,7 +96,7 @@ std::ostream& operator<<(std::ostream& os, User& u) {
 
 
 
-vector<Transaction*> User::getRequests(bool recent)
+vector<Transaction*> User::getToRequests(bool recent)
 {
     vector<Transaction*> requested;
     vector<Transaction*> all = Container::getSentTransaction(this->username);
@@ -232,14 +243,12 @@ void Transaction::setRecipientUsername(string username) {
 
 void Transaction::setAmount(float amount) {
 
-    float constexpr inf = numeric_limits<float>::infinity();
-
     if (amount < 0)
     {
         throw invalid_argument("Please Enter a Positive Number");
     }
-    if (amount == inf || amount == -inf) {
-        throw invalid_argument("Amount Can't be infinity");
+    if (!isfinite(amount)) {
+        throw invalid_argument("Amount Can't be infinity or nan");
     }
 
     this->amount = amount;

@@ -26,6 +26,7 @@ public:
 
 public:
 	static User* user;
+	static Admin* admin;
 	static Transaction* transaction;
 	static stack<MenuItem*> currentMenuItem;
 	string name;
@@ -91,11 +92,30 @@ public:
 
 };
 
-class ViewToUserRequestsMenu : public MenuItem
+
+enum TransactionType {
+	sentUser,
+	recievedUser,
+	allUser,
+	toRequest,
+	fromRequest
+};
+
+class ViewUserTransactionsMenu : public MenuItem
+{
+public:
+	ViewUserTransactionsMenu(string name);
+	bool update() override;
+
+public:
+	TransactionType mode;
+
+};
+
+class ViewToUserRequestsMenu : public ViewUserTransactionsMenu
 {
 public:
 	ViewToUserRequestsMenu(string name);
-	bool update() override;
 };
 
 class ViewRequestSettingsMenu : public MenuItem
@@ -117,17 +137,6 @@ class DeclineRequestMenu : public MenuItem
 public:
 	DeclineRequestMenu(string name);
 	bool update() override;
-
-};
-
-class ViewUserTransactionsMenu : public MenuItem
-{
-public:
-	ViewUserTransactionsMenu(string name);
-	bool update() override;
-
-public:
-	int mode;
 
 };
 
@@ -181,19 +190,56 @@ class AdminProfile : public MenuItem
 {
 public:
 	AdminProfile(string name);
+	bool update() override;
 	bool back() override;
 };
 
-class AllTransactions : public MenuItem
+class a_AllTransactions : public MenuItem
 {
 public:
-	AllTransactions(string name);
+	a_AllTransactions(string name);
 	bool update() override;
 };
 
-class AllUsers : public MenuItem
+class a_AllUsers : public MenuItem
 {
 public:
-	AllUsers(string name);
+	a_AllUsers(string name);
+	bool update() override;
+};
+
+class a_AddUser : public MenuItem
+{
+public:
+	a_AddUser(string name);
+	bool update() override;
+};
+
+
+class a_ModifyUserProfile : public MenuItem
+{
+public:
+	a_ModifyUserProfile(string name);
+	bool update() override;
+};
+
+class a_SetBalance : public MenuItem
+{
+public:
+	a_SetBalance(string name);
+	bool update() override;
+};
+
+class a_SuspendUser : public MenuItem
+{
+public:
+	a_SuspendUser(string name);
+	bool update() override;
+};
+
+class a_DeleteUser : public MenuItem
+{
+public:
+	a_DeleteUser(string name);
 	bool update() override;
 };

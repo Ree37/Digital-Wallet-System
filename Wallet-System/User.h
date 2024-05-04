@@ -33,7 +33,7 @@ public:
   void requestMoney(string username, float amount);
 
   vector<Transaction*> getAllTransactions(bool recent = true);
-  vector<Transaction*> getRequests(bool recent = true);
+  vector<Transaction*> getToRequests(bool recent = true);
   vector<Transaction*> getFromRequests(bool recent = true);
 
   vector<Transaction*> getReceivedTransactions(bool recent = true);

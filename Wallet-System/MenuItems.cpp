@@ -14,6 +14,7 @@
 using namespace std;
 
 User* MenuItem::user;
+Admin* MenuItem::admin;
 Transaction* MenuItem::transaction;
 
 stack <MenuItem*> MenuItem::currentMenuItem;
@@ -260,15 +261,16 @@ bool LoginUserMenu::update() {
 			}
 			}
 
-		
-		
-		MenuItem::user = data;
-
 		if(!dynamic_cast<Admin*>(data)) {
+
+			MenuItem::user = data;
+			MenuItem::admin = nullptr;
 			currentMenuItem.push(currentMenuItem.top()->getSubMenus()[0]);
 
 		}
 		else {
+			MenuItem::user = nullptr;
+			MenuItem::admin = dynamic_cast<Admin*>(data);
 			currentMenuItem.push(currentMenuItem.top()->getSubMenus()[1]);
 		}
 		break;
@@ -523,112 +525,9 @@ bool AddMoneyMenu::update() {
 };
 
 
-ViewToUserRequestsMenu::ViewToUserRequestsMenu(string name) : MenuItem(name) {};
-bool ViewToUserRequestsMenu::update() {
-	/*
-	vector<Transaction*> v;
+ViewToUserRequestsMenu::ViewToUserRequestsMenu(string name) : ViewUserTransactionsMenu(name) { mode = toRequest; };
 
-	
-
-	int choice;
-	int size;
-	bool isValid = true;
-	bool loop = false;
-	bool recent = true;
-	do {
-		v = user->getRequests(recent);
-		size = v.size();
-
-		CLI::clearCli();
-		cout << "Enter 'r' for most recent or 'o' for oldest\n\n";
-
-		if (!isValid) {
-			cout << CLI::invalidMessage(size, true) << "\n\n";
-		}
-		cout << "Current Menu: " << currentMenuItem.top()->name << "\n\n";
-		if (!v.empty())
-		{
-			for (int i = 0; i < size; i++)
-			{
-				cout << i + 1 << "] " << *v[i] << '\n';
-
-			}
-			cout << "x] Back";
-		}
-		else {
-			cout << "No transactions found...\n";
-			cout << "\nPress any key to go back..\n";
-
-			while (!_kbhit()) {
-			}
-			_getch();
-			back();
-			return true;
-		}
-
-		string eofTerminal = "\033[9999H";
-		cout << eofTerminal;
-
-		cout << "Enter your choice: ";
-		choice = CLI::getInput(true, size, true);
-
-		if (choice == 0) {
-			isValid = false;
-			loop = false;
-		}
-		else if ((tolower(choice) == 'r' || tolower(choice) == 'o')) {
-			isValid = true;
-			loop = true;
-			recent = tolower(choice) == 'r';
-		}
-		else {
-			isValid = true;
-			loop = false;
-		}
-	} while (!isValid || loop);
-
-	if (choice == 'x') {
-		back();
-		return true;
-	}
-
-	transaction = v[choice - 1];
-
-	currentMenuItem.push(currentMenuItem.top()->getSubMenus().at(0));
-
-	return true;
-	*/
-
-
-	bool recent = true;
-
-	while (true) {
-		vector<Transaction*> v = user->getRequests(recent);
-
-		int state = updateList(v,false);
-
-		switch (state) {
-		case 0: back(); return true; 
-		case -1:  recent = true; break;
-		case -2:  recent = false; break;
-
-		default:  transaction = v[state - 1];
-
-				  currentMenuItem.push(currentMenuItem.top()->getSubMenus().at(0));
-
-			      return true;
-		}
-
-
-	}
-
-}
-
-
-
-ViewFromUserRequestsMenu::ViewFromUserRequestsMenu(string name) : ViewUserTransactionsMenu(name) { mode = 4; };
-
-
+ViewFromUserRequestsMenu::ViewFromUserRequestsMenu(string name) : ViewUserTransactionsMenu(name) { mode = fromRequest; };
 
 ViewRequestSettingsMenu::ViewRequestSettingsMenu(string name) : MenuItem(name) {};
 bool ViewRequestSettingsMenu::update() {
@@ -699,91 +598,46 @@ bool ViewUserTransactionsMenu::update() {
 
 	vector<Transaction*> v;
 	bool recent = true;
+	bool isViewOnly = (admin || mode != toRequest);
 	while (true) {
 
 		switch (mode)
 		{
-		case 1:	v = user->getSentTransactions(recent);
+		case sentUser: v = user->getSentTransactions(recent);
 			break;
-		case 2:	v = user->getReceivedTransactions(recent);
+		case recievedUser: v = user->getReceivedTransactions(recent);
 			break;
-		case 3:	v = user->getAllTransactions(recent);
+		case allUser: v = user->getAllTransactions(recent);
 			break;
-		case 4: v = user->getFromRequests(recent);
+		case toRequest: v = user->getToRequests(recent);
+			break;
+		case fromRequest :v = user->getFromRequests(recent);
+			break;
+		
 		}
 
-		int state = updateList(v, true);
+
+		int state = updateList(v, isViewOnly);
 
 		switch (state) {
 		case 0: back(); return true;
 		case -1: recent = true; break;
 		case -2: recent = false; break;
+		default:  transaction = v[state - 1];
+			currentMenuItem.push(currentMenuItem.top()->getSubMenus().at(0));
+
+			return true;
 		}
 	}
-
-		/*
-		vector<Transaction*> v;
-		bool recent = true;
-		while (true) {
-
-
-			CLI::clearCli();
-			cout << "Current Menu: " << currentMenuItem.top()->name << "\n\n";
-			switch (mode)
-			{
-			case 1:	v = user->getSentTransactions(recent);
-				break;
-			case 2:	v = user->getReceivedTransactions(recent);
-				break;
-			case 3:	v = user->getAllTransactions(recent);
-				break;
-			case 4: v = user->getFromRequests(recent);
-			}
-
-			if (!v.empty())
-			{
-				for (int i = 0; i < v.size(); i++)
-				{
-					cout << i + 1 << "] " << *v[i] << '\n';
-
-				}
-				cout << "Press 'r' to view by most recent, 'o' to view by oldest, any other key to go back..\n";
-
-				while (!_kbhit()) {
-				}
-				char c = _getch();
-
-
-				switch (tolower(c)) {
-				case 'r': recent = true; break;
-				case 'o': recent = false; break;
-				default: back(); return true;
-				}
-			}
-			else {
-				cout << "No transactions found...\n";
-				cout << "\nPress any key to go back..\n";
-
-				while (!_kbhit()) {
-				}
-				_getch();
-
-				back();
-				return true;
-			}
-		}
-		*/
-
-	
 
 }
 
 
-ViewUserSentTransactionsMenu::ViewUserSentTransactionsMenu(string name) :ViewUserTransactionsMenu(name) { mode = 1; };
+ViewUserSentTransactionsMenu::ViewUserSentTransactionsMenu(string name) :ViewUserTransactionsMenu(name) { mode = sentUser; };
 
-ViewUserRecievedTransactionsMenu::ViewUserRecievedTransactionsMenu(string name) : ViewUserTransactionsMenu(name) { mode = 2; };
+ViewUserRecievedTransactionsMenu::ViewUserRecievedTransactionsMenu(string name) : ViewUserTransactionsMenu(name) { mode = recievedUser; };
 
-ViewUserAllTransactionsMenu::ViewUserAllTransactionsMenu(string name) : ViewUserTransactionsMenu(name) { mode = 3; };
+ViewUserAllTransactionsMenu::ViewUserAllTransactionsMenu(string name) : ViewUserTransactionsMenu(name) { mode = allUser; };
 
 SettingsMenu::SettingsMenu(string name) : MenuItem(name) {};
 
@@ -814,29 +668,33 @@ bool ChangePasswordMenu::update() {
 	CLI::clearCli();
 	cout << "Input 'x' to leave menu\n\n";
 
-	while (true) {
-		cout << "Enter old password: ";
-		cin >> oldPassword;
+	if (!admin)
+	{
+		while (true) {
+			cout << "Enter old password: ";
+			cin >> oldPassword;
 
-		if (exitCommand(oldPassword))
-		{
-			return true;
-		}
-
-		try {
-			if (!BCryptLib::validatePassword(oldPassword, user->getPassword())) {
-				throw invalid_argument("Wrong Password");
+			if (exitCommand(oldPassword))
+			{
+				return true;
 			}
 
-			break;
-		}
-		catch (exception e){
-			CLI::clearCli();
-			cout << "Input 'x' to leave menu\n\n";
-			cout << e.what() << "\n\n";
-	
+			try {
+				if (!BCryptLib::validatePassword(oldPassword, user->getPassword())) {
+					throw invalid_argument("Wrong Password");
+				}
+
+				break;
+			}
+			catch (exception e) {
+				CLI::clearCli();
+				cout << "Input 'x' to leave menu\n\n";
+				cout << e.what() << "\n\n";
+
+			}
 		}
 	}
+	
 
 	while (true)
 	{
@@ -854,7 +712,12 @@ bool ChangePasswordMenu::update() {
 			}
 
 			string hash = BCryptLib::generateHash(newPassword, 12);
-			user->setPassword(hash);
+			if (admin) {
+				admin->editUser(user->getUsername(), hash);
+			}
+			else {
+				user->setPassword(hash);
+			}
 
 			cout << "\nPassword succesfully updated!\n";
 			cout << "Press any key to continue..\n";
@@ -864,7 +727,6 @@ bool ChangePasswordMenu::update() {
 			_getch();
 
 			back();
-			back();
 			break;
 		}
 		catch (exception e)
@@ -872,7 +734,10 @@ bool ChangePasswordMenu::update() {
 			CLI::clearCli();
 			cout << "Input 'x' to leave menu\n\n";
 			cout << e.what() << "\n\n";
-			cout << "Enter old password: " << oldPassword << "\n";
+			if (!admin)
+			{
+				cout << "Enter old password: " << oldPassword << "\n";
+			}
 
 		}
 	}
@@ -974,6 +839,13 @@ bool Enable2FAMenu::update() {
 
 
 AdminProfile::AdminProfile(string name) : MenuItem(name) {};
+bool AdminProfile::update() {
+	CLI::clearCli();
+	cout << "\nCurrent Admin: " << admin->getUsername() << "\n\n";
+	MenuItem::update();
+
+	return true;
+}
 
 bool AdminProfile::back() {
 	currentMenuItem.pop();
@@ -983,13 +855,11 @@ bool AdminProfile::back() {
 
 
 
-AllTransactions::AllTransactions(string name) : MenuItem(name) {};
+a_AllTransactions::a_AllTransactions(string name) : MenuItem(name) {};
 
-bool AllTransactions::update() {
+bool a_AllTransactions::update() {
 
-	
-
-	vector<Transaction*> v = dynamic_cast<Admin*>(user)->viewAllUsersTransactions();
+	vector<Transaction*> v = admin->viewAllUsersTransactions();
 
 	while (true) {
 		int state = updateList(v, true);
@@ -1007,11 +877,11 @@ bool AllTransactions::update() {
 
 }
 
-AllUsers::AllUsers(string name) : MenuItem(name) {};
+a_AllUsers::a_AllUsers(string name) : MenuItem(name) {};
 
-bool AllUsers::update() {
+bool a_AllUsers::update() {
 
-	vector<User*> v = dynamic_cast<Admin*>(user)->viewUsers();
+	vector<User*> v = admin->viewUsers();
 
 	while (true) {
 		int state = updateList(v,false);
@@ -1020,11 +890,118 @@ bool AllUsers::update() {
 		case 0: back(); return true;
 		case -1:  break;
 		case -2:  break;
-		default : back(); return true;
+		default : 
+			user = v[state - 1];
+			currentMenuItem.push(currentMenuItem.top()->getSubMenus()[0]);
+			return true;
 		}
 
 
 	}
-	
+}
+a_ModifyUserProfile::a_ModifyUserProfile(string name) : MenuItem(name) {};
 
+bool a_ModifyUserProfile::update() {
+
+	CLI::clearCli();
+
+	cout << "\nCurrent User: " << user->getUsername() << '\n';
+	cout << "User Balance: " << MenuItem::user->getBalance() << "\n\n";
+
+	if (user->getSuspendedFlag())
+	{
+		currentMenuItem.top()->getSubMenus()[4]->setName("Unsuspend User");
+	}
+	else
+	{
+		currentMenuItem.top()->getSubMenus()[4]->setName("Suspend User");
+
+	}
+
+	MenuItem::update();
+
+	return true;
+}
+
+
+a_SetBalance::a_SetBalance(string name) : MenuItem(name) {};
+
+bool a_SetBalance::update() {
+	CLI::clearCli();
+
+	while (true) {
+		cout << "Enter Amount to Set User's balance to:\n";
+		string input;
+		cin >> input;
+		float balance;
+		try {
+			try {
+				balance = stof(input);
+			}
+			catch (exception e)
+			{
+				throw invalid_argument("Please Enter a number.");
+			}
+
+			admin->adjustUserBalance(user->getUsername(), balance);
+			back();
+			return true;
+
+		}
+		catch (exception e)
+		{
+			CLI::clearCli();
+			cout << e.what() << '\n';
+		}
+	}
+
+
+}
+
+a_SuspendUser::a_SuspendUser(string name) : MenuItem(name) {};
+
+bool a_SuspendUser::update() {
+	
+	CLI::clearCli();
+
+	admin->setSuspendUsers(user->getUsername());
+
+	if (user->getSuspendedFlag()) {
+		cout << "User Suspended...\n";
+	}
+	else {
+		cout << "User Unsuspended..\n";
+	}
+
+	cout << "Press any key to go back..";
+
+	while(!_kbhit()){}
+
+	_getch();
+
+	back();
+	return true;
+
+}
+
+a_DeleteUser::a_DeleteUser(string name) : MenuItem(name) {};
+
+bool a_DeleteUser::update() {
+
+	CLI::clearCli();
+	cout << "Are you sure you want to PERMANENTLY DELETE this user? Y/y for yes, any other input to go back..\n";
+	string input;
+	cin >> input;
+
+	if (input.size() == 1 && tolower(input[0]) == 'y') {
+		admin->deleteUser(user->getUsername());
+		cout << "\nYou deleted this user. Press any key to go back..";
+		while(!_kbhit()){}
+		_getch();
+
+		back();
+
+	}
+	back();
+	return true;
 }

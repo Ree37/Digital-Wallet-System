@@ -33,8 +33,13 @@ MainMenu mmainMenu("Main Menu");
                 Enable2FAMenu enable2FA("Enable Two-Factor Authentication");
     RegisterUserMenu registerUser("Register User");
 		AdminProfile adminProfile("Admin Profile");
-			AllTransactions allTransactions("All Transactions");
-			AllUsers allUsers("All Users");
+			a_AllTransactions allTransactions("All Transactions");
+			a_AllUsers allUsers("All Users");
+				a_ModifyUserProfile modifyUser("Modify User");
+					a_SetBalance setBalance("Set Balance");
+					a_SuspendUser suspendUser("Suspend User");
+					a_DeleteUser deleteUser("Delete User");
+					
 
 
 
@@ -46,8 +51,16 @@ void CLI::initMenu() {
 
 	loginUser.addSubMenu(&userProfile);
 	loginUser.addSubMenu(&adminProfile);
-		adminProfile.addSubMenu(&allTransactions);
-		adminProfile.addSubMenu(&allUsers);
+	adminProfile.addSubMenu(&allTransactions);
+	adminProfile.addSubMenu(&allUsers);
+	allUsers.addSubMenu(&modifyUser);
+		modifyUser.addSubMenu(&viewRequests);
+		modifyUser.addSubMenu(&viewTransactions);
+		modifyUser.addSubMenu(&setBalance);
+		modifyUser.addSubMenu(&changePassword);
+		modifyUser.addSubMenu(&suspendUser);
+		modifyUser.addSubMenu(&deleteUser);
+	
 	registerUser.addSubMenu(&userProfile);
 
 	userProfile.addSubMenu(&sendMoney);
@@ -116,13 +129,27 @@ void CLI::drawInvalid() {
 		cout << "Your Balance: " << MenuItem::user->getBalance() << "\n\n";
 
 	}
+	else if (dynamic_cast<AdminProfile*>(MenuItem::currentMenuItem.top()))
+	{
+		CLI::clearCli();
+		cout << invalidMessage(size) << "\n";
+		cout << "\nCurrent Admin: " << MenuItem::user->getUsername() << "\n\n";
+	}
+	else if (dynamic_cast<a_ModifyUserProfile*>(MenuItem::currentMenuItem.top())) {
+		clearCli();
+		cout << invalidMessage(size) << "\n";
+		cout << "\nCurrent User: " << MenuItem::user->getUsername() << '\n';
+		cout << "User Balance: " << MenuItem::user->getBalance() << "\n\n";
+	}
 	else {
 		cout << invalidMessage(size) << "\n";
 	}
 
 }
 void CLI::drawCli(bool isValid) {
-	if (!dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem.top()) && !dynamic_cast<ViewRequestSettingsMenu*>(MenuItem::currentMenuItem.top())) {
+	bool defaultMenu = (!dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem.top()) && !dynamic_cast<ViewRequestSettingsMenu*>(MenuItem::currentMenuItem.top()) && !dynamic_cast<AdminProfile*>(MenuItem::currentMenuItem.top()) && !dynamic_cast<a_ModifyUserProfile*>(MenuItem::currentMenuItem.top()) );
+	
+	if (defaultMenu) {
 		clearCli();
 	}
 
@@ -130,7 +157,7 @@ void CLI::drawCli(bool isValid) {
 		drawInvalid();
 	}
 
-	if (!dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem.top()) && !dynamic_cast<ViewRequestSettingsMenu*>(MenuItem::currentMenuItem.top())) {
+	if (defaultMenu) {
 		cout << "\nCurrent Menu: " + MenuItem::currentMenuItem.top()->getName() << "\n\n";
 	}
 	MenuItem::printMenu(MenuItem::currentMenuItem.top());
