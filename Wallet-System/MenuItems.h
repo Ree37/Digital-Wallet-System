@@ -22,7 +22,7 @@ public:
 	virtual bool back();
 
 	template <typename T>
-	int updateList(vector<T*> &v);
+	int updateList(vector<T*> &v, bool viewOnly);
 
 public:
 	static User* user;

@@ -80,7 +80,7 @@ bool MenuItem::update() {
 }
 
 template <typename T>
-int MenuItem::updateList(vector<T*>& v) {
+int MenuItem::updateList(vector<T*>& v, bool viewOnly) {
 
 
 	int choice;
@@ -104,7 +104,6 @@ int MenuItem::updateList(vector<T*>& v) {
 				cout << i + 1 << "] " << *v[i] << '\n';
 
 			}
-			cout << "x] Back";
 		}
 		else {
 			cout << "No result found...\n";
@@ -116,8 +115,31 @@ int MenuItem::updateList(vector<T*>& v) {
 			return 0;
 		}
 
+		if (viewOnly)
+		{
+			cout << "Press 'r' to view by most recent, 'o' to view by oldest, any other key to go back..\n";
+
+			while (!_kbhit()) {
+			}
+			char c = _getch();
+
+
+			if (tolower(c) == 'r')
+			{
+				return -1;
+			}
+			if (tolower(c) == 'o')
+			{
+				return -2;
+			}
+
+			return 0;
+		}
+
+		cout << "x] Back";
 		string eofTerminal = "\033[9999H";
 		cout << eofTerminal;
+
 
 		cout << "Enter your choice: ";
 		choice = CLI::getInput(true, size, true);
@@ -586,7 +608,7 @@ bool ViewToUserRequestsMenu::update() {
 	while (true) {
 		vector<Transaction*> v = user->getRequests(recent);
 
-		int state = updateList(v);
+		int state = updateList(v,false);
 
 		switch (state) {
 		case 0: back(); return true; 
@@ -676,14 +698,12 @@ bool DeclineRequestMenu::update() {
 
 ViewUserTransactionsMenu::ViewUserTransactionsMenu(string name) : MenuItem(name) {};
 bool ViewUserTransactionsMenu::update() {
-	
+
+
 	vector<Transaction*> v;
 	bool recent = true;
 	while (true) {
 
-
-		CLI::clearCli();
-		cout << "Current Menu: " << currentMenuItem.top()->name << "\n\n";
 		switch (mode)
 		{
 		case 1:	v = user->getSentTransactions(recent);
@@ -695,38 +715,68 @@ bool ViewUserTransactionsMenu::update() {
 		case 4: v = user->getFromRequests(recent);
 		}
 
-		if (!v.empty())
-		{
-			for (int i = 0; i < v.size(); i++)
-			{
-				cout << i + 1 << "] " << *v[i] << '\n';
+		int state = updateList(v, true);
 
-			}
-			cout << "Press 'r' to view by most recent, 'o' to view by oldest, any other key to go back..\n";
-
-			while (!_kbhit()) {
-			}
-			char c = _getch();
-
-
-			switch (tolower(c)) {
-			case 'r': recent = true; break;
-			case 'o': recent = false; break;
-			default: back(); return true;
-			}
-		}
-		else {
-			cout << "No transactions found...\n";
-			cout << "\nPress any key to go back..\n";
-
-			while (!_kbhit()) {
-			}
-			_getch();
-
-			back();
-			return true;
+		switch (state) {
+		case 0: back(); return true;
+		case -1: recent = true; break;
+		case -2: recent = false; break;
 		}
 	}
+
+		/*
+		vector<Transaction*> v;
+		bool recent = true;
+		while (true) {
+
+
+			CLI::clearCli();
+			cout << "Current Menu: " << currentMenuItem.top()->name << "\n\n";
+			switch (mode)
+			{
+			case 1:	v = user->getSentTransactions(recent);
+				break;
+			case 2:	v = user->getReceivedTransactions(recent);
+				break;
+			case 3:	v = user->getAllTransactions(recent);
+				break;
+			case 4: v = user->getFromRequests(recent);
+			}
+
+			if (!v.empty())
+			{
+				for (int i = 0; i < v.size(); i++)
+				{
+					cout << i + 1 << "] " << *v[i] << '\n';
+
+				}
+				cout << "Press 'r' to view by most recent, 'o' to view by oldest, any other key to go back..\n";
+
+				while (!_kbhit()) {
+				}
+				char c = _getch();
+
+
+				switch (tolower(c)) {
+				case 'r': recent = true; break;
+				case 'o': recent = false; break;
+				default: back(); return true;
+				}
+			}
+			else {
+				cout << "No transactions found...\n";
+				cout << "\nPress any key to go back..\n";
+
+				while (!_kbhit()) {
+				}
+				_getch();
+
+				back();
+				return true;
+			}
+		}
+		*/
+
 	
 
 }
@@ -943,7 +993,7 @@ bool AllTransactions::update() {
 	vector<Transaction*> v = admin->viewAllUsersTransactions();
 
 	while (true) {
-		int state = updateList(v);
+		int state = updateList(v, true);
 
 		switch (state) {
 		case 0: back(); return true;
@@ -965,7 +1015,7 @@ bool AllUsers::update() {
 	vector<User*> v = admin->viewUsers();
 
 	while (true) {
-		int state = updateList(v);
+		int state = updateList(v,false);
 
 		switch (state) {
 		case 0: back(); return true;
