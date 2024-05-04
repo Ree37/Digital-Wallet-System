@@ -4,6 +4,8 @@
 
 //Admin Admin::adminInstance();
 
+Admin* globalAdmin = new Admin();
+
 void Admin::deleteUser(string deletedUserName) {
 	Container::Users.erase(deletedUserName);
 }
@@ -16,6 +18,16 @@ void Admin::setName(string name)
 void Admin::setPassword(string password)
 {
 	this->password = password;
+}
+
+string Admin::getName()
+{
+	return name;
+}
+
+string Admin::getPassword()
+{
+	return password;
 }
 //vector<User*> Admin::viewUsers()
 //{

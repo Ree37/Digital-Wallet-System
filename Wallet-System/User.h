@@ -41,6 +41,8 @@ public:
   void makeTransaction(string receiver, float amount);
   void makeRequest(string requested, float amount);
 
+  friend std::ostream& operator<<(std::ostream& os, User& t);
+
 private:
   string username;
   string password;

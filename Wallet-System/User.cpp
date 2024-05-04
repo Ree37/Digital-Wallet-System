@@ -8,6 +8,8 @@
 
 using namespace std;
 
+
+
 // Users functions
 User::User(string username, string password) {
   if (username.empty() || password.empty()) {
@@ -70,6 +72,16 @@ bool User::strongPassword(string password) {
       "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+=])(?=\\S+$).{8,}");
   return (regex_match(password, pattern));
 }
+
+std::ostream& operator<<(std::ostream& os, User& u) {
+ 
+    os << u.getUsername();
+    return os;
+}
+
+
+
+
 
 vector<Transaction*> User::getRequests(bool recent)
 {

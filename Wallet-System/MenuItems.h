@@ -2,8 +2,8 @@
 
 #include "CLI.h"
 #include "User.h"
+#include "Admin.h"
 #include <stack>
-
 
 class MenuItem {
 public:
@@ -21,8 +21,12 @@ public:
 	virtual bool update();
 	virtual bool back();
 
+	template <typename T>
+	int updateList(vector<T*> &v);
+
 public:
 	static User* user;
+	static Admin* admin;
 	static Transaction* transaction;
 	static stack<MenuItem*> currentMenuItem;
 	string name;
@@ -174,3 +178,23 @@ public:
 	bool update() override;
 };
 
+class AdminProfile : public MenuItem
+{
+public:
+	AdminProfile(string name);
+	bool back() override;
+};
+
+class AllTransactions : public MenuItem
+{
+public:
+	AllTransactions(string name);
+	bool update() override;
+};
+
+class AllUsers : public MenuItem
+{
+public:
+	AllUsers(string name);
+	bool update() override;
+};

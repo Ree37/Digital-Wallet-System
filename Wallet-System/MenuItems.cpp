@@ -1,10 +1,9 @@
+#pragma once
 #include "MenuItems.h"
-
 #include <windows.h>
 #include <synchapi.h>
 #include <conio.h>
 #include <iostream>
-
 #include "Security/Utils.h"
 #include "Security/bcrypt/BCryptLib.h"
 #include "Security/qrcode/QrcodeLib.h"
@@ -15,6 +14,7 @@
 using namespace std;
 
 User* MenuItem::user;
+Admin* MenuItem::admin = new Admin();
 Transaction* MenuItem::transaction;
 
 stack <MenuItem*> MenuItem::currentMenuItem;
@@ -79,6 +79,76 @@ bool MenuItem::update() {
 	return true;
 }
 
+template <typename T>
+int MenuItem::updateList(vector<T*>& v) {
+
+
+	int choice;
+	int size;
+	bool isValid = true;
+	bool loop = false;
+	do {
+		size = v.size();
+
+		CLI::clearCli();
+		cout << "Enter 'r' for most recent or 'o' for oldest\n\n";
+
+		if (!isValid) {
+			cout << CLI::invalidMessage(size, true) << "\n\n";
+		}
+		cout << "Current Menu: " << currentMenuItem.top()->name << "\n\n";
+		if (!v.empty())
+		{
+			for (int i = 0; i < size; i++)
+			{
+				cout << i + 1 << "] " << *v[i] << '\n';
+
+			}
+			cout << "x] Back";
+		}
+		else {
+			cout << "No result found...\n";
+			cout << "\nPress any key to go back..\n";
+
+			while (!_kbhit()) {
+			}
+			_getch();
+			return 0;
+		}
+
+		string eofTerminal = "\033[9999H";
+		cout << eofTerminal;
+
+		cout << "Enter your choice: ";
+		choice = CLI::getInput(true, size, true);
+
+		if (choice == 0) {
+			isValid = false;
+		}
+		else if (tolower(choice) == 'r')
+		{
+			return -1;
+		}
+		else if(tolower(choice) == 'o')
+		{
+			return -2;
+		}
+		else {
+			isValid = true;
+		}
+
+		
+	} while (!isValid);
+
+	if (choice == 'x') {
+		return 0;
+	}
+
+	return choice;
+
+}
+
+
 bool MenuItem::back() {
 	currentMenuItem.pop();
 	return true;
@@ -126,13 +196,23 @@ bool LoginUserMenu::update() {
 		if (exitCommand(password))
 			return true;
 
+		Admin* adminData = (admin->getName() == username ? admin : nullptr);
+
 		User* userData = Container::getUser(username);
 		try {
-			if (!userData) {
+			if (!userData && !adminData) {
 				throw invalid_argument("Wrong Username or Password");
 			}
-			if (!BCryptLib::validatePassword(password, userData->getPassword())) {
-				throw invalid_argument("Wrong Username or Password");
+			if (userData)
+			{
+				if (!BCryptLib::validatePassword(password, userData->getPassword())) {
+					throw invalid_argument("Wrong Username or Password");
+				}
+			}
+			else {
+				if (!BCryptLib::validatePassword(password, adminData->getPassword())) {
+					throw invalid_argument("Wrong Username or Password");
+				}
 			}
 		}
 		catch (exception e) {
@@ -142,30 +222,36 @@ bool LoginUserMenu::update() {
 			continue;
 		}
 
-		if (userData->getIsHas2FA())
+		if (userData)
 		{
-			string i_otp;
-			string secret = userData->getTotpSecret();
-			QrcodeLib* qrcode = new QrcodeLib(userData->getUsername(), secret);
-			cout << "Enter 2FA Key: ";
-			cin >> i_otp;
-
-			if (exitCommand(i_otp))
-				return true;
-
-			unsigned int otp = TOTPLib::getOTP(secret);
-
-			if (stoi(i_otp) != otp)
+			if (userData->getIsHas2FA())
 			{
-				CLI::clearCli();
-				cout << "Invalid 2FA Key\n\n";
-				continue;
+				string i_otp;
+				string secret = userData->getTotpSecret();
+				QrcodeLib* qrcode = new QrcodeLib(userData->getUsername(), secret);
+				cout << "Enter 2FA Key: ";
+				cin >> i_otp;
+
+				if (exitCommand(i_otp))
+					return true;
+
+				unsigned int otp = TOTPLib::getOTP(secret);
+
+				if (stoi(i_otp) != otp)
+				{
+					CLI::clearCli();
+					cout << "Invalid 2FA Key\n\n";
+					continue;
+				}
 			}
+
+			MenuItem::user = userData;
+			currentMenuItem.push(currentMenuItem.top()->getSubMenus()[0]);
 		}
-
-		MenuItem::user = userData;
-		currentMenuItem.push(currentMenuItem.top()->getSubMenus()[0]);
-
+		else {
+			MenuItem::admin = adminData;
+			currentMenuItem.push(currentMenuItem.top()->getSubMenus()[1]);
+		}
 		break;
 	}
 	return true;
@@ -420,7 +506,7 @@ bool AddMoneyMenu::update() {
 
 ViewToUserRequestsMenu::ViewToUserRequestsMenu(string name) : MenuItem(name) {};
 bool ViewToUserRequestsMenu::update() {
-
+	/*
 	vector<Transaction*> v;
 
 	
@@ -491,6 +577,31 @@ bool ViewToUserRequestsMenu::update() {
 
 	currentMenuItem.push(currentMenuItem.top()->getSubMenus().at(0));
 
+	return true;
+	*/
+
+
+	bool recent = true;
+
+	while (true) {
+		vector<Transaction*> v = user->getRequests(recent);
+
+		int state = updateList(v);
+
+		switch (state) {
+		case 0: back(); return true; 
+		case -1:  recent = true; break;
+		case -2:  recent = false; break;
+
+		default:  transaction = v[state - 1];
+
+				  currentMenuItem.push(currentMenuItem.top()->getSubMenus().at(0));
+
+			      return true;
+		}
+
+
+	}
 
 }
 
@@ -813,3 +924,58 @@ bool Enable2FAMenu::update() {
 	return true;
 }
 
+
+
+AdminProfile::AdminProfile(string name) : MenuItem(name) {};
+
+bool AdminProfile::back() {
+	currentMenuItem.pop();
+	currentMenuItem.pop();
+	return true;
+}
+
+
+
+AllTransactions::AllTransactions(string name) : MenuItem(name) {};
+
+bool AllTransactions::update() {
+
+	vector<Transaction*> v = admin->viewAllUsersTransactions();
+
+	while (true) {
+		int state = updateList(v);
+
+		switch (state) {
+		case 0: back(); return true;
+		case -1:  break;
+		case -2:  break;
+		default: back(); return true;
+		}
+
+
+	}
+
+
+}
+
+AllUsers::AllUsers(string name) : MenuItem(name) {};
+
+bool AllUsers::update() {
+
+	vector<User*> v = admin->viewUsers();
+
+	while (true) {
+		int state = updateList(v);
+
+		switch (state) {
+		case 0: back(); return true;
+		case -1:  break;
+		case -2:  break;
+		default : back(); return true;
+		}
+
+
+	}
+	
+
+}

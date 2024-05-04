@@ -1,4 +1,4 @@
- #pragma once
+#pragma once
 #include<iostream>
 #include<string>
 #include<set>
@@ -23,6 +23,8 @@ public:
 
 		void setName(string name);
 		void setPassword (string password);
+		string getName();
+		string getPassword();
 		void setSuspendUsers(string suspendedUserName);
 		void deleteUser(string deleted_User);
 		void adjustUserBalance(string adjustedUserName, float value);

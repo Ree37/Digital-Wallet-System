@@ -14,7 +14,7 @@ void CLI::start() {
 
 MainMenu mmainMenu("Main Menu");
     LoginUserMenu loginUser("Login User");
-        UserProfileMenu userProfile("User Profile");
+        UserProfileMenu userProfile("User Profile");		
             SendMoneyMenu sendMoney("Send Money");
             RequestMoneyMenu requestMoney("Request Money");
             AddMoneyMenu addMoney("Add Money");
@@ -32,16 +32,22 @@ MainMenu mmainMenu("Main Menu");
                 ChangePasswordMenu changePassword("Change Password");
                 Enable2FAMenu enable2FA("Enable Two-Factor Authentication");
     RegisterUserMenu registerUser("Register User");
-    MenuItem loginAdmin("Login Admin");
+		AdminProfile adminProfile("Admin Profile");
+			AllTransactions allTransactions("All Transactions");
+			AllUsers allUsers("All Users");
+
+
 
 void CLI::initMenu() {
 	MenuItem::currentMenuItem.push(&mmainMenu);
 
 	mmainMenu.addSubMenu(&loginUser);
 	mmainMenu.addSubMenu(&registerUser);
-	mmainMenu.addSubMenu(&loginAdmin);
 
 	loginUser.addSubMenu(&userProfile);
+	loginUser.addSubMenu(&adminProfile);
+		adminProfile.addSubMenu(&allTransactions);
+		adminProfile.addSubMenu(&allUsers);
 	registerUser.addSubMenu(&userProfile);
 
 	userProfile.addSubMenu(&sendMoney);
