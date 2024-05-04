@@ -14,7 +14,6 @@
 using namespace std;
 
 User* MenuItem::user;
-Admin* MenuItem::admin = new Admin();
 Transaction* MenuItem::transaction;
 
 stack <MenuItem*> MenuItem::currentMenuItem;
@@ -218,24 +217,19 @@ bool LoginUserMenu::update() {
 		if (exitCommand(password))
 			return true;
 
-		Admin* adminData = (admin->getName() == username ? admin : nullptr);
+		User* data = (Container::admin->getUsername() == username ? Container::admin : Container::getUser(username));
 
-		User* userData = Container::getUser(username);
+	
 		try {
-			if (!userData && !adminData) {
+			if (!data) {
 				throw invalid_argument("Wrong Username or Password");
 			}
-			if (userData)
-			{
-				if (!BCryptLib::validatePassword(password, userData->getPassword())) {
-					throw invalid_argument("Wrong Username or Password");
-				}
+			
+			if (!BCryptLib::validatePassword(password, data->getPassword())) {
+				throw invalid_argument("Wrong Username or Password");
 			}
-			else {
-				if (!BCryptLib::validatePassword(password, adminData->getPassword())) {
-					throw invalid_argument("Wrong Username or Password");
-				}
-			}
+		
+			
 		}
 		catch (exception e) {
 			CLI::clearCli();
@@ -244,34 +238,37 @@ bool LoginUserMenu::update() {
 			continue;
 		}
 
-		if (userData)
+		
+		if (data->getIsHas2FA())
 		{
-			if (userData->getIsHas2FA())
+			string i_otp;
+			string secret = data->getTotpSecret();
+			QrcodeLib* qrcode = new QrcodeLib(data->getUsername(), secret);
+			cout << "Enter 2FA Key: ";
+			cin >> i_otp;
+
+			if (exitCommand(i_otp))
+				return true;
+
+			unsigned int otp = TOTPLib::getOTP(secret);
+
+			if (stoi(i_otp) != otp)
 			{
-				string i_otp;
-				string secret = userData->getTotpSecret();
-				QrcodeLib* qrcode = new QrcodeLib(userData->getUsername(), secret);
-				cout << "Enter 2FA Key: ";
-				cin >> i_otp;
-
-				if (exitCommand(i_otp))
-					return true;
-
-				unsigned int otp = TOTPLib::getOTP(secret);
-
-				if (stoi(i_otp) != otp)
-				{
-					CLI::clearCli();
-					cout << "Invalid 2FA Key\n\n";
-					continue;
-				}
+				CLI::clearCli();
+				cout << "Invalid 2FA Key\n\n";
+				continue;
+			}
 			}
 
-			MenuItem::user = userData;
+		
+		
+		MenuItem::user = data;
+
+		if(!dynamic_cast<Admin*>(data)) {
 			currentMenuItem.push(currentMenuItem.top()->getSubMenus()[0]);
+
 		}
 		else {
-			MenuItem::admin = adminData;
 			currentMenuItem.push(currentMenuItem.top()->getSubMenus()[1]);
 		}
 		break;
@@ -990,7 +987,9 @@ AllTransactions::AllTransactions(string name) : MenuItem(name) {};
 
 bool AllTransactions::update() {
 
-	vector<Transaction*> v = admin->viewAllUsersTransactions();
+	
+
+	vector<Transaction*> v = dynamic_cast<Admin*>(user)->viewAllUsersTransactions();
 
 	while (true) {
 		int state = updateList(v, true);
@@ -1012,7 +1011,7 @@ AllUsers::AllUsers(string name) : MenuItem(name) {};
 
 bool AllUsers::update() {
 
-	vector<User*> v = admin->viewUsers();
+	vector<User*> v = dynamic_cast<Admin*>(user)->viewUsers();
 
 	while (true) {
 		int state = updateList(v,false);

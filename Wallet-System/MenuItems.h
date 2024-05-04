@@ -26,7 +26,6 @@ public:
 
 public:
 	static User* user;
-	static Admin* admin;
 	static Transaction* transaction;
 	static stack<MenuItem*> currentMenuItem;
 	string name;

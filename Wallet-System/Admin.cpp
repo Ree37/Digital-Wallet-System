@@ -4,31 +4,12 @@
 
 //Admin Admin::adminInstance();
 
-Admin* globalAdmin = new Admin();
+Admin::Admin(string name, string pwd) : User(name,pwd) {};
 
 void Admin::deleteUser(string deletedUserName) {
 	Container::Users.erase(deletedUserName);
 }
 
-void Admin::setName(string name)
-{
-	this->name = name;
-}
-
-void Admin::setPassword(string password)
-{
-	this->password = password;
-}
-
-string Admin::getName()
-{
-	return name;
-}
-
-string Admin::getPassword()
-{
-	return password;
-}
 //vector<User*> Admin::viewUsers()
 //{
 //unordered_map<string,User>::

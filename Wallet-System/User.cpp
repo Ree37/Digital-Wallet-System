@@ -22,6 +22,8 @@ User::User(string username, string password) {
   this->password = password;
 }
 
+User::~User(){}
+
 string User::getUsername() { return username; };
 
 string User::getPassword() { return password; };

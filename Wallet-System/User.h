@@ -43,9 +43,11 @@ public:
 
   friend std::ostream& operator<<(std::ostream& os, User& t);
 
-private:
+  virtual ~User();
+protected:
   string username;
   string password;
+private:
   string totpSecret;
   bool isHas2FA = false;
   float balance;

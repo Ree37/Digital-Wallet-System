@@ -8,9 +8,6 @@
 #include "Container.h"
 
 int main() {
-	MenuItem::admin->setName("admin");
-	MenuItem::admin->setPassword("$2a$12$RQ8XZhi9Tod7M2FvDgzBeeXfyKfHovi.aJDXCpstZUlY3RoVYYwFO");
-
 	Files::readUsersData();
     Files::readTransactionsData();
 	CLI::start();

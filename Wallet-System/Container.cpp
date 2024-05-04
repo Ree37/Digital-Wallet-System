@@ -3,6 +3,8 @@
 unordered_map<string, User*> Container::Users;
 vector<Transaction *> Container:: allTransactions;
 
+User* Container::admin = new Admin("admin", "$2a$12$RQ8XZhi9Tod7M2FvDgzBeeXfyKfHovi.aJDXCpstZUlY3RoVYYwFO");
+
 unordered_map<string, vector<Transaction *>> Container::userKeyTransactions;
 void Container::addUser(User* user) {
 	Users.insert({ user->getUsername(), user });
