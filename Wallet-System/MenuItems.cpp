@@ -71,7 +71,10 @@ bool MenuItem::update() {
 	} while (!isValid);
 
 	if (choice == 'x') {
-		return back();
+		if (dynamic_cast<AdminProfile*>(currentMenuItem.top())) {
+			currentMenuItem.top()->getSubMenus()[2]->setName("Register User");
+		}
+		return back();;
 	}
 	else {
 		currentMenuItem.push(currentMenuItem.top()->getSubMenus()[choice - 1]);

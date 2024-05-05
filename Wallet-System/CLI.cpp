@@ -134,7 +134,7 @@ void CLI::drawInvalid() {
 	{
 		CLI::clearCli();
 		cout << invalidMessage(size) << "\n";
-		cout << "\nCurrent Admin: " << MenuItem::user->getUsername() << "\n\n";
+		cout << "\nCurrent Admin: " << MenuItem::admin->getUsername() << "\n\n";
 	}
 	else if (dynamic_cast<a_ModifyUserProfile*>(MenuItem::currentMenuItem.top())) {
 		clearCli();
