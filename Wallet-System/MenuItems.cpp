@@ -93,12 +93,14 @@ int MenuItem::updateList(vector<T*>& v, bool viewOnly) {
 	int choice;
 	int size;
 	bool isValid = true;
-	bool loop = false;
-	do {
+	bool ascending = true;
+	while(true) {
 		size = v.size();
 
 		CLI::clearCli();
-		cout << "Enter 'r' for most recent or 'o' for oldest\n\n";
+
+		if(!viewOnly)
+			cout << "Enter 'a' for ascending or 'd' for descending\n\n";
 
 		if (!isValid) {
 			cout << CLI::invalidMessage(size, true) << "\n\n";
@@ -106,11 +108,20 @@ int MenuItem::updateList(vector<T*>& v, bool viewOnly) {
 		cout << "Current Menu: " << currentMenuItem.top()->name << "\n\n";
 		if (!v.empty())
 		{
-			for (int i = 0; i < size; i++)
-			{
-				cout << i + 1 << "] " << *v[i] << '\n';
-
+			int i = 0;
+			if (ascending) {
+				for (auto it = v.begin(); it != v.end(); ++it) {
+					cout << i + 1 << "] " << **it << "\n";
+					i++;
+				}
 			}
+			else {
+				for (auto it = v.rbegin(); it != v.rend(); ++it) {
+					cout << i + 1 << "] " << **it << "\n";
+					i++;
+				}
+			}
+			
 		}
 		else {
 			cout << "No result found...\n";
@@ -124,20 +135,21 @@ int MenuItem::updateList(vector<T*>& v, bool viewOnly) {
 
 		if (viewOnly)
 		{
-			cout << "Press 'r' to view by most recent, 'o' to view by oldest, any other key to go back..\n";
+			cout << "Press 'a' to view by ascending, 'd' to view by descending, any other key to go back..\n";
 
 			while (!_kbhit()) {
 			}
 			char c = _getch();
 
-
-			if (tolower(c) == 'r')
+			if (tolower(c) == 'a')
 			{
-				return -1;
+				ascending = true;
+				continue;
 			}
-			if (tolower(c) == 'o')
+			if (tolower(c) == 'd')
 			{
-				return -2;
+				ascending = false;
+				continue;
 			}
 
 			return 0;
@@ -151,30 +163,31 @@ int MenuItem::updateList(vector<T*>& v, bool viewOnly) {
 		cout << "Enter your choice: ";
 		choice = CLI::getInput(true, size, true);
 
+		isValid = true;
+
 		if (choice == 0) {
 			isValid = false;
+			continue;
 		}
-		else if (tolower(choice) == 'r')
+		if (tolower(choice) == 'a')
 		{
-			return -1;
+			ascending = true;
+			continue;
 		}
-		else if(tolower(choice) == 'o')
+		if (tolower(choice) == 'd')
 		{
-			return -2;
+			ascending = false;
+			continue;
 		}
-		else {
-			isValid = true;
+		if (choice == 'x') {
+			return 0;
 		}
-
-		
-	} while (!isValid);
-
-	if (choice == 'x') {
-		return 0;
+		return (ascending ? choice : size - choice + 1);
 	}
 
-	return choice;
+	
 
+	
 }
 
 
@@ -620,21 +633,19 @@ bool ViewUserTransactionsMenu::update() {
 
 
 	vector<Transaction*> v;
-	bool recent = true;
 	bool isViewOnly = (admin || mode != toRequest);
 	while (true) {
-
 		switch (mode)
 		{
-		case sentUser: v = user->getSentTransactions(recent);
+		case sentUser: v = user->getSentTransactions();
 			break;
-		case recievedUser: v = user->getReceivedTransactions(recent);
+		case recievedUser: v = user->getReceivedTransactions();
 			break;
-		case allUser: v = user->getAllTransactions(recent);
+		case allUser: v = user->getAllTransactions();
 			break;
-		case toRequest: v = user->getToRequests(recent);
+		case toRequest: v = user->getToRequests();
 			break;
-		case fromRequest :v = user->getFromRequests(recent);
+		case fromRequest :v = user->getFromRequests();
 			break;
 		
 		}
@@ -642,15 +653,16 @@ bool ViewUserTransactionsMenu::update() {
 
 		int state = updateList(v, isViewOnly);
 
-		switch (state) {
-		case 0: back(); return true;
-		case -1: recent = true; break;
-		case -2: recent = false; break;
-		default:  transaction = v[state - 1];
-			currentMenuItem.push(currentMenuItem.top()->getSubMenus().at(0));
-
+		if (state == 0)
+		{
+			back(); 
 			return true;
 		}
+
+		transaction = v[state - 1];
+		currentMenuItem.push(currentMenuItem.top()->getSubMenus().at(0));
+		return true;
+		
 	}
 
 }

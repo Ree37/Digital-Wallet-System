@@ -112,7 +112,7 @@ void CLI::clearCli() {
 
 string CLI::invalidMessage(int size, bool sorted) {
 
-	return sorted ? "Invalid choice. Please enter 'x', 'r', 'o' or a number between 1 and " + std::to_string(size) : "Invalid choice. Please enter 'x' or a number between 1 and " + std::to_string(size);
+	return sorted ? "Invalid choice. Please enter 'x', 'a', 'd' or a number between 1 and " + std::to_string(size) : "Invalid choice. Please enter 'x' or a number between 1 and " + std::to_string(size);
 }
 void CLI::drawCli(bool isValid) {
 	bool defaultMenu = (!dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem.top()) && !dynamic_cast<ViewRequestSettingsMenu*>(MenuItem::currentMenuItem.top()) && !dynamic_cast<AdminProfile*>(MenuItem::currentMenuItem.top()) && !dynamic_cast<a_ModifyUserProfile*>(MenuItem::currentMenuItem.top()) );
@@ -159,7 +159,7 @@ int CLI::getInput(bool overwrite, int size, bool sorted) {
 		return choice;
 	}
 
-	if ((tolower(choice) == 'r' || tolower(choice) == 'o') && sorted) {
+	if ((tolower(choice) == 'a' || tolower(choice) == 'd') && sorted) {
 		return choice;
 	}
 
