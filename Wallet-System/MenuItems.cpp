@@ -30,7 +30,7 @@ void MenuItem::printMenu(MenuItem* menuItem) {
 	if (dynamic_cast<MainMenu*>(MenuItem::currentMenuItem.top())) {
 		cout << "x] Exit" << "\n";
 	}
-	else if (dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem.top())) {
+	else if (dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem.top()) || dynamic_cast<AdminProfile*>(MenuItem::currentMenuItem.top())) {
 		cout << "x] Log Out" << "\n";
 	}
 	else {
@@ -284,13 +284,28 @@ bool RegisterUserMenu::update() {
 	CLI::clearCli();
 
 	string username, password;
+
 	cout << "Input 'x' to leave menu\n";
+	while (true) {
+		
 
-	cout << "Enter Username: ";
-	cin >> username;
+		cout << "Enter Username: ";
+		cin >> username;
 
-	if (exitCommand(username))
-		return true;
+		if (exitCommand(username))
+			return true;
+
+		try {
+			Container::checkUniqueUser(username);
+			break;
+		}
+		catch(exception e){
+			CLI::clearCli();
+			cout << "Input 'x' to leave menu\n\n";
+			cout << e.what() << '\n';
+		}
+	}
+	
 
 	while (true) {
 		try {
@@ -309,6 +324,17 @@ bool RegisterUserMenu::update() {
 			MenuItem::user = new User(username, hash);
 
 			Container::addUser(MenuItem::user);
+
+			if(admin){
+				cout << "\nUser Added Sucessfully. Press any key to go back...";
+
+				while(!_kbhit()){}
+				_getch();
+
+				back();
+
+				break;
+			}
 
 			currentMenuItem.push(currentMenuItem.top()->getSubMenus()[0]);
 
@@ -841,6 +867,7 @@ bool Enable2FAMenu::update() {
 AdminProfile::AdminProfile(string name) : MenuItem(name) {};
 bool AdminProfile::update() {
 	CLI::clearCli();
+	currentMenuItem.top()->getSubMenus()[2]->setName("Add User");
 	cout << "\nCurrent Admin: " << admin->getUsername() << "\n\n";
 	MenuItem::update();
 

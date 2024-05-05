@@ -53,6 +53,7 @@ void CLI::initMenu() {
 	loginUser.addSubMenu(&adminProfile);
 	adminProfile.addSubMenu(&allTransactions);
 	adminProfile.addSubMenu(&allUsers);
+	adminProfile.addSubMenu(&registerUser);
 	allUsers.addSubMenu(&modifyUser);
 		modifyUser.addSubMenu(&viewRequests);
 		modifyUser.addSubMenu(&viewTransactions);

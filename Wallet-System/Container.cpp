@@ -18,6 +18,13 @@ User* Container::getUser(string userName) {
 		return nullptr;
 	}
 }
+
+void Container::checkUniqueUser(string username) {
+
+	if (Users.count(username)) {
+		throw invalid_argument("Username already taken!");
+	}
+}
 void Container ::addTransaction(Transaction *t) { 
 	allTransactions.push_back(t);
 	userKeyTransactions[t->getSenderUserName()].push_back(t);
