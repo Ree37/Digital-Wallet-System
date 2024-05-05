@@ -24,6 +24,8 @@ public:
 	template <typename T>
 	int updateList(vector<T*> &v, bool viewOnly);
 
+	virtual void customHeader();
+
 public:
 	static User* user;
 	static Admin* admin;
@@ -60,7 +62,7 @@ public:
 	UserProfileMenu(string name);
 
 	bool back() override;
-	bool update() override;
+	void customHeader() override;
 };
 
 class TransferMoneyMenu : public MenuItem
@@ -122,7 +124,7 @@ class ViewRequestSettingsMenu : public MenuItem
 {
 public:
 	ViewRequestSettingsMenu(string name);
-	bool update() override;
+	void customHeader() override;
 };
 
 class AcceptRequestMenu : public MenuItem
@@ -190,8 +192,8 @@ class AdminProfile : public MenuItem
 {
 public:
 	AdminProfile(string name);
-	bool update() override;
 	bool back() override;
+	void customHeader() override;
 };
 
 class a_AllTransactions : public MenuItem
@@ -221,6 +223,7 @@ class a_ModifyUserProfile : public MenuItem
 public:
 	a_ModifyUserProfile(string name);
 	bool update() override;
+	void customHeader() override;
 };
 
 class a_SetBalance : public MenuItem

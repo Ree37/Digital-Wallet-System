@@ -114,53 +114,19 @@ string CLI::invalidMessage(int size, bool sorted) {
 
 	return sorted ? "Invalid choice. Please enter 'x', 'r', 'o' or a number between 1 and " + std::to_string(size) : "Invalid choice. Please enter 'x' or a number between 1 and " + std::to_string(size);
 }
-void CLI::drawInvalid() {
-	int size = MenuItem::currentMenuItem.top()->getSubMenus().size();
-
-	if (dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem.top())) {
-		clearCli();
-		cout << invalidMessage(size) << "\n";
-		cout << "\nCurrent User: " << MenuItem::user->getUsername() << "\n\n";
-		cout << "Available Balance: " << MenuItem::user->getBalance() << "\n\n";
-	}
-	else if(dynamic_cast<ViewRequestSettingsMenu*>(MenuItem::currentMenuItem.top())){
-		clearCli();
-		cout << invalidMessage(size) << "\n";
-		cout << "\nCurrent Request: " << MenuItem::transaction->getAmount() << " to " << MenuItem::transaction->getRecipientUserName() << "\n\n";
-		cout << "Your Balance: " << MenuItem::user->getBalance() << "\n\n";
-
-	}
-	else if (dynamic_cast<AdminProfile*>(MenuItem::currentMenuItem.top()))
-	{
-		CLI::clearCli();
-		cout << invalidMessage(size) << "\n";
-		cout << "\nCurrent Admin: " << MenuItem::admin->getUsername() << "\n\n";
-	}
-	else if (dynamic_cast<a_ModifyUserProfile*>(MenuItem::currentMenuItem.top())) {
-		clearCli();
-		cout << invalidMessage(size) << "\n";
-		cout << "\nCurrent User: " << MenuItem::user->getUsername() << '\n';
-		cout << "User Balance: " << MenuItem::user->getBalance() << "\n\n";
-	}
-	else {
-		cout << invalidMessage(size) << "\n";
-	}
-
-}
 void CLI::drawCli(bool isValid) {
 	bool defaultMenu = (!dynamic_cast<UserProfileMenu*>(MenuItem::currentMenuItem.top()) && !dynamic_cast<ViewRequestSettingsMenu*>(MenuItem::currentMenuItem.top()) && !dynamic_cast<AdminProfile*>(MenuItem::currentMenuItem.top()) && !dynamic_cast<a_ModifyUserProfile*>(MenuItem::currentMenuItem.top()) );
 	
-	if (defaultMenu) {
-		clearCli();
-	}
+	clearCli();
 
 	if (!isValid) {
-		drawInvalid();
+		int size = MenuItem::currentMenuItem.top()->getSubMenus().size();
+		cout << invalidMessage(size) << "\n";
 	}
 
-	if (defaultMenu) {
-		cout << "\nCurrent Menu: " + MenuItem::currentMenuItem.top()->getName() << "\n\n";
-	}
+	MenuItem::currentMenuItem.top()->customHeader();
+
+
 	MenuItem::printMenu(MenuItem::currentMenuItem.top());
 
 	string eofTerminal = "\033[9999H";

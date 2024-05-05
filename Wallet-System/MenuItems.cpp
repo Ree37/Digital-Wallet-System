@@ -55,6 +55,10 @@ void MenuItem::addSubMenu(MenuItem* subMenu) {
 	subMenus.push_back(subMenu);
 }
 
+void MenuItem::customHeader(){
+	cout << "\nCurrent Menu: " + MenuItem::currentMenuItem.top()->getName() << "\n\n";
+}
+
 bool MenuItem::update() {
 	bool isValid = true;
 	int choice;
@@ -357,16 +361,10 @@ bool RegisterUserMenu::update() {
 
 UserProfileMenu::UserProfileMenu(string name) : MenuItem(name) {};
 
-bool UserProfileMenu::update() {
-	CLI::clearCli();
-
+void UserProfileMenu::customHeader() {
 	cout << "\nCurrent User: " << MenuItem::user->getUsername() << "\n\n";
 	cout << "Available Balance: " << MenuItem::user->getBalance() << "\n\n";
-
-	MenuItem::update();
-
-	return true;
-};
+}
 
 bool UserProfileMenu::back() {
 	currentMenuItem.pop();
@@ -559,16 +557,12 @@ ViewToUserRequestsMenu::ViewToUserRequestsMenu(string name) : ViewUserTransactio
 ViewFromUserRequestsMenu::ViewFromUserRequestsMenu(string name) : ViewUserTransactionsMenu(name) { mode = fromRequest; };
 
 ViewRequestSettingsMenu::ViewRequestSettingsMenu(string name) : MenuItem(name) {};
-bool ViewRequestSettingsMenu::update() {
-	CLI::clearCli();
 
+void ViewRequestSettingsMenu::customHeader() {
 	cout << "\n\nCurrent Request: " << transaction->getAmount() << " to " << transaction->getRecipientUserName() << "\n\n";
 	cout << "Your Balance: " << MenuItem::user->getBalance() << "\n\n";
-
-	MenuItem::update();
-
-	return true;
 }
+
 
 AcceptRequestMenu::AcceptRequestMenu(string name) : MenuItem(name) {};
 bool AcceptRequestMenu::update() {
@@ -868,13 +862,10 @@ bool Enable2FAMenu::update() {
 
 
 AdminProfile::AdminProfile(string name) : MenuItem(name) {};
-bool AdminProfile::update() {
-	CLI::clearCli();
+
+void AdminProfile::customHeader() {
 	currentMenuItem.top()->getSubMenus()[2]->setName("Add User");
 	cout << "\nCurrent Admin: " << admin->getUsername() << "\n\n";
-	MenuItem::update();
-
-	return true;
 }
 
 bool AdminProfile::back() {
@@ -931,12 +922,12 @@ bool a_AllUsers::update() {
 }
 a_ModifyUserProfile::a_ModifyUserProfile(string name) : MenuItem(name) {};
 
-bool a_ModifyUserProfile::update() {
-
-	CLI::clearCli();
-
+void a_ModifyUserProfile::customHeader() {
 	cout << "\nCurrent User: " << user->getUsername() << '\n';
 	cout << "User Balance: " << MenuItem::user->getBalance() << "\n\n";
+}
+
+bool a_ModifyUserProfile::update() {
 
 	if (user->getSuspendedFlag())
 	{
@@ -947,9 +938,7 @@ bool a_ModifyUserProfile::update() {
 		currentMenuItem.top()->getSubMenus()[4]->setName("Suspend User");
 
 	}
-
 	MenuItem::update();
-
 	return true;
 }
 
@@ -1035,3 +1024,6 @@ bool a_DeleteUser::update() {
 	back();
 	return true;
 }
+
+
+
