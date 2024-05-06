@@ -46,9 +46,10 @@ vector<User*> Admin::viewUsers()
 	{
 		usrVec.push_back(it->second);
 	}
-	return usrVec;
+	return usrVec; //sort before return
 }
 
+//use all transactions instead + sort based on date
 vector<Transaction*>Admin::viewAllUsersTransactions() {
 	unordered_map<string, vector<Transaction*>>::iterator it;
 
