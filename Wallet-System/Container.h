@@ -24,4 +24,5 @@ public:
 	static vector<Transaction *> getSentTransaction(string senderUserName);
     static vector<Transaction *> getRecipientTransaction(string recipientUserName);
     static vector<Transaction *> getAllUserTransaction(string UserName);
+	~Container();
 };

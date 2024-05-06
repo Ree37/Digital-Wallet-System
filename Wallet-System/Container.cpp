@@ -55,5 +55,10 @@ vector<Transaction *> Container::getAllUserTransaction(string UserName) {
   return userKeyTransactions[UserName];
 }
 
+Container::~Container()
+{
+	delete admin;
+}
+
 
 

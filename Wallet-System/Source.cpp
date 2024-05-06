@@ -13,4 +13,5 @@ int main() {
 	CLI::start();
 	Files::writeUsersData(Container::Users);
     Files::writeTransactionsData(Container::allTransactions);
+	delete Container::admin;
 }
