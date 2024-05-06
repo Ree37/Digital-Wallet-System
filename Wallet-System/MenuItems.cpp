@@ -228,7 +228,7 @@ bool LoginUserMenu::update() {
 
 		cout << "Enter Username: ";
 		cin >> username;
-
+		
 		if (exitCommand(username))
 			return true;
 

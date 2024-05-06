@@ -1,7 +1,7 @@
 #include "Container.h"
 
 unordered_map<string, User*> Container::Users;
-vector<Transaction *> Container:: allTransactions;
+vector<Transaction *> Container::allTransactions;
 
 User* Container::admin = new Admin("admin", "$2a$12$RQ8XZhi9Tod7M2FvDgzBeeXfyKfHovi.aJDXCpstZUlY3RoVYYwFO");
 

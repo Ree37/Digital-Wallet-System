@@ -32,12 +32,12 @@ public:
   bool isSentTransaction(Transaction *transaction);
   void requestMoney(string username, float amount);
 
-  vector<Transaction*> getAllTransactions(bool recent = true);
-  vector<Transaction*> getToRequests(bool recent = true);
-  vector<Transaction*> getFromRequests(bool recent = true);
+  vector<Transaction*> getAllTransactions();
+  vector<Transaction*> getToRequests();
+  vector<Transaction*> getFromRequests();
 
-  vector<Transaction*> getReceivedTransactions(bool recent = true);
-  vector<Transaction*> getSentTransactions(bool recent = true);
+  vector<Transaction*> getReceivedTransactions();
+  vector<Transaction*> getSentTransactions();
   void makeTransaction(string receiver, float amount);
   void makeRequest(string requested, float amount);
 
