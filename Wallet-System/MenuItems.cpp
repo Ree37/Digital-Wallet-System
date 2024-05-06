@@ -564,6 +564,22 @@ bool AddMoneyMenu::update() {
 	return true;
 };
 
+ViewRequestsMenu::ViewRequestsMenu(string name) : MenuItem(name) {};
+
+bool ViewRequestsMenu::update(){
+	if (admin) {
+		currentMenuItem.top()->getSubMenus()[0]->setName("Requests to " + user->getUsername());
+		currentMenuItem.top()->getSubMenus()[1]->setName("Requests from " + user->getUsername());
+	}
+	else {
+		currentMenuItem.top()->getSubMenus()[0]->setName("Requests to you");
+		currentMenuItem.top()->getSubMenus()[1]->setName("Requests from you");
+	}
+
+	MenuItem::update();
+	return true;
+}
+
 
 ViewToUserRequestsMenu::ViewToUserRequestsMenu(string name) : ViewUserTransactionsMenu(name) { mode = toRequest; };
 

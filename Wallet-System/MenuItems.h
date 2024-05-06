@@ -94,6 +94,13 @@ public:
 
 };
 
+class ViewRequestsMenu : public MenuItem
+{
+public:
+	ViewRequestsMenu(string name);
+	bool update() override;
+
+};
 
 enum TransactionType {
 	sentUser,

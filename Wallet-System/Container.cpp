@@ -21,7 +21,7 @@ User* Container::getUser(string userName) {
 
 void Container::checkUniqueUser(string username) {
 
-	if (Users.count(username)) {
+	if (Users.count(username) || username == admin->getUsername()) {
 		throw invalid_argument("Username already taken!");
 	}
 }
@@ -31,7 +31,7 @@ void Container ::addTransaction(Transaction *t) {
     userKeyTransactions[t->getRecipientUserName()].push_back(t);
 }
 vector<Transaction*> Container::getSentTransaction(string senderUserName) {
-  vector<Transaction*> allUserTransaction = userKeyTransactions[senderUserName];
+  vector<Transaction*> allUserTransaction = userKeyTransactions[senderUserName]; 
   vector<Transaction *> sentUserTransactions ;
 	for (auto t : allUserTransaction ) {
     if (t->getSenderUserName()== senderUserName) {

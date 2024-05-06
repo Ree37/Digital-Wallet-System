@@ -18,7 +18,7 @@ MainMenu mmainMenu("Main Menu");
             SendMoneyMenu sendMoney("Send Money");
             RequestMoneyMenu requestMoney("Request Money");
             AddMoneyMenu addMoney("Add Money");
-			MenuItem viewRequests("View Requests");
+			ViewRequestsMenu viewRequests("View Requests");
 				ViewToUserRequestsMenu toRequests("Requests to you");
 				ViewFromUserRequestsMenu fromRequests("Requests from you");
 					ViewRequestSettingsMenu requestSettings("Reqeust Settings");
