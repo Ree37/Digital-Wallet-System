@@ -7,7 +7,6 @@
 
 
 class Admin;
-
 class Container {
 public:
 	//static Admin adminn;
