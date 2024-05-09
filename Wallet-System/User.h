@@ -27,7 +27,7 @@ public:
   void setSuspendedFlag(bool flag);
 
   bool isUniqueUsername();
-  bool addMoney(float value);
+  void addMoney(float value);
   bool strongPassword(string password);
   bool isSentTransaction(Transaction *transaction);
   void requestMoney(string username, float amount);

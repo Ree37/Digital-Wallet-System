@@ -508,15 +508,8 @@ bool AddMoneyMenu::update() {
 	
 	string input;
 	float amount;
-	bool isValid;
-
-	isValid = true;
+	CLI::clearCli();
 	while(true) {
-		CLI::clearCli();
-		if (!isValid)
-		{
-			cout << "Please enter valid amount (positive number)\n\n";
-		}
 		cout << "Enter amount: ";
 		cin >> input;
 
@@ -527,16 +520,11 @@ bool AddMoneyMenu::update() {
 			
 		try {
 			amount = stof(input);
+			user->addMoney(amount);
 		}
 		catch (exception e)
 		{
-			isValid = false;
-			continue;
-		}
-
-		if (!user->addMoney(amount))
-		{
-			isValid = false;
+			cout << e.what() << '\n';
 			continue;
 		}
 

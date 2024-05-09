@@ -72,12 +72,15 @@ bool User::isUniqueUsername()
     return (uniqueUsername == Container::Users.end());
 }
 
-bool User::addMoney(float value) {
-  if (value > 0) {
-    balance += value;
-    return true;
+void User::addMoney(float value) {
+    if (suspendedFlag) {
+        throw invalid_argument("You are suspended!");
+    }
+  if (value <= 0 || !isfinite(value)) {
+      throw invalid_argument("Enter valid amount!");
   }
-  return false;
+  balance += value;
+  
 }
 
 bool User::strongPassword(string password) {
@@ -183,10 +186,17 @@ void User::makeTransaction(string receiver, float amount) {
 
     try {
         t->setSenderUsername(this->getUsername());
+        if (suspendedFlag) {
+            throw invalid_argument("You are suspended!");
+        }
         t->setRecipientUsername(receiver);
+        if (Container::getUser(receiver)->suspendedFlag) {
+            throw invalid_argument(receiver + " is suspended!");
+        }
         t->setAmount(amount);
         t->setIsPending(0);
         t->sendAmount();
+        Container::addTransaction(t);
     }
     catch (exception e)
     {
@@ -194,18 +204,26 @@ void User::makeTransaction(string receiver, float amount) {
         throw e;
     }
 
-    Container::addTransaction(t);
-
 }
 void User::makeRequest(string requested, float amount) {
     Transaction* t = new Transaction();
-
-    t->setSenderUsername(requested);
-    t->setRecipientUsername(this->getUsername());
-    t->setAmount(amount);
-    t->setIsPending(1);
-
-    Container::addTransaction(t);
+    try {
+        t->setSenderUsername(requested);
+        if (suspendedFlag) {
+            throw invalid_argument("You are suspended!");
+        }
+        t->setRecipientUsername(this->getUsername());
+        if (Container::getUser(requested)->suspendedFlag) {
+            throw invalid_argument(requested + " is suspended!");
+        }
+        t->setAmount(amount);
+        t->setIsPending(1);
+        Container::addTransaction(t);
+    }
+    catch (exception e) {
+        delete t;
+        throw e;
+    }
 }
 
 // Transaction functions
