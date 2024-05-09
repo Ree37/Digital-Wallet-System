@@ -1,6 +1,7 @@
 #include "CLI.h"
 
 #include <iostream>
+#include <sstream>
 #include <cstdlib>
 #include <conio.h>
 
@@ -137,14 +138,14 @@ void CLI::drawCli(bool isValid) {
 	cout << "Enter your choice: ";
 }
 
-int CLI::getInput(bool overwrite, int size, bool sorted) {
+int CLI::getChoice(bool overwrite, int size, bool sorted) {
 	
 	int sizee = overwrite ? size : MenuItem::currentMenuItem.top()->getSubMenus().size();
 
 	int choice;
 	string input;
 
-	cin >> input;
+	input = getInput();
 
 	try {
 		choice = stoi(input);
@@ -170,34 +171,48 @@ int CLI::getInput(bool overwrite, int size, bool sorted) {
 	
 }
 
-string CLI::getPassword() {
+string CLI::getInput() {
 
-	std::string input;
-	char ch;
+	string input;
+	std::getline(std::cin, input);
+	std::istringstream iss(input);
+	iss >> input;
 
-	while (true) {
-		ch = _getch(); 
-
-		if (ch == '\r' && !input.empty()) {
-			std::cout << std::endl;
-			return input;
-		}
-		
-		else if (ch == '\b') {  
-			if (!input.empty()) {
-				std::cout << "\b \b";  
-				input.pop_back(); 
-			}
-		}
-		else if (isspace(ch))
-		{
-			continue;
-		}
-		else {
-			std::cout << '*'; 
-			input += ch;  
-		}
-	}
-
+	return input;
 }
 
+
+std::string CLI::getPassword() {
+	std::string input;
+	bool isVisible = false;
+
+	while (true) {
+		char ch = _getch();  
+
+		if (ch == '\r') { 
+			if (!input.empty()) {
+				std::cout << std::endl;  
+				return input;  
+			}
+		}
+		else if (ch == '\b') { 
+			if (!input.empty()) {
+				std::cout << "\b \b";  
+				input.pop_back();  
+			}
+		}
+		else if (ch == ' ') { 
+			isVisible = !isVisible;
+
+			std::cout << std::string(input.length(), '\b');
+			std::cout << (isVisible ? input : std::string(input.length(), '*'));  
+		}
+		else if (ch == 0 || ch == '\xE0')
+			_getch();
+		else if (ch >= 1 && ch <= 255 && std::isprint(ch)) {  
+			input += ch; 
+			std::cout << (isVisible ? ch : '*');  
+		}
+
+	}
+}

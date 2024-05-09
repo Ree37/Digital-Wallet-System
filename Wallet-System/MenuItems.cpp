@@ -64,7 +64,7 @@ bool MenuItem::update() {
 	int choice;
 	do {
 		CLI::drawCli(isValid);
-		choice = CLI::getInput();
+		choice = CLI::getChoice();
 
 		if (choice == 0) {
 			isValid = false;
@@ -161,7 +161,7 @@ int MenuItem::updateList(vector<T*>& v, bool viewOnly) {
 
 
 		cout << "Enter your choice: ";
-		choice = CLI::getInput(true, size, true);
+		choice = CLI::getChoice(true, size, true);
 
 		isValid = true;
 
@@ -227,7 +227,7 @@ bool LoginUserMenu::update() {
 		string username, password;
 
 		cout << "Enter Username: ";
-		cin >> username;
+		username = CLI::getInput();
 		
 		if (exitCommand(username))
 			return true;
@@ -266,7 +266,7 @@ bool LoginUserMenu::update() {
 			string secret = data->getTotpSecret();
 			QrcodeLib* qrcode = new QrcodeLib(data->getUsername(), secret);
 			cout << "Enter 2FA Key: ";
-			cin >> i_otp;
+			i_otp = CLI::getInput();
 
 			if (exitCommand(i_otp))
 				return true;
@@ -310,7 +310,7 @@ bool RegisterUserMenu::update() {
 		
 
 		cout << "Enter Username: ";
-		cin >> username;
+		username = CLI::getInput();
 
 		if (exitCommand(username))
 			return true;
@@ -409,14 +409,14 @@ bool TransferMoneyMenu::update() {
 
 		cout << "Enter " << state << " Username: ";
 
-		cin >> recepientName;
+		recepientName = CLI::getInput();
 
 		if (exitCommand(recepientName)) {
 			return true;
 		}
 
 		cout << "Enter amount: ";
-		cin >> input;
+		input = CLI::getInput();
 
 		if (exitCommand(input))
 		{
@@ -471,7 +471,7 @@ bool AddMoneyMenu::update() {
 	while (true) {
 		cout << "Enter Credit Card (16 numbers): ";
 		string input;
-		cin >> input;
+		input = CLI::getInput();
 
 		if (exitCommand(input))
 		{
@@ -511,7 +511,7 @@ bool AddMoneyMenu::update() {
 	CLI::clearCli();
 	while(true) {
 		cout << "Enter amount: ";
-		cin >> input;
+		input = CLI::getInput();
 
 		if (exitCommand(input))
 		{
@@ -650,7 +650,7 @@ bool ViewUserTransactionsMenu::update() {
 			break;
 		case fromRequest :v = user->getFromRequests();
 			break;
-		
+		case allAdmin: v = admin->viewAllUsersTransactions();
 		}
 
 	bool isViewOnly = (admin || mode != toRequest);
@@ -802,7 +802,7 @@ bool Enable2FAMenu::update() {
 		QrcodeLib* qrcode = new QrcodeLib(user->getUsername(), secret);
 		cout << "Input 'x' to leave menu\n";
 		cout << "Enter 2FA Key: ";
-		cin >> i_otp;
+		i_otp = CLI::getInput();
 
 		if (exitCommand(i_otp))
 			return true;
@@ -835,7 +835,7 @@ bool Enable2FAMenu::update() {
 	string password;
 	cout << "Input 'x' to leave 2FA menu\n";
 	cout << "Enter Current Password to enable 2FA: ";
-	cin >> password;
+	password = CLI::getInput();
 
 	if (exitCommand(password))
 		return true;
@@ -894,29 +894,7 @@ bool AdminProfile::back() {
 	return true;
 }
 
-
-
-a_AllTransactions::a_AllTransactions(string name) : MenuItem(name) {};
-
-bool a_AllTransactions::update() {
-
-	vector<Transaction*> v = admin->viewAllUsersTransactions();
-
-	while (true) {
-		int state = updateList(v, true);
-
-		switch (state) {
-		case 0: back(); return true;
-		case -1:  break;
-		case -2:  break;
-		default: back(); return true;
-		}
-
-
-	}
-
-
-}
+a_AllTransactions::a_AllTransactions(string name) : ViewUserTransactionsMenu(name) { mode = allAdmin; };
 
 a_AllUsers::a_AllUsers(string name) : MenuItem(name) {};
 
@@ -970,7 +948,7 @@ bool a_SetBalance::update() {
 	while (true) {
 		cout << "Enter Amount to Set User's balance to:\n";
 		string input;
-		cin >> input;
+		input = CLI::getInput();
 		float balance;
 		try {
 			try {
@@ -1029,7 +1007,7 @@ bool a_DeleteUser::update() {
 	CLI::clearCli();
 	cout << "Are you sure you want to PERMANENTLY DELETE this user? Y/y for yes, any other input to go back..\n";
 	string input;
-	cin >> input;
+	input = CLI::getInput();
 
 	if (input.size() == 1 && tolower(input[0]) == 'y') {
 		admin->deleteUser(user->getUsername());

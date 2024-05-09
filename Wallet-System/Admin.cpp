@@ -44,6 +44,7 @@ vector<User*> Admin::viewUsers() {
 vector<Transaction*>Admin::viewAllUsersTransactions() {
 	vector<Transaction*> all=Container::allTransactions;
 	
+	sort(all.begin(), all.end(), Transaction::oldestDate);
 	return all ;
 }
 vector<Transaction*> Admin::viewSpecicTranactioBySenderName(string senderUserName) {

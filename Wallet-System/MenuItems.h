@@ -107,7 +107,8 @@ enum TransactionType {
 	recievedUser,
 	allUser,
 	toRequest,
-	fromRequest
+	fromRequest,
+	allAdmin
 };
 
 class ViewUserTransactionsMenu : public MenuItem
@@ -203,11 +204,10 @@ public:
 	void customHeader() override;
 };
 
-class a_AllTransactions : public MenuItem
+class a_AllTransactions : public ViewUserTransactionsMenu
 {
 public:
 	a_AllTransactions(string name);
-	bool update() override;
 };
 
 class a_AllUsers : public MenuItem
