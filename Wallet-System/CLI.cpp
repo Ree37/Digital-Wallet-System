@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <conio.h>
+
 
 #include "MenuItems.h"
 
@@ -166,5 +168,36 @@ int CLI::getInput(bool overwrite, int size, bool sorted) {
 
 	return false;
 	
+}
+
+string CLI::getPassword() {
+
+	std::string input;
+	char ch;
+
+	while (true) {
+		ch = _getch(); 
+
+		if (ch == '\r' && !input.empty()) {
+			std::cout << std::endl;
+			return input;
+		}
+		
+		else if (ch == '\b') {  
+			if (!input.empty()) {
+				std::cout << "\b \b";  
+				input.pop_back(); 
+			}
+		}
+		else if (isspace(ch))
+		{
+			continue;
+		}
+		else {
+			std::cout << '*'; 
+			input += ch;  
+		}
+	}
+
 }
 

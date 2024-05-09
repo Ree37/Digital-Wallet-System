@@ -233,7 +233,7 @@ bool LoginUserMenu::update() {
 			return true;
 
 		cout << "Enter Password: ";
-		cin >> password;
+		password = CLI::getPassword();
 
 		if (exitCommand(password))
 			return true;
@@ -330,7 +330,7 @@ bool RegisterUserMenu::update() {
 	while (true) {
 		try {
 			cout << "Enter Password: ";
-			cin >> password;
+			password = CLI::getPassword();
 
 			if (exitCommand(password))
 				return true;
@@ -723,7 +723,7 @@ bool ChangePasswordMenu::update() {
 	{
 		while (true) {
 			cout << "Enter old password: ";
-			cin >> oldPassword;
+			oldPassword = CLI::getPassword();
 
 			if (exitCommand(oldPassword))
 			{
@@ -750,7 +750,7 @@ bool ChangePasswordMenu::update() {
 	while (true)
 	{
 		cout << "Enter new password: ";
-		cin >> newPassword;
+		newPassword = CLI::getPassword();
 
 		if (exitCommand(newPassword))
 		{
