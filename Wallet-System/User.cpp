@@ -254,6 +254,9 @@ void Transaction::setAmount(float amount) {
     this->amount = amount;
 
 }
+bool Transaction::operator>(const Transaction& other) const {
+    return other > *this;
+}
 void Transaction::setIsPending(int pending) { this->isPending = pending; }
 void Transaction::setDateTime(chrono::system_clock::time_point date) { this->dateTime = date; }
 
@@ -323,4 +326,9 @@ bool Transaction::oldestDate(Transaction* t1, Transaction* t2) {
 
 bool Transaction::recentDate(Transaction* t1, Transaction* t2) {
     return t1->dateTime > t2->dateTime;
+}
+
+
+ bool User::compareByUsername(const User* a, const User* b) {
+    return a->username < b->username;
 }

@@ -1,7 +1,7 @@
 #include "Admin.h"
 #include "User.h"
 #include "Container.h"
-
+#include <algorithm>
 //Admin Admin::adminInstance();
 
 Admin::Admin(string name, string pwd) : User(name,pwd) {};
@@ -10,14 +10,6 @@ void Admin::deleteUser(string deletedUserName) {
 	Container::Users.erase(deletedUserName);
 }
 
-//vector<User*> Admin::viewUsers()
-//{
-//unordered_map<string,User>::
-//    for (int i = 0; i <= Container::users.size(); i++) {
-//        userVec.push_back(Container::users.at(i));
-//    };
-//    return userVec;
-//}
 void Admin::setSuspendUsers(string suspendedUserName) {
 	Container::Users.at(suspendedUserName)->setSuspendedFlag(
 		!Container::Users.at(suspendedUserName)->getSuspendedFlag());
@@ -38,33 +30,21 @@ void Admin::addUser(string userName, string userPassword) {
 	Container::addUser(newUser);
 }
 
-vector<User*> Admin::viewUsers()
-{
+vector<User*> Admin::viewUsers() {
 	vector<User*> usrVec;
-	unordered_map<string, User*>::iterator it;
-	for (it = Container::Users.begin(); it != Container::Users.end(); it++)
-	{
+	for (auto it = Container::Users.begin(); it != Container::Users.end(); ++it) {
 		usrVec.push_back(it->second);
 	}
-	return usrVec; //sort before return
+
+	sort(usrVec.begin(), usrVec.end(), compareByUsername);
+	return usrVec;
 }
 
-//use all transactions instead + sort based on date
+
 vector<Transaction*>Admin::viewAllUsersTransactions() {
-	unordered_map<string, vector<Transaction*>>::iterator it;
-
-	it = Container::userKeyTransactions.begin();
-	vector<Transaction*> returnedTransaction;
-	vector<Transaction*> specificUserTransacions;
-	while (it != Container::userKeyTransactions.end()) {
-		specificUserTransacions = Container::getAllUserTransaction(it->first);
-		for (int i = 0; i < specificUserTransacions.size(); i++) {
-			returnedTransaction.push_back(specificUserTransacions[i]);
-		}
-
-		it++;
-	}
-	return returnedTransaction;
+	vector<Transaction*> all=Container::allTransactions;
+	
+	return all ;
 }
 vector<Transaction*> Admin::viewSpecicTranactioBySenderName(string senderUserName) {
 	return Container::getSentTransaction(senderUserName);
