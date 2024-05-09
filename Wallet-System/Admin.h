@@ -11,8 +11,8 @@ using namespace std;
 class Admin : public User
 {
 public:
+
 	    Admin(string username, string password);
-		bool isUnique(string name);
 		void addUser(string userName,string userPassword);
 		vector<User*> viewUsers();
 		//void editUsers(User edited_User);

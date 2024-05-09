@@ -42,7 +42,7 @@ public:
   void makeRequest(string requested, float amount);
 
   friend std::ostream& operator<<(std::ostream& os, User& t);
-
+  static bool compareByUsername(const User* a, const User* b);
   virtual ~User();
 protected:
   string username;
@@ -63,6 +63,7 @@ private:
   chrono::system_clock::time_point dateTime;
 
 public:
+  bool operator>(const Transaction& other) const;
   Transaction();
   Transaction(string sender, string recipient, float amount);
   string getSenderUserName();
@@ -83,7 +84,6 @@ public:
   void checkUserExist(string username);
   void sendAmount();
   void addTransaction();
-
   friend std::ostream& operator<<(std::ostream& os, const Transaction& t);
 
   static bool recentDate(Transaction* t1, Transaction* t2);
