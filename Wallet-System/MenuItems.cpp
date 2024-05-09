@@ -524,6 +524,7 @@ bool AddMoneyMenu::update() {
 		}
 		catch (exception e)
 		{
+			CLI::clearCli();
 			cout << e.what() << '\n';
 			continue;
 		}
@@ -545,11 +546,10 @@ bool AddMoneyMenu::update() {
 		}
 		_getch();
 		back();
-		break;
-		
+		return true;
+
 	}
 
-	return true;
 };
 
 ViewRequestsMenu::ViewRequestsMenu(string name) : MenuItem(name) {};
@@ -637,9 +637,8 @@ bool ViewUserTransactionsMenu::update() {
 
 
 	vector<Transaction*> v;
-	bool isViewOnly = (admin || mode != toRequest);
-	while (true) {
-		switch (mode)
+
+	switch (mode)
 		{
 		case sentUser: v = user->getSentTransactions();
 			break;
@@ -653,6 +652,11 @@ bool ViewUserTransactionsMenu::update() {
 			break;
 		
 		}
+
+	bool isViewOnly = (admin || mode != toRequest);
+
+	while (true) {
+		
 
 
 		int state = updateList(v, isViewOnly);
@@ -919,20 +923,19 @@ a_AllUsers::a_AllUsers(string name) : MenuItem(name) {};
 bool a_AllUsers::update() {
 
 	vector<User*> v = admin->viewUsers();
-
 	while (true) {
-		int state = updateList(v,false);
 
-		switch (state) {
-		case 0: back(); return true;
-		case -1:  break;
-		case -2:  break;
-		default : 
-			user = v[state - 1];
-			currentMenuItem.push(currentMenuItem.top()->getSubMenus()[0]);
+		int state = updateList(v, false);
+
+		if (state == 0)
+		{
+			back();
 			return true;
 		}
 
+		user = v[state - 1];
+		currentMenuItem.push(currentMenuItem.top()->getSubMenus()[0]);
+		return true;
 
 	}
 }
