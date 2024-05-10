@@ -566,7 +566,7 @@ bool AddMoneyMenu::update() {
 		case 3: card = "VISA"; 
 		}
 
-		cout << "\nYou succesfully added " << round(amount*100)/100 << " through a " << card << " card\n";
+		cout << "\nYou succesfully added " << std::fixed << setprecision(2) << round(amount*100)/100 << " through a " << card << " card\n";
 
 		cout << "\npress any key to continue..";
 
