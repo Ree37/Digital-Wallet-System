@@ -50,7 +50,7 @@ protected:
 private:
   string totpSecret;
   bool isHas2FA = false;
-  float balance;
+  float balancee;
   bool suspendedFlag;
 };
 
@@ -58,7 +58,7 @@ class Transaction {
 private:
   string sender;
   string recipient;
-  float amount;
+  float amountt;
   int isPending;
   chrono::system_clock::time_point dateTime;
 

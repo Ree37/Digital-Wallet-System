@@ -17,7 +17,7 @@ User::User(string username, string password) {
   }
 
   this->suspendedFlag = false;
-  this->balance = 0.0;
+  this->balancee = 0.0;
   this->username = username;
   this->password = password;
 }
@@ -28,7 +28,7 @@ string User::getUsername() { return username; };
 
 string User::getPassword() { return password; };
 
-float User::getBalance() { return balance; }
+float User::getBalance() { return balancee; }
 
 bool User::getSuspendedFlag() { return suspendedFlag; }
 
@@ -45,6 +45,7 @@ void User::setPassword(string newPassword) { password = newPassword; }
 
 void User::setBalance(float amount) { 
 
+    amount = round(amount * 100) / 100;
     if (amount < 0)
     {
         throw invalid_argument("Please Enter a Positive Number");
@@ -53,7 +54,7 @@ void User::setBalance(float amount) {
         throw invalid_argument("Balance Can't be infinity or nan");
     }
 
-    this->balance = amount;
+    this->balancee = amount;
 }
 
 void User::setSuspendedFlag(bool flag) { suspendedFlag = flag; }
@@ -80,11 +81,12 @@ void User::addMoney(float value) {
       throw invalid_argument("Enter valid amount!");
   }
 
-  if (value + balance > 100000)
+  if (value + balancee > 100000)
   {
       throw invalid_argument("Maximum Balance Reached : 100,000");
   }
-  balance += value;
+  
+  setBalance(balancee + value);
   
 }
 
@@ -235,7 +237,7 @@ void User::makeRequest(string requested, float amount) {
 Transaction::Transaction() {
     this->sender = "";
     this->recipient = "";
-    this->amount = 0;
+    this->amountt = 0;
     this->dateTime = chrono::system_clock::now();
     this->isPending = 0;
 
@@ -244,7 +246,7 @@ Transaction::Transaction() {
 Transaction::Transaction(string sender, string recipient, float amount) {
   this->sender = sender;
   this->recipient = recipient;
-  this->amount = amount;
+  setAmount(amount);
   this->dateTime = chrono::system_clock::now();
   this->isPending = 0;
 }
@@ -266,11 +268,14 @@ void Transaction::setRecipientUsername(string username) {
 
 void Transaction::setAmount(float amount) {
 
-    if (amount < 0 || !isfinite(amount))
+    amount = round(amount * 100) / 100;
+
+    if (amount <= 0 || !isfinite(amount))
     {
         throw invalid_argument("Please Enter a Positive Number");
     }
-    this->amount = amount;
+
+    this->amountt = amount;
 
 }
 bool Transaction::operator>(const Transaction& other) const {
@@ -280,19 +285,19 @@ void Transaction::setIsPending(int pending) { this->isPending = pending; }
 void Transaction::setDateTime(chrono::system_clock::time_point date) { this->dateTime = date; }
 
 string Transaction::getRecipientUserName() { return recipient; }
-float Transaction::getAmount() { return amount; }
+float Transaction::getAmount() { return amountt; }
 int Transaction::getIsPending() { return isPending; }
 chrono::system_clock::time_point Transaction::getDateTime() { return dateTime; }
 
 
 void Transaction::checkSenderBalance() {
-    if (Container::Users[sender]->getBalance() <= amount)
+    if (Container::Users[sender]->getBalance() <= amountt)
     {
         throw invalid_argument("Insufficient balance");
     }
 }
 void Transaction::checkRecepientBalance() {
-    if (Container::Users[recipient]->getBalance() + amount > 100000)
+    if (Container::Users[recipient]->getBalance() + amountt > 100000)
     {
         throw invalid_argument("Maximum Balance Reached: 100,000");
     }
@@ -312,8 +317,8 @@ void Transaction::sendAmount() {
     checkSenderBalance();
     checkRecepientBalance();
     
-    Container::Users[sender]->setBalance(Container::Users[sender]->getBalance() - amount);
-    Container::Users[recipient]->setBalance(Container::Users[recipient]->getBalance() + amount);
+    Container::Users[sender]->setBalance(Container::Users[sender]->getBalance() - amountt);
+    Container::Users[recipient]->setBalance(Container::Users[recipient]->getBalance() + amountt);
    
 }
 
@@ -350,7 +355,7 @@ std::ostream& operator<<(std::ostream& os, const Transaction& t) {
     case 1: s = "Pending"; break;
     case 2: s = "Declined";
     }
-    os << "Sender: " << t.sender << " | Recepient: " << t.recipient << " | Amount: " << t.amount << " | Date: " << Utils::timePointToString(t.dateTime) << " | " << s;
+    os << "Sender: " << t.sender << " | Recepient: " << t.recipient << " | Amount: " << t.amountt << " | Date: " << Utils::timePointToString(t.dateTime) << " | " << s;
     return os;
 }
 
