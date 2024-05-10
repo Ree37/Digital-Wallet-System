@@ -74,19 +74,20 @@ bool User::isUniqueUsername()
 }
 
 void User::addMoney(float value) {
+    value = round(value * 100) / 100;
     if (suspendedFlag) {
         throw invalid_argument("You are suspended!");
     }
-  if (value <= 0 || !isfinite(value)) {
-      throw invalid_argument("Enter valid amount!");
-  }
+    if (value <= 0 || !isfinite(value)) {
+        throw invalid_argument("Enter valid amount!");
+    }
 
-  if (value + balancee > 100000)
-  {
-      throw invalid_argument("Maximum Balance Reached : 100,000");
-  }
+    if (value + balancee > 100000)
+    {
+        throw invalid_argument("Maximum Balance Reached : 100,000");
+    }
   
-  setBalance(balancee + value);
+    setBalance(balancee + value);
   
 }
 
