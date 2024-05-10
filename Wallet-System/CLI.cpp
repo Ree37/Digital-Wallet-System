@@ -1,6 +1,7 @@
 #include "CLI.h"
 
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <cstdlib>
 #include <conio.h>
@@ -13,6 +14,7 @@ using namespace std;
 void CLI::start() {
 	std::locale loc("");
 	std::cout.imbue(loc);
+	std::cout << std::fixed << setprecision(2);
 	CLI::initMenu();
 	CLI::navMenu();
 }

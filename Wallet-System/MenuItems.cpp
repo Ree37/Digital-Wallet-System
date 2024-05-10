@@ -390,7 +390,7 @@ void UserProfileMenu::customHeader() {
 	if (user->getSuspendedFlag())
 		cout << "You are currently suspended from making any transactions\n";
 	cout << "\nCurrent User: " << MenuItem::user->getUsername() << "\n\n";
-	cout << "Available Balance: " << std::fixed << setprecision(2) <<MenuItem::user->getBalance() << "\n\n";
+	cout << "Available Balance: " << MenuItem::user->getBalance() << "\n\n";
 
 	if(!user->getSuspendedFlag()) {
 		user->getToRequests().size() != 1 ? cout << "You have " << user->getToRequests().size() << " Requests\n\n" : cout << "You have " << user->getToRequests().size() << " Request\n\n";
@@ -566,7 +566,7 @@ bool AddMoneyMenu::update() {
 		case 3: card = "VISA"; 
 		}
 
-		cout << "\nYou succesfully added " << std::fixed << setprecision(2) << round(amount*100)/100 << " through a " << card << " card\n";
+		cout << "\nYou succesfully added " << round(amount*100)/100 << " through a " << card << " card\n";
 
 		cout << "\npress any key to continue..";
 
@@ -605,7 +605,7 @@ ViewRequestSettingsMenu::ViewRequestSettingsMenu(string name) : MenuItem(name) {
 
 void ViewRequestSettingsMenu::customHeader() {
 	cout << "\n\nCurrent Request: " << transaction->getAmount() << " to " << transaction->getRecipientUserName() << "\n\n";
-	cout << "Your Balance: " << fixed << setprecision(2) <<MenuItem::user->getBalance() << "\n\n";
+	cout << "Your Balance: " << MenuItem::user->getBalance() << "\n\n";
 }
 
 
@@ -958,7 +958,7 @@ a_ModifyUserProfile::a_ModifyUserProfile(string name) : MenuItem(name) {};
 
 void a_ModifyUserProfile::customHeader() {
 	cout << "\nCurrent User: " << user->getUsername() << '\n';
-	cout << "User Balance: " << std::fixed << setprecision(2) << MenuItem::user->getBalance() << "\n\n";
+	cout << "User Balance: "  << MenuItem::user->getBalance() << "\n\n";
 }
 
 bool a_ModifyUserProfile::update() {

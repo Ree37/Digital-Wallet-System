@@ -356,7 +356,7 @@ std::ostream& operator<<(std::ostream& os, const Transaction& t) {
     case 1: s = "Pending"; break;
     case 2: s = "Declined";
     }
-    os << "Sender: " << t.sender << " | Recepient: " << t.recipient << " | Amount: " << std::fixed << setprecision(2) << t.amountt << " | Date: " << Utils::timePointToString(t.dateTime) << " | " << s;
+    os << "Sender: " << t.sender << " | Recepient: " << t.recipient << " | Amount: " << t.amountt << " | Date: " << Utils::timePointToString(t.dateTime) << " | " << s;
     return os;
 }
 
