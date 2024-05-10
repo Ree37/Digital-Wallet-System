@@ -127,8 +127,6 @@ int MenuItem::updateList(vector<T*>& v, bool viewOnly) {
 			cout << "No result found...\n";
 			cout << "\nPress any key to go back..\n";
 
-			while (!_kbhit()) {
-			}
 			_getch();
 			return 0;
 		}
@@ -137,8 +135,6 @@ int MenuItem::updateList(vector<T*>& v, bool viewOnly) {
 		{
 			cout << "Press 'a' to view by ascending, 'd' to view by descending, any other key to go back..\n";
 
-			while (!_kbhit()) {
-			}
 			char c = _getch();
 
 			if (tolower(c) == 'a')
@@ -360,7 +356,6 @@ bool RegisterUserMenu::update() {
 			if(admin){
 				cout << "\nUser Added Sucessfully. Press any key to go back...";
 
-				while(!_kbhit()){}
 				_getch();
 
 				back();
@@ -570,8 +565,6 @@ bool AddMoneyMenu::update() {
 
 		cout << "\npress any key to continue..";
 
-		while (!_kbhit()) {
-		}
 		_getch();
 		back();
 		return true;
@@ -620,7 +613,6 @@ bool AcceptRequestMenu::update() {
 		cout << "Press any key to continue..\n";
 		
 
-		while(!_kbhit()){}
 		_getch();
 		back();
 		back();
@@ -630,7 +622,6 @@ bool AcceptRequestMenu::update() {
 	catch (exception e){
 		cout << "Transaction failed: " << e.what() << "\n";
 		cout << "Press any key to continue..\n";
-		while (!_kbhit()) {}
 		_getch();
 		back();
 		return true;
@@ -650,7 +641,6 @@ bool DeclineRequestMenu::update() {
 	cout << "Press any key to continue..\n";
 
 
-	while (!_kbhit()) {}
 	_getch();
 	back();
 	back();
@@ -806,8 +796,6 @@ bool ChangePasswordMenu::update() {
 			cout << "\nPassword succesfully updated!\n";
 			cout << "Press any key to continue..\n";
 
-			while (!_kbhit()) {
-			}
 			_getch();
 
 			back();
@@ -860,8 +848,6 @@ bool Enable2FAMenu::update() {
 		user->setTotpSecret("");
 
 		cout << "2FA has been disabled!\n";
-		while (!_kbhit()) {
-		}
 
 		_getch();
 		back();
@@ -1032,8 +1018,6 @@ bool a_SuspendUser::update() {
 
 	cout << "Press any key to go back..";
 
-	while(!_kbhit()){}
-
 	_getch();
 
 	back();
@@ -1053,7 +1037,6 @@ bool a_DeleteUser::update() {
 	if (input.size() == 1 && tolower(input[0]) == 'y') {
 		admin->deleteUser(user->getUsername());
 		cout << "\nYou deleted this user. Press any key to go back..";
-		while(!_kbhit()){}
 		_getch();
 
 		back();
