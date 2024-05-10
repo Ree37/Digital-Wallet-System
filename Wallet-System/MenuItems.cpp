@@ -222,7 +222,7 @@ LoginUserMenu::LoginUserMenu(string name) : MenuItem(name) {};
 bool LoginUserMenu::update() {
 
 	CLI::clearCli();
-	cout << "Input 'x' to leave menu\n\n";
+	cout << "Input 'x' to leave login menu. Press space to toggle password visibility\n\n";
 	while (true) {
 		string username, password;
 
@@ -254,7 +254,7 @@ bool LoginUserMenu::update() {
 		}
 		catch (exception e) {
 			CLI::clearCli();
-			cout << "Input 'x' to leave menu\n\n";
+			cout << "Input 'x' to leave login menu. Press space to toggle password visibility\n\n";
 			cout << e.what() << "\n\n";
 			continue;
 		}
@@ -303,9 +303,9 @@ RegisterUserMenu::RegisterUserMenu(string name) : MenuItem(name) {};
 bool RegisterUserMenu::update() {
 	CLI::clearCli();
 
-	string username, password;
+	string username, password, confirm;
 
-	cout << "Input 'x' to leave menu\n";
+	cout << "Input 'x' to leave register menu. Press space to toggle password visibility\n\n";
 	while (true) {
 		
 
@@ -321,7 +321,7 @@ bool RegisterUserMenu::update() {
 		}
 		catch(exception e){
 			CLI::clearCli();
-			cout << "Input 'x' to leave menu\n\n";
+			cout << "Input 'x' to leave register menu. Press space to toggle password visibility\n\n";
 			cout << e.what() << '\n';
 		}
 	}
@@ -339,6 +339,18 @@ bool RegisterUserMenu::update() {
 			{
 				throw std::invalid_argument("Password is weak. It should include an uppercase letter, a lowercase letter, a number, a special character, and be at least 8 characters long.");
 			}
+
+			cout << "Confirm Password: ";
+			confirm = CLI::getPassword();
+
+			if (exitCommand(confirm))
+				return true;
+
+			if (password != confirm)
+			{
+				throw std::invalid_argument("Password not same as Confirm password.");
+			}
+			
 			string hash = BCryptLib::generateHash(password, 12);
 
 			MenuItem::user = new User(username, hash);
@@ -362,7 +374,7 @@ bool RegisterUserMenu::update() {
 		}
 		catch (exception e) {
 			CLI::clearCli();
-			cout << "Input 'x' to leave menu\n\n";
+			cout << "Input 'x' to leave register menu. Press space to toggle password visibility\n\n";
 
 			cout << e.what() << '\n';
 			cout << "Enter Username: " << username << "\n";
@@ -706,10 +718,11 @@ bool ChangePasswordMenu::update() {
 
 	string oldPassword;
 	string newPassword;
+	string confirm;
 
 
 	CLI::clearCli();
-	cout << "Input 'x' to leave menu\n\n";
+	cout << "Input 'x' to leave menu. Press space to toggle password visibility\n\n";
 
 	if (!admin)
 	{
@@ -731,7 +744,7 @@ bool ChangePasswordMenu::update() {
 			}
 			catch (exception e) {
 				CLI::clearCli();
-				cout << "Input 'x' to leave menu\n\n";
+				cout << "Input 'x' to leave menu. Press space to toggle password visibility\n\n";
 				cout << e.what() << "\n\n";
 
 			}
@@ -754,6 +767,18 @@ bool ChangePasswordMenu::update() {
 				throw std::invalid_argument("Password is weak. It should include an uppercase letter, a lowercase letter, a number, a special character, and be at least 8 characters long.");
 			}
 
+			cout << "Confirm Password: ";
+			confirm = CLI::getPassword();
+
+			if (exitCommand(confirm))
+				return true;
+
+			if (newPassword != confirm)
+			{
+				throw std::invalid_argument("Password not same as Confirm password.");
+			}
+
+
 			string hash = BCryptLib::generateHash(newPassword, 12);
 			if (admin) {
 				admin->editUser(user->getUsername(), hash);
@@ -775,12 +800,8 @@ bool ChangePasswordMenu::update() {
 		catch (exception e)
 		{
 			CLI::clearCli();
-			cout << "Input 'x' to leave menu\n\n";
+			cout << "Input 'x' to leave menu. Press space to toggle password visibility\n\n";
 			cout << e.what() << "\n\n";
-			if (!admin)
-			{
-				cout << "Enter old password: " << oldPassword << "\n";
-			}
 
 		}
 	}

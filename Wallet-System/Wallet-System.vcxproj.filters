@@ -62,7 +62,16 @@
     <ClInclude Include="MenuItems.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Security\bcrypt\BCryptDLL.h">
+    <ClInclude Include="Security\AES\AES.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Security\bcrypt\BCryptLib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Security\qrcode\QrcodeLib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Security\totp\TOTPLib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
