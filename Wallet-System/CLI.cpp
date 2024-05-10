@@ -159,7 +159,7 @@ int CLI::getChoice(bool overwrite, int size, bool sorted) {
 	}
 
 	if (tolower(choice) == 'x') {
-		return choice;
+		return tolower(choice);
 	}
 
 	if ((tolower(choice) == 'a' || tolower(choice) == 'd') && sorted) {
