@@ -11,6 +11,8 @@
 using namespace std;
 
 void CLI::start() {
+	std::locale loc("");
+	std::cout.imbue(loc);
 	CLI::initMenu();
 	CLI::navMenu();
 }
