@@ -387,8 +387,14 @@ bool RegisterUserMenu::update() {
 UserProfileMenu::UserProfileMenu(string name) : MenuItem(name) {};
 
 void UserProfileMenu::customHeader() {
+	if (user->getSuspendedFlag())
+		cout << "You are currently suspended from making any transactions\n";
 	cout << "\nCurrent User: " << MenuItem::user->getUsername() << "\n\n";
 	cout << "Available Balance: " << MenuItem::user->getBalance() << "\n\n";
+
+	if(!user->getSuspendedFlag()) {
+		user->getToRequests().size() != 1 ? cout << "You have " << user->getToRequests().size() << " Requests\n\n" : cout << "You have " << user->getToRequests().size() << " Request\n\n";
+	}
 }
 
 bool UserProfileMenu::back() {
@@ -521,6 +527,8 @@ bool AddMoneyMenu::update() {
 	string input;
 	float amount;
 	CLI::clearCli();
+	cout << "Input 'x' to leave menu\n\n";
+
 	while(true) {
 		cout << "Enter amount: ";
 		input = CLI::getInput();
@@ -531,13 +539,21 @@ bool AddMoneyMenu::update() {
 		}
 			
 		try {
-			amount = stof(input);
+			try {
+				amount = stof(input);
+			}
+			catch (exception e)
+			{
+				throw invalid_argument("Please Enter a number");
+			}
 			user->addMoney(amount);
 		}
 		catch (exception e)
 		{
 			CLI::clearCli();
-			cout << e.what() << '\n';
+			cout << "Input 'x' to leave menu\n\n";
+
+			cout << e.what() << "\n\n";
 			continue;
 		}
 
@@ -970,6 +986,10 @@ bool a_SetBalance::update() {
 		cout << "Enter Amount to Set User's balance to:\n";
 		string input;
 		input = CLI::getInput();
+		if (exitCommand(input))
+		{
+			return true;
+		}
 		float balance;
 		try {
 			try {

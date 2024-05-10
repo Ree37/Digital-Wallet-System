@@ -79,6 +79,11 @@ void User::addMoney(float value) {
   if (value <= 0 || !isfinite(value)) {
       throw invalid_argument("Enter valid amount!");
   }
+
+  if (value + balance > 100000)
+  {
+      throw invalid_argument("Maximum Balance Reached : 100,000");
+  }
   balance += value;
   
 }
@@ -261,14 +266,10 @@ void Transaction::setRecipientUsername(string username) {
 
 void Transaction::setAmount(float amount) {
 
-    if (amount < 0)
+    if (amount < 0 || !isfinite(amount))
     {
         throw invalid_argument("Please Enter a Positive Number");
     }
-    if (!isfinite(amount)) {
-        throw invalid_argument("Amount Can't be infinity or nan");
-    }
-
     this->amount = amount;
 
 }
@@ -284,10 +285,16 @@ int Transaction::getIsPending() { return isPending; }
 chrono::system_clock::time_point Transaction::getDateTime() { return dateTime; }
 
 
-void Transaction::checkSenderBalance(float amount) {
+void Transaction::checkSenderBalance() {
     if (Container::Users[sender]->getBalance() <= amount)
     {
         throw invalid_argument("Insufficient balance");
+    }
+}
+void Transaction::checkRecepientBalance() {
+    if (Container::Users[recipient]->getBalance() + amount > 100000)
+    {
+        throw invalid_argument("Maximum Balance Reached: 100,000");
     }
 }
 
@@ -302,8 +309,9 @@ void Transaction::checkUserExist(string username) {
 
 void Transaction::sendAmount() {
 
-    checkSenderBalance(amount);
-
+    checkSenderBalance();
+    checkRecepientBalance();
+    
     Container::Users[sender]->setBalance(Container::Users[sender]->getBalance() - amount);
     Container::Users[recipient]->setBalance(Container::Users[recipient]->getBalance() + amount);
    
@@ -314,7 +322,9 @@ string Transaction::getSenderUserName() { return sender; }
 
 
 void Transaction::declineTransaction(){
-
+    if (Container::Users[sender]->getSuspendedFlag()) {
+        throw invalid_argument("You are suspended!");
+    }
     this->isPending = 2;
     this->dateTime = chrono::system_clock::now();
 
@@ -322,6 +332,12 @@ void Transaction::declineTransaction(){
 
 
 void Transaction::acceptTransaction(){
+    if (Container::Users[sender]->getSuspendedFlag()) {
+        throw invalid_argument("You are suspended!");
+    }
+    if (Container::Users[recipient]->getSuspendedFlag()) {
+        throw invalid_argument(recipient + " is suspended!");
+    }
     sendAmount();
     this->isPending = 0;
     this->dateTime = chrono::system_clock::now();

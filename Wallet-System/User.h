@@ -80,7 +80,8 @@ public:
   void declineTransaction();
   void acceptTransaction();
 
-  void checkSenderBalance(float amount);
+  void checkSenderBalance();
+  void checkRecepientBalance();
   void checkUserExist(string username);
   void sendAmount();
   void addTransaction();
