@@ -223,13 +223,13 @@ bool LoginUserMenu::update() {
 		string username, password;
 
 		cout << "Enter Username: ";
-		username = CLI::getInput();
+	    CLI::getInput(username);
 		
 		if (exitCommand(username))
 			return true;
 
 		cout << "Enter Password: ";
-		password = CLI::getPassword();
+		CLI::getPassword(password);
 
 		if (exitCommand(password))
 			return true;
@@ -262,7 +262,7 @@ bool LoginUserMenu::update() {
 			string secret = data->getTotpSecret();
 			QrcodeLib* qrcode = new QrcodeLib(data->getUsername(), secret);
 			cout << "Enter 2FA Key: ";
-			i_otp = CLI::getInput();
+		    CLI::getInput(i_otp);
 
 			if (exitCommand(i_otp))
 				return true;
@@ -306,7 +306,7 @@ bool RegisterUserMenu::update() {
 		
 
 		cout << "Enter Username: ";
-		username = CLI::getInput();
+		CLI::getInput(username);
 
 		if (exitCommand(username))
 			return true;
@@ -326,7 +326,7 @@ bool RegisterUserMenu::update() {
 	while (true) {
 		try {
 			cout << "Enter Password: ";
-			password = CLI::getPassword();
+			CLI::getPassword(password);
 
 			if (exitCommand(password))
 				return true;
@@ -337,7 +337,7 @@ bool RegisterUserMenu::update() {
 			}
 
 			cout << "Confirm Password: ";
-			confirm = CLI::getPassword();
+			CLI::getPassword(confirm);
 
 			if (exitCommand(confirm))
 				return true;
@@ -422,14 +422,14 @@ bool TransferMoneyMenu::update() {
 
 		cout << "Enter " << state << " Username: ";
 
-		recepientName = CLI::getInput();
+		CLI::getInput(recepientName);
 
 		if (exitCommand(recepientName)) {
 			return true;
 		}
 
 		cout << "Enter amount: ";
-		input = CLI::getInput();
+		CLI::getInput(input);
 
 		if (exitCommand(input))
 		{
@@ -484,7 +484,7 @@ bool AddMoneyMenu::update() {
 	while (true) {
 		cout << "Enter Credit Card (16 numbers): ";
 		string input;
-		input = CLI::getInput();
+		CLI::getInput(input);
 
 		if (exitCommand(input))
 		{
@@ -526,7 +526,7 @@ bool AddMoneyMenu::update() {
 
 	while(true) {
 		cout << "Enter amount: ";
-		input = CLI::getInput();
+		CLI::getInput(input);
 
 		if (exitCommand(input))
 		{
@@ -725,6 +725,7 @@ bool ChangePasswordMenu::update() {
 	string oldPassword;
 	string newPassword;
 	string confirm;
+	bool pwdVisible;
 
 
 	CLI::clearCli();
@@ -734,7 +735,7 @@ bool ChangePasswordMenu::update() {
 	{
 		while (true) {
 			cout << "Enter old password: ";
-			oldPassword = CLI::getPassword();
+			pwdVisible = CLI::getPassword(oldPassword);
 
 			if (exitCommand(oldPassword))
 			{
@@ -761,7 +762,7 @@ bool ChangePasswordMenu::update() {
 	while (true)
 	{
 		cout << "Enter new password: ";
-		newPassword = CLI::getPassword();
+		CLI::getPassword(newPassword);
 
 		if (exitCommand(newPassword))
 		{
@@ -773,8 +774,8 @@ bool ChangePasswordMenu::update() {
 				throw std::invalid_argument("Password is weak. It should include an uppercase letter, a lowercase letter, a number, a special character, and be at least 8 characters long.");
 			}
 
-			cout << "Confirm Password: ";
-			confirm = CLI::getPassword();
+			cout << "Confirm password: ";
+			CLI::getPassword(confirm);
 
 			if (exitCommand(confirm))
 				return true;
@@ -806,6 +807,7 @@ bool ChangePasswordMenu::update() {
 			CLI::clearCli();
 			cout << "Input 'x' to leave menu. Press space to toggle password visibility\n\n";
 			cout << e.what() << "\n\n";
+			cout << "Enter old password: " << (pwdVisible ? oldPassword : std::string(oldPassword.size(), '*')) << '\n';
 
 		}
 	}
@@ -827,7 +829,7 @@ bool Enable2FAMenu::update() {
 		QrcodeLib* qrcode = new QrcodeLib(user->getUsername(), secret);
 		cout << "Input 'x' to leave menu\n";
 		cout << "Enter 2FA Key: ";
-		i_otp = CLI::getInput();
+		CLI::getInput(i_otp);
 
 		if (exitCommand(i_otp))
 			return true;
@@ -858,7 +860,7 @@ bool Enable2FAMenu::update() {
 	string password;
 	cout << "Input 'x' to leave 2FA menu\n";
 	cout << "Enter Current Password to enable 2FA: ";
-	password = CLI::getInput();
+	CLI::getPassword(password);
 
 	if (exitCommand(password))
 		return true;
@@ -971,7 +973,7 @@ bool a_SetBalance::update() {
 	while (true) {
 		cout << "Enter Amount to Set User's balance to:\n";
 		string input;
-		input = CLI::getInput();
+		CLI::getInput(input);
 		if (exitCommand(input))
 		{
 			return true;
@@ -1032,7 +1034,7 @@ bool a_DeleteUser::update() {
 	CLI::clearCli();
 	cout << "Are you sure you want to PERMANENTLY DELETE this user? Y/y for yes, any other input to go back..\n";
 	string input;
-	input = CLI::getInput();
+	CLI::getInput(input);
 
 	if (input.size() == 1 && tolower(input[0]) == 'y') {
 		admin->deleteUser(user->getUsername());

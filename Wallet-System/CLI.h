@@ -12,6 +12,6 @@ public:
     static void drawCli(bool isValid);
     static std::string invalidMessage(int size, bool sorted = false);
     static int getChoice(bool overwrite = false, int size = 0, bool sorted = false);
-    static std::string getInput();
-    static std::string getPassword();
+    static void getInput(std::string& input);
+    static bool getPassword(std::string& pwd);
 };

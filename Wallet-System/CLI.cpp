@@ -149,7 +149,7 @@ int CLI::getChoice(bool overwrite, int size, bool sorted) {
 	int choice;
 	string input;
 
-	input = getInput();
+    getInput(input);
 
 	try {
 		choice = stoi(input);
@@ -175,46 +175,43 @@ int CLI::getChoice(bool overwrite, int size, bool sorted) {
 	
 }
 
-string CLI::getInput() {
-
-	string input;
+void CLI::getInput(std::string& input) {
+	input.clear();
 	std::getline(std::cin, input);
 	std::istringstream iss(input);
 	iss >> input;
-
-	return input;
 }
 
 
-std::string CLI::getPassword() {
-	std::string input;
+bool CLI::getPassword(std::string& pwd) {
+	pwd.clear();
 	bool isVisible = false;
 
 	while (true) {
 		char ch = _getch();  
 
 		if (ch == '\r') { 
-			if (!input.empty()) {
+			if (!pwd.empty()) {
 				std::cout << std::endl;  
-				return input;  
+				return isVisible;
 			}
 		}
 		else if (ch == '\b') { 
-			if (!input.empty()) {
+			if (!pwd.empty()) {
 				std::cout << "\b \b";  
-				input.pop_back();  
+				pwd.pop_back();  
 			}
 		}
 		else if (ch == ' ') { 
 			isVisible = !isVisible;
 
-			std::cout << std::string(input.length(), '\b');
-			std::cout << (isVisible ? input : std::string(input.length(), '*'));  
+			std::cout << std::string(pwd.length(), '\b');
+			std::cout << (isVisible ? pwd : std::string(pwd.length(), '*'));  
 		}
 		else if (ch == 0 || ch == '\xE0')
 			_getch();
 		else if (ch >= 1 && ch <= 255 && std::isprint(ch)) {  
-			input += ch; 
+			pwd += ch; 
 			std::cout << (isVisible ? ch : '*');  
 		}
 
