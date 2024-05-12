@@ -568,7 +568,7 @@ bool AddMoneyMenu::update() {
 
 		switch (type)
 		{
-		case 1: card = "AMERICAN EXPRESS"; break;
+		case 1: card = "MEEZA"; break;
 		case 2: card = "MASTERCARD"; break;
 		case 3: card = "VISA"; 
 		}

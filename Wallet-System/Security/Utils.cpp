@@ -58,7 +58,6 @@ void Utils::generateIV(unsigned char* iv) {
 
 void Utils::encryptFiles(string inputFile, const stringstream& data)
 {
-    //ifstream inFile(inputFile, ios::binary);
     ofstream fileOut(inputFile + ".enc", ios::binary);
     string strContent = data.str();
 
@@ -97,7 +96,7 @@ std::stringstream Utils::decryptFiles(std::string inputFile) {
 
     if(encryptedContent == "")
     {
-        return std::stringstream("");
+        return std::stringstream();
     }
 
     AES aes(AESKeyLength::AES_256);
@@ -117,11 +116,9 @@ int Utils::checkCreditCard(long long cc)
     // Applying Luhn Algorithm
     int digit_count = 0;
     int sum = 0;
-    int amex = cc / pow(10, 13);
+    int meeza = cc / pow(10, 10);
     int master = cc / pow(10, 14);
-    int visa[2];
-    visa[0] = cc / pow(10, 12);
-    visa[1] = cc / pow(10, 15);
+    int visa = cc / pow(10, 15);
 
     while (cc > 0)
     {
@@ -143,16 +140,16 @@ int Utils::checkCreditCard(long long cc)
 
     if (sum % 10 != 0)
         return -1;
-
-    if (amex == 34 || amex == 37)
+    // https://binlookup.io/bin-list/eg/meeza
+    if (meeza == 507803 || meeza == 507808 || meeza == 507809 || meeza == 507810)
     {
-        return 1; // AMEX
+        return 1; // MEEZA
     }
     if (master == 51 || master == 52 || master == 53 || master == 54 || master == 55)
     {
         return 2; // MASTERCARD
     }
-    if (visa[0] == 4 || visa[1] == 4)
+    if (visa == 4)
     {
         return 3; // VISA
     }
