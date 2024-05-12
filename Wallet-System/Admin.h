@@ -15,9 +15,6 @@ public:
 	    Admin(string username, string password);
 		void addUser(string userName,string userPassword);
 		vector<User*> viewUsers();
-		//void editUsers(User edited_User);
-		vector<Transaction*> viewSpecicTranactioBySenderName(string senderUserName);
-		vector<Transaction*> viewSpecicTranactioByRecipientName(string recipientName);
 		vector<Transaction*> viewAllUsersTransactions();
 
 		void setSuspendUsers(string suspendedUserName);

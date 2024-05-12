@@ -25,6 +25,15 @@ void Container::checkUniqueUser(string username) {
 		throw invalid_argument("Username already taken!");
 	}
 }
+
+void Container::checkUserExist(string username) {
+
+	if (!Users.count(username))
+	{
+		throw invalid_argument(username + " doesn't exist");
+	}
+
+}
 void Container ::addTransaction(Transaction *t) { 
 	allTransactions.push_back(t);
 	userKeyTransactions[t->getSenderUserName()].push_back(t);

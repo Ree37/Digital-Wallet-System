@@ -21,6 +21,7 @@ public:
 	static User* getUser(string userName);
 	static void addTransaction(Transaction* t);
 	static void checkUniqueUser(string username);
+	static void checkUserExist(string username);
 	static vector<Transaction *> getSentTransaction(string senderUserName);
     static vector<Transaction *> getRecipientTransaction(string recipientUserName);
     static vector<Transaction *> getAllUserTransaction(string UserName);

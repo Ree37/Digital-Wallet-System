@@ -28,9 +28,6 @@ public:
 
   bool isUniqueUsername();
   void addMoney(double value);
-  bool strongPassword(string password);
-  bool isSentTransaction(Transaction *transaction);
-  void requestMoney(string username, double amount);
 
   vector<Transaction*> getAllTransactions();
   vector<Transaction*> getToRequests();
@@ -84,7 +81,6 @@ public:
   void checkRecepientBalance();
   void checkUserExist(string username);
   void sendAmount();
-  void addTransaction();
   friend std::ostream& operator<<(std::ostream& os, const Transaction& t);
 
   static bool recentDate(Transaction* t1, Transaction* t2);
