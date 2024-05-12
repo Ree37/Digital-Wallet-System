@@ -1,7 +1,7 @@
 #include "User.h"
 
 #include <iostream>
-#include <regex>
+#include <Algorithm>
 
 #include "Container.h"
 #include "Security/Utils.h"
@@ -91,11 +91,6 @@ void User::addMoney(double value) {
   
 }
 
-bool User::strongPassword(string password) {
-  regex pattern(
-      "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+=])(?=\\S+$).{8,}");
-  return (regex_match(password, pattern));
-}
 
 std::ostream& operator<<(std::ostream& os, User& u) {
  
@@ -253,12 +248,12 @@ Transaction::Transaction(string sender, string recipient, double amount) {
 }
 
 void Transaction::setSenderUsername(string username) {
-    checkUserExist(username);
+    Container::checkUserExist(username);
     this->sender = username;
 }
 
 void Transaction::setRecipientUsername(string username) {
-    checkUserExist(username);
+    Container::checkUserExist(username);
 
     if (sender == username)
     {  
@@ -304,14 +299,6 @@ void Transaction::checkRecepientBalance() {
     }
 }
 
-void Transaction::checkUserExist(string username) {
-
-    if (!Container::Users.count(username))
-    {
-        throw invalid_argument(username + " doesn't exist");
-    }
-
-}
 
 void Transaction::sendAmount() {
 
