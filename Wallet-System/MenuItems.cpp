@@ -833,6 +833,7 @@ bool ChangePasswordMenu::update() {
 Enable2FAMenu::Enable2FAMenu(string name) : MenuItem(name) {};
 
 bool Enable2FAMenu::update() {
+
 	CLI::clearCli();
 
 	if (user->getIsHas2FA())
@@ -841,52 +842,81 @@ bool Enable2FAMenu::update() {
 
 		string secret = user->getTotpSecret();
 		QrcodeLib* qrcode = new QrcodeLib(user->getUsername(), secret);
-		cout << "Input 'x' to leave menu\n";
+		cout << "Input 'x' to leave menu\n\n";
 		cout << "Enter 2FA Key: ";
-		CLI::getInput(i_otp);
 
-		if (exitCommand(i_otp)) {
-			back();
-			return true;
+		while (true) {
+			try {
+				CLI::getInput(i_otp);
+
+				if (exitCommand(i_otp)) {
+					back();
+					return true;
+				}
+
+				unsigned int otp = TOTPLib::getOTP(secret);
+
+				if (stoi(i_otp) != otp)
+				{
+					throw invalid_argument("Invalid 2FA Key");
+				}
+
+				CLI::clearCli();
+				cout << "Press any key to go back\n\n";
+
+				user->setIsHas2FA(false);
+				user->setTotpSecret("");
+
+				cout << "2FA has been disabled!\n";
+
+				_getch();
+				back();
+
+				return true;
+			}
+			catch(exception e){
+				CLI::clearCli(); 
+				cout << e.what() << "\n\n";
+				cout << "Input 'x' to leave menu\n\n";
+				cout << "Enter 2FA Key: ";
+
+			}
 		}
-
-		unsigned int otp = TOTPLib::getOTP(secret);
-
-		if (stoi(i_otp) != otp)
-		{
-			CLI::clearCli();
-			cout << "Invalid 2FA Key\n\n";
-			return true;
-		}
-
-		CLI::clearCli();
-		cout << "Press any key to go back\n\n";
-
-		user->setIsHas2FA(false);
-		user->setTotpSecret("");
-
-		cout << "2FA has been disabled!\n";
-
-		_getch();
-		back();
-
-		return true;
-	}
-	/*
-	string password;
-	cout << "Input 'x' to leave 2FA menu\n";
-	cout << "Enter Current Password to enable 2FA: ";
-	CLI::getPassword(password);
-
-	if (exitCommand(password)) {
-		back();
-		return true;
 	}
 	
-	if (!BCryptLib::validatePassword(password, user->getPassword())) {
-		return true;
+	string password;
+	cout << "Input 'x' to leave 2FA menu\n\n";
+	cout << "Enter Current Password to enable 2FA: ";
+
+	while (true) {
+		try {
+			CLI::getPassword(password);
+
+			if (exitCommand(password)) {
+				back();
+				return true;
+			}
+
+			if (!BCryptLib::validatePassword(password, user->getPassword())) {
+				throw invalid_argument("Wrong Password");
+			}
+
+			currentMenuItem.push(currentMenuItem.top()->getSubMenus()[0]);
+			return true;
+		}
+		catch (exception e) {
+			CLI::clearCli();
+			cout << e.what() << "\n\n";
+			cout << "Input 'x' to leave 2FA menu\n\n";
+			cout << "Enter Current Password to enable 2FA: ";
+		}
 	}
-	*/
+}
+
+QrCodeMenu::QrCodeMenu(string name) : MenuItem(name) {};
+
+bool QrCodeMenu::update() {
+	
 	CLI::clearCli();
 
 	if (user->getTotpSecret().empty())
@@ -917,6 +947,8 @@ bool Enable2FAMenu::update() {
 	}
 	char c = _getch();
 	if (exitCommand(string(1, c))) {
+		user->setTotpSecret("");
+		back();
 		back();
 		return true;
 	}
@@ -935,7 +967,7 @@ bool Confirm2FAMenu::update() {
 	while (true) {
 		string totp;
 
-		cin >> totp;
+		CLI::getInput(totp);
 
 		if (exitCommand(totp)) {
 			back();
@@ -943,15 +975,23 @@ bool Confirm2FAMenu::update() {
 		}
 
 		try{
-			if (stoi(totp) != TOTPLib::getOTP(user->getTotpSecret())) {
+
+			try {
+				if (stoi(totp) != TOTPLib::getOTP(user->getTotpSecret())) {
+					throw exception();
+				}
+			}
+			catch (exception e) {
 				throw invalid_argument("Enter a valid TOTP");
 			}
+			
 
 			cout << "\n\nTwo-Factor-Authentication Enabled Succesfully. Press any key to continue...";
 
 			_getch();
 
 			user->setIsHas2FA(true);
+			back();
 			back();
 			back();
 			return true;

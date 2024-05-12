@@ -195,6 +195,13 @@ public:
 	Enable2FAMenu(string name);
 	bool update() override;
 };
+
+class QrCodeMenu : public MenuItem
+{
+public:
+	QrCodeMenu(string name);
+	bool update() override;
+};
 class Confirm2FAMenu : public MenuItem
 {
 public:
