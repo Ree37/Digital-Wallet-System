@@ -38,6 +38,7 @@ MainMenu mmainMenu("Main Menu");
             SettingsMenu settings("Settings");
                 ChangePasswordMenu changePassword("Change Password");
                 Enable2FAMenu enable2FA("Enable Two-Factor Authentication");
+					Confirm2FAMenu confirm2FA("Confirm Two-Factor Authentication");
     RegisterUserMenu registerUser("Register User");
 		AdminProfile adminProfile("Admin Profile");
 			a_AllTransactions allTransactions("All Transactions");
@@ -94,6 +95,7 @@ void CLI::initMenu() {
 
 	settings.addSubMenu(&changePassword);
 	settings.addSubMenu(&enable2FA);
+	enable2FA.addSubMenu(&confirm2FA);
 }
 
 void CLI::navMenu() {

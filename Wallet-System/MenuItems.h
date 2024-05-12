@@ -195,6 +195,12 @@ public:
 	Enable2FAMenu(string name);
 	bool update() override;
 };
+class Confirm2FAMenu : public MenuItem
+{
+public:
+	Confirm2FAMenu(string name);
+	bool update() override;
+};
 
 class AdminProfile : public MenuItem
 {

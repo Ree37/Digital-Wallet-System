@@ -195,7 +195,6 @@ bool MenuItem::back() {
 bool MenuItem::exitCommand(string s) {
 	if (s.length() == 1 && tolower(s[0]) == 'x')
 	{
-		back();
 		return true;
 	}
 
@@ -225,14 +224,18 @@ bool LoginUserMenu::update() {
 		cout << "Enter Username: ";
 	    CLI::getInput(username);
 		
-		if (exitCommand(username))
+		if (exitCommand(username)) {
+			back();
 			return true;
+		}
 
 		cout << "Enter Password: ";
 		CLI::getPassword(password);
 
-		if (exitCommand(password))
+		if (exitCommand(password)) {
+			back();
 			return true;
+		}
 
 		User* data = (Container::admin->getUsername() == username ? Container::admin : Container::getUser(username));
 
@@ -264,8 +267,10 @@ bool LoginUserMenu::update() {
 			cout << "Enter 2FA Key: ";
 		    CLI::getInput(i_otp);
 
-			if (exitCommand(i_otp))
+			if (exitCommand(i_otp)) {
+				back();
 				return true;
+			}
 
 			unsigned int otp = TOTPLib::getOTP(secret);
 
@@ -308,8 +313,10 @@ bool RegisterUserMenu::update() {
 		cout << "Enter Username: ";
 		CLI::getInput(username);
 
-		if (exitCommand(username))
+		if (exitCommand(username)) {
+			back();
 			return true;
+		}
 
 		try {
 			Container::checkUniqueUser(username);
@@ -328,8 +335,10 @@ bool RegisterUserMenu::update() {
 			cout << "Enter Password: ";
 			CLI::getPassword(password);
 
-			if (exitCommand(password))
+			if (exitCommand(password)) {
+				back();
 				return true;
+			}
 
 			if (!Utils::checkPasswordPolicy(password))
 			{
@@ -339,8 +348,10 @@ bool RegisterUserMenu::update() {
 			cout << "Confirm Password: ";
 			CLI::getPassword(confirm);
 
-			if (exitCommand(confirm))
+			if (exitCommand(confirm)) {
+				back();
 				return true;
+			}
 
 			if (password != confirm)
 			{
@@ -425,14 +436,15 @@ bool TransferMoneyMenu::update() {
 		CLI::getInput(recepientName);
 
 		if (exitCommand(recepientName)) {
+			back();
 			return true;
 		}
 
 		cout << "Enter amount: ";
 		CLI::getInput(input);
 
-		if (exitCommand(input))
-		{
+		if (exitCommand(input)){
+			back();
 			return true;
 		}
 		
@@ -486,8 +498,8 @@ bool AddMoneyMenu::update() {
 		string input;
 		CLI::getInput(input);
 
-		if (exitCommand(input))
-		{
+		if (exitCommand(input)){
+			back();
 			return true;
 		}
 
@@ -528,8 +540,8 @@ bool AddMoneyMenu::update() {
 		cout << "Enter amount: ";
 		CLI::getInput(input);
 
-		if (exitCommand(input))
-		{
+		if (exitCommand(input)){
+			back();
 			return true;
 		}
 			
@@ -737,8 +749,8 @@ bool ChangePasswordMenu::update() {
 			cout << "Enter old password: ";
 			pwdVisible = CLI::getPassword(oldPassword);
 
-			if (exitCommand(oldPassword))
-			{
+			if (exitCommand(oldPassword)){
+				back();
 				return true;
 			}
 
@@ -764,8 +776,8 @@ bool ChangePasswordMenu::update() {
 		cout << "Enter new password: ";
 		CLI::getPassword(newPassword);
 
-		if (exitCommand(newPassword))
-		{
+		if (exitCommand(newPassword)){
+			back();
 			return true;
 		}
 
@@ -777,8 +789,10 @@ bool ChangePasswordMenu::update() {
 			cout << "Confirm password: ";
 			CLI::getPassword(confirm);
 
-			if (exitCommand(confirm))
+			if (exitCommand(confirm)) {
+				back();
 				return true;
+			}
 
 			if (newPassword != confirm)
 			{
@@ -831,8 +845,10 @@ bool Enable2FAMenu::update() {
 		cout << "Enter 2FA Key: ";
 		CLI::getInput(i_otp);
 
-		if (exitCommand(i_otp))
+		if (exitCommand(i_otp)) {
+			back();
 			return true;
+		}
 
 		unsigned int otp = TOTPLib::getOTP(secret);
 
@@ -856,33 +872,35 @@ bool Enable2FAMenu::update() {
 
 		return true;
 	}
-
+	/*
 	string password;
 	cout << "Input 'x' to leave 2FA menu\n";
 	cout << "Enter Current Password to enable 2FA: ";
 	CLI::getPassword(password);
 
-	if (exitCommand(password))
+	if (exitCommand(password)) {
+		back();
 		return true;
-
+	}
+	
 	if (!BCryptLib::validatePassword(password, user->getPassword())) {
 		return true;
 	}
-
+	*/
 	CLI::clearCli();
 
-	std::string secret = TOTPLib::generateSecret();
-	QrcodeLib* qrcode = new QrcodeLib(user->getUsername(), secret);
+	if (user->getTotpSecret().empty())
+		user->setTotpSecret(TOTPLib::generateSecret());
 
-	user->setIsHas2FA(true);
-	user->setTotpSecret(secret);
+	QrcodeLib* qrcode = new QrcodeLib(user->getUsername(), user->getTotpSecret());
 
 	qrcode->printQRCodeASCII();
-	cout << "Press any key to go back\n\n";
+	cout << "\nPress 'x' to go back or any other key to Enter your TOTP\n\n";
 
 	int width = Utils::getConsoleWidth();
 	int new_width;
 
+	
 	while (!_kbhit())
 	{
 		new_width = Utils::getConsoleWidth();
@@ -891,19 +909,64 @@ bool Enable2FAMenu::update() {
 		{
 			CLI::clearCli();
 			qrcode->printQRCodeASCII();
-			cout << "\nPress any key to go back\n\n";
+			cout << "\nPress 'x' to go back or any other key to Enter your TOTP\n\n";
 			width = new_width;
 		}
 
 		Sleep(300);
 	}
+	char c = _getch();
+	if (exitCommand(string(1, c))) {
+		back();
+		return true;
+	}
 
-	_getch();
-	back();
-
+	currentMenuItem.push(currentMenuItem.top()->getSubMenus()[0]);
 	return true;
+	
+
 }
 
+Confirm2FAMenu::Confirm2FAMenu(string name) : MenuItem(name) {};
+
+bool Confirm2FAMenu::update() {
+	CLI::clearCli();
+	cout << "\nEnter 'x' to go back or your TOTP to confirm Two-Factor-Authentication\n";
+	while (true) {
+		string totp;
+
+		cin >> totp;
+
+		if (exitCommand(totp)) {
+			back();
+			return true;
+		}
+
+		try{
+			if (stoi(totp) != TOTPLib::getOTP(user->getTotpSecret())) {
+				throw invalid_argument("Enter a valid TOTP");
+			}
+
+			cout << "\n\nTwo-Factor-Authentication Enabled Succesfully. Press any key to continue...";
+
+			_getch();
+
+			user->setIsHas2FA(true);
+			back();
+			back();
+			return true;
+
+		}
+		catch (exception e)
+		{
+			CLI::clearCli();
+			cout << e.what() << '\n';
+			cout << "\nEnter 'x' to go back or your TOTP to confirm Two-Factor-Authentication\n";
+
+		}
+
+	}
+}
 
 
 AdminProfile::AdminProfile(string name) : MenuItem(name) {};
@@ -974,8 +1037,8 @@ bool a_SetBalance::update() {
 		cout << "Enter Amount to Set User's balance to:\n";
 		string input;
 		CLI::getInput(input);
-		if (exitCommand(input))
-		{
+		if (exitCommand(input)){
+			back();
 			return true;
 		}
 		float balance;
