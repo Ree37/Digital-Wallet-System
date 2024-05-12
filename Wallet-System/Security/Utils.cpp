@@ -45,13 +45,13 @@ int Utils::getConsoleWidth()
     return csbi.srWindow.Right - csbi.srWindow.Left + 1;
 }
 
-void generateIV(unsigned char* iv, size_t ivSize) {
+void Utils::generateIV(unsigned char* iv) {
     std::random_device rd;
 
     std::mt19937_64 gen(rd());
     std::uniform_int_distribution<unsigned int> dis(0, 255); // Unsigned char range
 
-    for (size_t i = 0; i < ivSize; ++i) {
+    for (size_t i = 0; i < IV_SIZE; ++i) {
         iv[i] = dis(gen);
     }
 }
@@ -61,7 +61,7 @@ void Utils::encryptFiles(string inputFile, const stringstream& data)
     //ifstream inFile(inputFile, ios::binary);
     ofstream fileOut(inputFile + ".enc", ios::binary);
     string strContent = data.str();
-    //inFile.close();
+
     unsigned int strSize = strContent.size();
     int paddingSize = 16 - (strSize % 16); // Calculate padding size
     if (paddingSize != 16) {
@@ -72,7 +72,7 @@ void Utils::encryptFiles(string inputFile, const stringstream& data)
     
     unsigned char iv[IV_SIZE];
 
-    generateIV(iv, IV_SIZE);
+    generateIV(iv);
 
     AES aes(AESKeyLength::AES_256);
     unsigned char* EncryptedData = aes.EncryptCBC((unsigned char*)strContent.c_str(), strSize, key, iv);
