@@ -251,7 +251,7 @@ bool LoginUserMenu::update() {
 		
 			
 		}
-		catch (exception e) {
+		catch (const exception& e) {
 			CLI::clearCli();
 			cout << "Input 'x' to leave login menu. Press space to toggle password visibility\n\n";
 			cout << e.what() << "\n\n";
@@ -322,7 +322,7 @@ bool RegisterUserMenu::update() {
 			Container::checkUniqueUser(username);
 			break;
 		}
-		catch(exception e){
+		catch(const exception& e){
 			CLI::clearCli();
 			cout << "Input 'x' to leave register menu. Press space to toggle password visibility\n\n";
 			cout << e.what() << '\n';
@@ -378,7 +378,7 @@ bool RegisterUserMenu::update() {
 
 			break;
 		}
-		catch (exception e) {
+		catch (const exception& e) {
 			CLI::clearCli();
 			cout << "Input 'x' to leave register menu. Press space to toggle password visibility\n\n";
 
@@ -454,7 +454,7 @@ bool TransferMoneyMenu::update() {
 			try {
 				amount = stof(input);
 			}
-			catch (exception e)
+			catch (const exception& e)
 			{
 				throw invalid_argument("Please enter a number");
 			}
@@ -469,7 +469,7 @@ bool TransferMoneyMenu::update() {
 			back();
 			break;
 		}
-		catch (exception e)
+		catch (const exception& e)
 		{
 			CLI::clearCli();
 			cout << "Input 'x' to leave menu\n\n";
@@ -509,7 +509,7 @@ bool AddMoneyMenu::update() {
 			try {
 				cc = std::stoll(input);
 			}
-			catch (exception e)
+			catch (const exception& e)
 			{
 				throw invalid_argument("Please enter a number");
 			}
@@ -522,7 +522,7 @@ bool AddMoneyMenu::update() {
 			}
 			break;
 		}
-		catch (exception e) {
+		catch (const exception& e) {
 			CLI::clearCli();
 			cout << "Input 'x' to leave menu\n\n";
 			cout << e.what() << "\n\n";
@@ -549,13 +549,13 @@ bool AddMoneyMenu::update() {
 			try {
 				amount = stof(input);
 			}
-			catch (exception e)
+			catch (const exception& e)
 			{
 				throw invalid_argument("Please Enter a number");
 			}
 			user->addMoney(amount);
 		}
-		catch (exception e)
+		catch (const exception& e)
 		{
 			CLI::clearCli();
 			cout << "Input 'x' to leave menu\n\n";
@@ -631,7 +631,7 @@ bool AcceptRequestMenu::update() {
 		return true;
 
 	}
-	catch (exception e){
+	catch (const exception& e){
 		cout << "Transaction failed: " << e.what() << "\n";
 		cout << "Press any key to continue..\n";
 		_getch();
@@ -761,7 +761,7 @@ bool ChangePasswordMenu::update() {
 
 				break;
 			}
-			catch (exception e) {
+			catch (const exception& e) {
 				CLI::clearCli();
 				cout << "Input 'x' to leave menu. Press space to toggle password visibility\n\n";
 				cout << e.what() << "\n\n";
@@ -816,12 +816,13 @@ bool ChangePasswordMenu::update() {
 			back();
 			break;
 		}
-		catch (exception e)
+		catch (const exception& e)
 		{
 			CLI::clearCli();
 			cout << "Input 'x' to leave menu. Press space to toggle password visibility\n\n";
 			cout << e.what() << "\n\n";
-			cout << "Enter old password: " << (pwdVisible ? oldPassword : std::string(oldPassword.size(), '*')) << '\n';
+			if(!admin)
+				cout << "Enter old password: " << (pwdVisible ? oldPassword : std::string(oldPassword.size(), '*')) << '\n';
 
 		}
 	}
@@ -874,7 +875,7 @@ bool Enable2FAMenu::update() {
 
 				return true;
 			}
-			catch(exception e){
+			catch(const exception& e){
 				CLI::clearCli(); 
 				cout << e.what() << "\n\n";
 				cout << "Input 'x' to leave menu\n\n";
@@ -904,7 +905,7 @@ bool Enable2FAMenu::update() {
 			currentMenuItem.push(currentMenuItem.top()->getSubMenus()[0]);
 			return true;
 		}
-		catch (exception e) {
+		catch (const exception& e) {
 			CLI::clearCli();
 			cout << e.what() << "\n\n";
 			cout << "Input 'x' to leave 2FA menu\n\n";
@@ -981,7 +982,7 @@ bool Confirm2FAMenu::update() {
 					throw exception();
 				}
 			}
-			catch (exception e) {
+			catch (const exception& e) {
 				throw invalid_argument("Enter a valid TOTP");
 			}
 			
@@ -997,7 +998,7 @@ bool Confirm2FAMenu::update() {
 			return true;
 
 		}
-		catch (exception e)
+		catch (const exception& e)
 		{
 			CLI::clearCli();
 			cout << e.what() << '\n';
@@ -1086,7 +1087,7 @@ bool a_SetBalance::update() {
 			try {
 				balance = stof(input);
 			}
-			catch (exception e)
+			catch (const exception& e)
 			{
 				throw invalid_argument("Please Enter a number.");
 			}
@@ -1096,7 +1097,7 @@ bool a_SetBalance::update() {
 			return true;
 
 		}
-		catch (exception e)
+		catch (const exception& e)
 		{
 			CLI::clearCli();
 			cout << e.what() << '\n';

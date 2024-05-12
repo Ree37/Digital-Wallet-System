@@ -206,7 +206,7 @@ void User::makeTransaction(string receiver, float amount) {
         t->sendAmount();
         Container::addTransaction(t);
     }
-    catch (exception e)
+    catch (const exception& e)
     {
         delete t;
         throw e;
@@ -228,7 +228,7 @@ void User::makeRequest(string requested, float amount) {
         t->setIsPending(1);
         Container::addTransaction(t);
     }
-    catch (exception e) {
+    catch (const exception& e) {
         delete t;
         throw e;
     }
