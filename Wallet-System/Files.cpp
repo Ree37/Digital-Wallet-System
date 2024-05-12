@@ -36,22 +36,20 @@ void Files::create() {
 
 
 void Files::writeUsersData(unordered_map<string, User *> &User) {
-  ofstream usersFile;
-  // Open the file in append mode
-  usersFile.open(userData);
+  stringstream usersData;
+  usersData << std::fixed << std::setprecision(2);
 
-  if (usersFile.is_open()) {
-    usersFile << "UserName"
+    usersData << "UserName"
               << ",";
-    usersFile << "HashedPassword"
+    usersData << "HashedPassword"
               << ",";
-    usersFile << "Balance"
+    usersData << "Balance"
               << ",";
-    usersFile << "isHas2FA"
+    usersData << "isHas2FA"
               << ",";
-    usersFile << "TOTP_Secret"
+    usersData << "TOTP_Secret"
               << ",";
-    usersFile << "isSuspended" << endl;
+    usersData << "isSuspended" << endl;
 
     // Input Sanitization: wrap in quotes to prevent comma insertion which
     // breaks csv
@@ -59,67 +57,67 @@ void Files::writeUsersData(unordered_map<string, User *> &User) {
 
     for (auto &user : User) {
       // Note: Order is important
-      usersFile << "\"" << user.second->getUsername() << "\",";
-      usersFile << "\"" << user.second->getPassword() << "\",";
-      usersFile << "\"" << user.second->getBalance() << "\",";
-      usersFile << "\"" << user.second->getIsHas2FA() << "\",";
-      usersFile << "\"" << user.second->getTotpSecret() << "\",";
-      usersFile << "\"" << user.second->getSuspendedFlag() << "\"" << endl;
+      usersData << "\"" << user.second->getUsername() << "\",";
+      usersData << "\"" << user.second->getPassword() << "\",";
+      usersData << "\"" << user.second->getBalance() << "\",";
+      usersData << "\"" << user.second->getIsHas2FA() << "\",";
+      usersData << "\"" << user.second->getTotpSecret() << "\",";
+      usersData << "\"" << user.second->getSuspendedFlag() << "\"" << endl;
       delete user.second;
     }
-  }
 
-  usersFile.close();
-  Utils::encryptFiles(userData);
+  Utils::encryptFiles(userData, usersData);
 }
 void Files::writeTransactionsData(vector<Transaction *> allTransactions) {
-  ofstream TransactionsFile;
-  // Open the file in append mode
-  TransactionsFile.open(transactionsData);
+   stringstream TransactionsData;
+   TransactionsData << std::fixed << std::setprecision(2);
 
-  if (TransactionsFile.is_open()) {
-    TransactionsFile << "Sender"
+    TransactionsData << "Sender"
                      << ",";
-    TransactionsFile << "Recipient"
+    TransactionsData << "Recipient"
                      << ",";
-    TransactionsFile << "Amount"
+    TransactionsData << "Amount"
                      << ",";
-    TransactionsFile << "IsPending"
+    TransactionsData << "IsPending"
                      << ",";
-    TransactionsFile << "Date" << endl;
+    TransactionsData << "Date" << endl;
     // Input Sanitization: wrap in quotes to prevent comma insertion which
     // breaks csv
     // TODO: Sanitize Excel formula syntax to prevent csv injection
 
     for (auto &T : allTransactions) {
       // Note: Order is important
-      TransactionsFile << "\"" << T->getSenderUserName() << "\",";
-      TransactionsFile << "\"" << T->getRecipientUserName() << "\",";
-      TransactionsFile << "\"" << T->getAmount() << "\",";
-      TransactionsFile << "\"" << T->getIsPending() << "\",";
-      TransactionsFile << "\"" << Utils::timePointToString(T->getDateTime()) << "\"" << endl;
+      TransactionsData << "\"" << T->getSenderUserName() << "\",";
+      TransactionsData << "\"" << T->getRecipientUserName() << "\",";
+      TransactionsData << "\"" << T->getAmount() << "\",";
+      TransactionsData << "\"" << T->getIsPending() << "\",";
+      TransactionsData << "\"" << Utils::timePointToString(T->getDateTime()) << "\"" << endl;
       delete T;
     }
-  }
 
-  TransactionsFile.close();
-  Utils::encryptFiles(userData);
+  Utils::encryptFiles(transactionsData, TransactionsData);
 }
 
 void Files::readUsersData() {
-  ifstream usersFile;
-  // std::stringstream stream = Utils::decryptFiles(userData);
-  usersFile.open(userData);
+  std::stringstream stream;
+  try
+  {
+      stream = Utils::decryptFiles(userData);
+  }
+  catch(exception e)
+  {
+      return;
+  }
 
   // Skip header
-  getLineFromData(usersFile);
+  getLineFromData(stream);
 
-  while (usersFile.peek() != EOF) {
+  while (stream.peek() != EOF) {
     // Note: Order is important
-    stringstream Line = getLineFromData(usersFile);
+    stringstream Line = getLineFromData(stream);
     string userName = getCellFromLine(Line);
     string storedPassword = getCellFromLine(Line);
-    float storedBalance = stof(getCellFromLine(Line));
+    double storedBalance = stod(getCellFromLine(Line));
     bool setIsHas2FA = stoi(getCellFromLine(Line));
     string TOTP_Secret = getCellFromLine(Line);
     bool isSuspended = stoi(getCellFromLine(Line));
@@ -133,22 +131,27 @@ void Files::readUsersData() {
 
     Container::Users.insert({userName, user});
   }
-
-  usersFile.close();
 }
 void Files::readTransactionsData() {
   ifstream TransactionsFile;
-  // std::stringstream stream = Utils::decryptFiles(userData);
-  TransactionsFile.open(transactionsData);
+  std::stringstream stream;
+  try
+  {
+      stream = Utils::decryptFiles(transactionsData);
+  }
+  catch (exception e)
+  {
+      return;
+  }
 
   // Skip header
-  getLineFromData(TransactionsFile);
-  while (TransactionsFile.peek() != EOF) {
+  getLineFromData(stream);
+  while (stream.peek() != EOF) {
     // Note: Order is important
-    stringstream Line = getLineFromData(TransactionsFile);
+    stringstream Line = getLineFromData(stream);
     string sender = getCellFromLine(Line);
     string recipient = getCellFromLine(Line);
-    float amount = stof(getCellFromLine(Line));
+    double amount = stod(getCellFromLine(Line));
     int isPending = stoi(getCellFromLine(Line));
     chrono::system_clock::time_point Date = Utils::stringToTimePoint(getCellFromLine(Line));
 
@@ -157,9 +160,8 @@ void Files::readTransactionsData() {
     t->setDateTime(Date);
     Container::addTransaction(t);
   }
-  TransactionsFile.close();
 }
-stringstream Files::getLineFromData(ifstream &data) {
+stringstream Files::getLineFromData(stringstream&data) {
   string records;
   getline(data, records);
   stringstream record(records);

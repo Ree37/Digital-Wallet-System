@@ -28,7 +28,7 @@ string User::getUsername() { return username; };
 
 string User::getPassword() { return password; };
 
-float User::getBalance() { return balancee; }
+double User::getBalance() { return balancee; }
 
 bool User::getSuspendedFlag() { return suspendedFlag; }
 
@@ -43,7 +43,7 @@ bool User::setUsername(string newUsername) {
 
 void User::setPassword(string newPassword) { password = newPassword; }
 
-void User::setBalance(float amount) { 
+void User::setBalance(double amount) { 
 
     amount = round(amount * 100) / 100;
     if (amount < 0)
@@ -73,7 +73,7 @@ bool User::isUniqueUsername()
     return (uniqueUsername == Container::Users.end());
 }
 
-void User::addMoney(float value) {
+void User::addMoney(double value) {
     value = round(value * 100) / 100;
     if (suspendedFlag) {
         throw invalid_argument("You are suspended!");
@@ -189,7 +189,7 @@ vector<Transaction*> User::getSentTransactions()
 }
 
 
-void User::makeTransaction(string receiver, float amount) {
+void User::makeTransaction(string receiver, double amount) {
     Transaction* t = new Transaction();
 
     try {
@@ -213,7 +213,7 @@ void User::makeTransaction(string receiver, float amount) {
     }
 
 }
-void User::makeRequest(string requested, float amount) {
+void User::makeRequest(string requested, double amount) {
     Transaction* t = new Transaction();
     try {
         t->setSenderUsername(requested);
@@ -244,7 +244,7 @@ Transaction::Transaction() {
 
 }
 
-Transaction::Transaction(string sender, string recipient, float amount) {
+Transaction::Transaction(string sender, string recipient, double amount) {
   this->sender = sender;
   this->recipient = recipient;
   setAmount(amount);
@@ -267,7 +267,7 @@ void Transaction::setRecipientUsername(string username) {
     this->recipient = username;
 }
 
-void Transaction::setAmount(float amount) {
+void Transaction::setAmount(double amount) {
 
     amount = round(amount * 100) / 100;
 
@@ -286,7 +286,7 @@ void Transaction::setIsPending(int pending) { this->isPending = pending; }
 void Transaction::setDateTime(chrono::system_clock::time_point date) { this->dateTime = date; }
 
 string Transaction::getRecipientUserName() { return recipient; }
-float Transaction::getAmount() { return amountt; }
+double Transaction::getAmount() { return amountt; }
 int Transaction::getIsPending() { return isPending; }
 chrono::system_clock::time_point Transaction::getDateTime() { return dateTime; }
 

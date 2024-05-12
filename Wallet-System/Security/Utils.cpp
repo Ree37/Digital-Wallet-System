@@ -56,34 +56,35 @@ void generateIV(unsigned char* iv, size_t ivSize) {
     }
 }
 
-void Utils::encryptFiles(string inputFile)
+void Utils::encryptFiles(string inputFile, const stringstream& data)
 {
-    ifstream inFile(inputFile, ios::binary);
+    //ifstream inFile(inputFile, ios::binary);
     ofstream fileOut(inputFile + ".enc", ios::binary);
-    string usersContent((istreambuf_iterator<char>(inFile)), (istreambuf_iterator<char>()));
-    inFile.close();
-    unsigned int usersContentLen = usersContent.size();
-    int paddingSize = 16 - (usersContentLen % 16); // Calculate padding size
+    string strContent = data.str();
+    //inFile.close();
+    unsigned int strSize = strContent.size();
+    int paddingSize = 16 - (strSize % 16); // Calculate padding size
     if (paddingSize != 16) {
-        usersContent.append(paddingSize, '\0'); // Pad with null bytes
+        strContent.append(paddingSize, '\0'); // Pad with null bytes
     }
 
-    usersContentLen = usersContent.size();
+    strSize = strContent.size();
     
     unsigned char iv[IV_SIZE];
 
     generateIV(iv, IV_SIZE);
 
     AES aes(AESKeyLength::AES_256);
-    unsigned char* usersEncryptedData = aes.EncryptCBC((unsigned char*)usersContent.c_str(), usersContentLen, key, iv);
+    unsigned char* EncryptedData = aes.EncryptCBC((unsigned char*)strContent.c_str(), strSize, key, iv);
     fileOut.write((char*)(iv), IV_SIZE);
-    fileOut.write((char*)usersEncryptedData, usersContentLen);
+    fileOut.write((char*)EncryptedData, strSize);
     fileOut.close();
-    delete[] usersEncryptedData;
+    delete[] EncryptedData;
 }
 
 std::stringstream Utils::decryptFiles(std::string inputFile) {
-    std::ifstream inFile(inputFile + ".enc", std::ios::binary);
+    std::ifstream inFile;
+    inFile.open(inputFile + ".enc", std::ios::binary);
     if (!inFile.is_open()) {
         throw exception("Error: Unable to open file.");
     }
@@ -93,6 +94,11 @@ std::stringstream Utils::decryptFiles(std::string inputFile) {
 
     string encryptedContent(std::istreambuf_iterator<char>(inFile), {});
     inFile.close();
+
+    if(encryptedContent == "")
+    {
+        return std::stringstream("");
+    }
 
     AES aes(AESKeyLength::AES_256);
     unsigned char* decryptedData = aes.DecryptCBC((unsigned char*)encryptedContent.c_str(), encryptedContent.size(), key, iv);

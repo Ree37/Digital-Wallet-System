@@ -414,7 +414,7 @@ TransferMoneyMenu::TransferMoneyMenu(string name) : MenuItem(name) {};
 
 bool TransferMoneyMenu::update() {
 	string input;
-	float amount;
+	double amount;
 	string state;
 	if (isSend)
 	{
@@ -452,7 +452,7 @@ bool TransferMoneyMenu::update() {
 		try {
 
 			try {
-				amount = stof(input);
+				amount = stod(input);
 			}
 			catch (const exception& e)
 			{
@@ -532,7 +532,7 @@ bool AddMoneyMenu::update() {
 	
 	
 	string input;
-	float amount;
+	double amount;
 	CLI::clearCli();
 	cout << "Input 'x' to leave menu\n\n";
 
@@ -547,7 +547,7 @@ bool AddMoneyMenu::update() {
 			
 		try {
 			try {
-				amount = stof(input);
+				amount = stod(input);
 			}
 			catch (const exception& e)
 			{
@@ -1082,10 +1082,10 @@ bool a_SetBalance::update() {
 			back();
 			return true;
 		}
-		float balance;
+		double balance;
 		try {
 			try {
-				balance = stof(input);
+				balance = stod(input);
 			}
 			catch (const exception& e)
 			{

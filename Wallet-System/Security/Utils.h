@@ -10,7 +10,7 @@ class Utils
 public:
 	static bool checkPasswordPolicy(string password);
 	static int getConsoleWidth();
-	static void encryptFiles(string inputFile);
+	static void encryptFiles(string inputFile, const stringstream& data);
 	static std::stringstream decryptFiles(string inputFile);
 	static int checkCreditCard(long long cc);
 	static string timePointToString(const std::chrono::system_clock::time_point& timePoint);

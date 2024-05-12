@@ -22,7 +22,7 @@ public:
 
 		void setSuspendUsers(string suspendedUserName);
 		void deleteUser(string deleted_User);
-		void adjustUserBalance(string adjustedUserName, float value);
+		void adjustUserBalance(string adjustedUserName, double value);
 		void editUser(string name, string newPwd);
 		unordered_map<string, vector<Transaction*>>::iterator it;
 };

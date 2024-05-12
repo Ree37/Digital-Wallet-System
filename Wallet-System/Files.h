@@ -16,7 +16,7 @@ public:
     static void readTransactionsData();
 
 private:
-	static stringstream getLineFromData(ifstream& data);
+	static stringstream getLineFromData(stringstream& data);
 	static string getCellFromLine(stringstream& record);
     
 };

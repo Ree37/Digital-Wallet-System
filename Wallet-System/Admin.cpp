@@ -15,7 +15,7 @@ void Admin::setSuspendUsers(string suspendedUserName) {
 		!Container::Users.at(suspendedUserName)->getSuspendedFlag());
 }
 
-void Admin::adjustUserBalance(string adjustedUserName, float amount) {
+void Admin::adjustUserBalance(string adjustedUserName, double amount) {
 	Container::Users.at(adjustedUserName)->setBalance(amount);
 }
 
