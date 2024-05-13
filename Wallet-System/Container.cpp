@@ -19,10 +19,16 @@ User* Container::getUser(string userName) {
 	}
 }
 
-void Container::checkUniqueUser(string username) {
+void Container::checkValidUser(string username) {
 
 	if (Users.count(username) || username == admin->getUsername()) {
 		throw invalid_argument("Username already taken!");
+	}
+
+	for (char c : username) {
+		if (c == ',' || c== '\"' || c == '\'')
+			throw invalid_argument("Username Invalid (\" \' ,) aren't allowed!");
+
 	}
 }
 

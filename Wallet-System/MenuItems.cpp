@@ -319,7 +319,7 @@ bool RegisterUserMenu::update() {
 		}
 
 		try {
-			Container::checkUniqueUser(username);
+			Container::checkValidUser(username);
 			break;
 		}
 		catch(const exception& e){
