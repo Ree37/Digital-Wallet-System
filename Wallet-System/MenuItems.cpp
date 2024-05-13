@@ -76,7 +76,7 @@ bool MenuItem::update() {
 
 	if (choice == 'x') {
 		if (dynamic_cast<AdminProfile*>(currentMenuItem.top())) {
-			currentMenuItem.top()->getSubMenus()[2]->setName("Register User");
+			currentMenuItem.top()->getSubMenus()[3]->setName("Register User");
 		}
 		return back();;
 	}
@@ -87,7 +87,7 @@ bool MenuItem::update() {
 }
 
 template <typename T>
-int MenuItem::updateList(vector<T*>& v, bool viewOnly) {
+int MenuItem::updateList(vector<T*>& v, bool viewOnly, bool sorted) {
 
 
 	int choice;
@@ -99,11 +99,11 @@ int MenuItem::updateList(vector<T*>& v, bool viewOnly) {
 
 		CLI::clearCli();
 
-		if(!viewOnly)
+		if(!viewOnly && sorted)
 			cout << "Enter 'a' for ascending or 'd' for descending\n\n";
 
 		if (!isValid) {
-			cout << CLI::invalidMessage(size, true) << "\n\n";
+			cout << CLI::invalidMessage(size, sorted) << "\n\n";
 		}
 		cout << "Current Menu: " << currentMenuItem.top()->name << "\n\n";
 		if (!v.empty())
@@ -1023,7 +1023,7 @@ bool Confirm2FAMenu::update() {
 AdminProfile::AdminProfile(string name) : MenuItem(name) {};
 
 void AdminProfile::customHeader() {
-	currentMenuItem.top()->getSubMenus()[2]->setName("Add User");
+	currentMenuItem.top()->getSubMenus()[3]->setName("Add User");
 	cout << "\nCurrent Admin: " << admin->getUsername() << "\n\n";
 }
 
@@ -1056,6 +1056,45 @@ bool a_AllUsers::update() {
 
 	}
 }
+
+
+a_SearchUser::a_SearchUser(string name) : MenuItem(name) {};
+
+bool a_SearchUser::update() {
+
+	CLI::clearCli();
+
+	cout << "\nEnter user name to search: ";
+
+	string username;
+	CLI::getInput(username);
+
+	if (exitCommand(username)) {
+		back();
+		return true;
+	}
+
+	vector<User*> v = admin->search(username);
+
+	while (true) {
+
+		int state = updateList(v, false, false);
+
+		if (state == 0)
+		{
+			back();
+			return true;
+		}
+
+		user = v[state - 1];
+		currentMenuItem.push(currentMenuItem.top()->getSubMenus()[0]);
+		return true;
+
+	}
+
+
+}
+
 a_ModifyUserProfile::a_ModifyUserProfile(string name) : MenuItem(name) {};
 
 void a_ModifyUserProfile::customHeader() {

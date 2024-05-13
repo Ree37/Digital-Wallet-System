@@ -48,6 +48,21 @@ vector<Transaction*>Admin::viewAllUsersTransactions() {
 	sort(all.begin(), all.end(), Transaction::oldestDate);
 	return all ;
 }
+
+std::string removeAdjacentDuplicates(const std::string& str) {
+	if (str.empty()) return str; // Return empty string if input is empty
+
+	std::string result;
+	result.push_back(str[0]); // Add the first character to the result
+	for (size_t i = 1; i < str.size(); ++i) {
+		// If the current character is different from the last character added to the result, add it
+		if (str[i] != result.back()) {
+			result.push_back(str[i]);
+		}
+	}
+	return result;
+}
+
 string Admin::removeSpecialCharsAndNumbers(string& str) {
 	string result;
 	for (char c : str) {
@@ -59,8 +74,10 @@ string Admin::removeSpecialCharsAndNumbers(string& str) {
 }
 string Admin::preprocessing(string name) {
 	transform(name.begin(), name.end(), name.begin(), [](unsigned char c) { return tolower(c); });
+	name = removeAdjacentDuplicates(name);
 	return removeSpecialCharsAndNumbers(name);
 }
+/*
 vector<User*> Admin::search(string name) {
 
 	string preprocessedName = preprocessing(name);
@@ -96,4 +113,56 @@ vector<User*> Admin::search(string name) {
 
 	return expected;
 }
-//TODO edit
+*/
+
+
+vector<User*> Admin::search(string name)
+{
+	string str1  = preprocessing(name);
+	vector<User*> v;
+
+	int m = str1.length();
+
+	for (auto u : Container::Users)
+	{
+		string str2 = preprocessing(u.second->getUsername());
+		int n = str2.length();
+
+		vector<vector<int> > dp(m + 1, vector<int>(n + 1, 0));
+
+		for (int i = 0; i <= m; i++) {
+			dp[i][0] = i;
+		}
+
+		for (int j = 0; j <= n; j++) {
+			dp[0][j] = j;
+		}
+
+		for (int i = 1; i <= m; i++) {
+			for (int j = 1; j <= n; j++) {
+				if (str1[i - 1] == str2[j - 1]) {
+					dp[i][j] = dp[i - 1][j - 1];
+				}
+				else {
+					dp[i][j] = 1
+						+ min(
+
+							// Insert
+							dp[i][j - 1],
+							min(
+
+								// Remove
+								dp[i - 1][j],
+
+								// Replace
+								dp[i - 1][j - 1]));
+				}
+			}
+		}
+
+		if (dp[m][n] <= 2) {
+			v.push_back(u.second);
+		}
+	}
+	return v;
+}

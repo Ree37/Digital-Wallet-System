@@ -22,7 +22,7 @@ public:
 	virtual bool back();
 
 	template <typename T>
-	int updateList(vector<T*> &v, bool viewOnly);
+	int updateList(vector<T*>& v, bool viewOnly, bool sorted = true);
 
 	virtual void customHeader();
 
@@ -227,6 +227,13 @@ class a_AllUsers : public MenuItem
 {
 public:
 	a_AllUsers(string name);
+	bool update() override;
+};
+
+class a_SearchUser : public MenuItem
+{
+public:
+	a_SearchUser(string name);
 	bool update() override;
 };
 
