@@ -646,17 +646,27 @@ DeclineRequestMenu::DeclineRequestMenu(string name) : MenuItem(name) {};
 
 bool DeclineRequestMenu::update() {
 	CLI::clearCli();
-	
-	transaction->declineTransaction();
 
-	cout << "Request declined..\n";
-	cout << "Press any key to continue..\n";
+	try {
+		transaction->declineTransaction();
+
+		cout << "Request declined..\n";
+		cout << "Press any key to continue..\n";
 
 
-	_getch();
-	back();
-	back();
-	return true;
+		_getch();
+		back();
+		back();
+		return true;
+
+	}
+	catch (const exception& e) {
+		cout << "Transaction failed: " << e.what() << "\n";
+		cout << "Press any key to continue..\n";
+		_getch();
+		back();
+		return true;
+	}
 
 
 }

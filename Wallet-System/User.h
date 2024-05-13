@@ -79,7 +79,7 @@ public:
 
   void checkSenderBalance();
   void checkRecepientBalance();
-  void checkUserExist(string username);
+  
   void sendAmount();
   friend std::ostream& operator<<(std::ostream& os, const Transaction& t);
 
