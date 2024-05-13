@@ -415,14 +415,7 @@ TransferMoneyMenu::TransferMoneyMenu(string name) : MenuItem(name) {};
 bool TransferMoneyMenu::update() {
 	string input;
 	double amount;
-	string state;
-	if (isSend)
-	{
-		state = "recepient";
-	}
-	else {
-		state = "requested";
-	}
+	
 
 	CLI::clearCli();
 	cout << "Input 'x' to leave menu\n\n";
@@ -431,7 +424,7 @@ bool TransferMoneyMenu::update() {
 
 	while (true) {
 
-		cout << "Enter " << state << " Username: ";
+		cout << "Enter " << (isSend ? "recipent" : "requested") << " Username: ";
 
 		CLI::getInput(recepientName);
 
@@ -466,6 +459,9 @@ bool TransferMoneyMenu::update() {
 			else {
 				user->makeRequest(recepientName, amount);
 			}
+			cout << "You succesfully " << (isSend ? "sent " : "requested ") << round(amount*100)/100 << " EGP " << (isSend ? "to " : "from ") << recepientName << "..\n\n";
+			cout << "Press any key to continue..\n";
+			_getch();
 			back();
 			break;
 		}

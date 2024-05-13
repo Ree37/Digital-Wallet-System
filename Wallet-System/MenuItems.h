@@ -237,14 +237,6 @@ public:
 	bool update() override;
 };
 
-class a_AddUser : public MenuItem
-{
-public:
-	a_AddUser(string name);
-	bool update() override;
-};
-
-
 class a_ModifyUserProfile : public MenuItem
 {
 public:
