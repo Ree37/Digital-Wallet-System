@@ -2,6 +2,7 @@
 #include <cassert>
 #include <sstream>
 #include <chrono>
+#include <conio.h>
 #include "Container.h"
 #include "Security/Utils.h"
 #include "User.h"
@@ -114,23 +115,29 @@ void Files::readUsersData() {
 
   while (stream.peek() != EOF) {
     // Note: Order is important
-    stringstream Line = getLineFromData(stream);
-    string userName = getCellFromLine(Line);
-    string storedPassword = getCellFromLine(Line);
-    double storedBalance = stod(getCellFromLine(Line));
-    bool setIsHas2FA = stoi(getCellFromLine(Line));
-    string TOTP_Secret = getCellFromLine(Line);
-    bool isSuspended = stoi(getCellFromLine(Line));
+      try {
+          stringstream Line = getLineFromData(stream);
+          string userName = getCellFromLine(Line);
+          string storedPassword = getCellFromLine(Line);
+          double storedBalance = stod(getCellFromLine(Line));
+          bool setIsHas2FA = stoi(getCellFromLine(Line));
+          string TOTP_Secret = getCellFromLine(Line);
+          bool isSuspended = stoi(getCellFromLine(Line));
 
-    User *user = new User(userName, storedPassword);
+          User* user = new User(userName, storedPassword);
 
-    user->setBalance(storedBalance);
-    user->setIsHas2FA(setIsHas2FA);
-    user->setTotpSecret(TOTP_Secret);
-    user->setSuspendedFlag(isSuspended);
+          user->setBalance(storedBalance);
+          user->setIsHas2FA(setIsHas2FA);
+          user->setTotpSecret(TOTP_Secret);
+          user->setSuspendedFlag(isSuspended);
 
-    Container::Users.insert({userName, user});
+          Container::Users.insert({ userName, user });
+      }
+      catch (const exception& e) {
+      }
   }
+
+  
 }
 void Files::readTransactionsData() {
   ifstream TransactionsFile;
@@ -178,7 +185,7 @@ string Files::getCellFromLine(stringstream &record) {
   if (start == string::npos || end == string::npos || start == end) {
     // Empty string if no non-whitespace characters found
     cell = "";
-    assert(false && ": Cell is not correctly formated");
+    throw invalid_argument("Cell is not correctly formated");
   } else {
     // TODO: Make sure cell is a string (i.e. "")
     cell = cell.substr(start + 1, end - start - 1);
