@@ -492,7 +492,7 @@ bool AddMoneyMenu::update() {
 	while (true) {
 		cout << "Enter Credit Card (16 numbers): ";
 		string input;
-		CLI::getInput(input);
+		CLI::getCreditCard(input);
 
 		if (exitCommand(input)){
 			back();

@@ -14,4 +14,5 @@ public:
     static int getChoice(bool overwrite = false, int size = 0, bool sorted = false);
     static void getInput(std::string& input);
     static bool getPassword(std::string& pwd);
+    static void getCreditCard(std::string& cc);
 };

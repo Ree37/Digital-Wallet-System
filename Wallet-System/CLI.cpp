@@ -224,3 +224,33 @@ bool CLI::getPassword(std::string& pwd) {
 
 	}
 }
+
+void CLI::getCreditCard(std::string& cc) {
+	cc.clear();
+	while (true) {
+		char ch = _getch();
+		
+	    if (ch == '\r') {
+			if (!cc.empty()) {
+				std::cout << std::endl;
+				return;
+			}
+		}
+		else if (ch == '\b') {
+			if (!cc.empty()) {
+				cc.size() % 4 == 1 && cc.size() != 1 ? std::cout << "\b \b\b" : std::cout << "\b \b";
+				cc.pop_back();
+			}
+		}
+		else if (ch == 0 || ch == '\xE0')
+			_getch();
+		else if (cc.size() == 16){
+		}
+		else if (ch >= '0' && ch <= '9' && std::isprint(ch) || cc.empty() && tolower(ch) == 'x') {
+			cc += ch;
+			cc.size() % 4 == 1 && cc.size() != 1 ? std::cout << ' ' << ch : std::cout << ch;
+		}
+
+	}
+
+}
