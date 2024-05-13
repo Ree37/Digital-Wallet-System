@@ -109,18 +109,7 @@ void CLI::navMenu() {
 
 
 void CLI::clearCli() {
-	try {
-#ifdef _WIN32
-		std::system("cls");
-#else
-		// Assume Unix-like system
-		std::cout << "\033[H\033[2J";
-		std::cout.flush();
-#endif
-	}
-	catch (const std::exception& e) {
-		std::cout << "An error occurred while clearing the CLI: " << e.what() << std::endl;
-	}
+	std::system("cls");
 }
 
 
