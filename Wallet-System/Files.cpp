@@ -154,17 +154,22 @@ void Files::readTransactionsData() {
   getLineFromData(stream);
   while (stream.peek() != EOF) {
     // Note: Order is important
-    stringstream Line = getLineFromData(stream);
-    string sender = getCellFromLine(Line);
-    string recipient = getCellFromLine(Line);
-    double amount = stod(getCellFromLine(Line));
-    int isPending = stoi(getCellFromLine(Line));
-    chrono::system_clock::time_point Date = Utils::stringToTimePoint(getCellFromLine(Line));
+      try {
+          stringstream Line = getLineFromData(stream);
+          string sender = getCellFromLine(Line);
+          string recipient = getCellFromLine(Line);
+          double amount = stod(getCellFromLine(Line));
+          int isPending = stoi(getCellFromLine(Line));
+          chrono::system_clock::time_point Date = Utils::stringToTimePoint(getCellFromLine(Line));
 
-    Transaction *t = new Transaction(sender, recipient, amount);
-    t->setIsPending(isPending);
-    t->setDateTime(Date);
-    Container::addTransaction(t);
+          Transaction* t = new Transaction(sender, recipient, amount);
+          t->setIsPending(isPending);
+          t->setDateTime(Date);
+          Container::addTransaction(t);
+      }
+      catch (const exception& e) {
+
+      }
   }
 }
 stringstream Files::getLineFromData(stringstream&data) {
