@@ -11,29 +11,6 @@ using namespace std;
 string transactionsData = "Transactions.csv";
 string userData = "UsersData.csv";
 
-void Files::create() {
-  // check if file already exists else create it
-  ofstream usersFile;
-  ofstream Transactions;
-
-  Transactions.open(transactionsData);
-  usersFile.open(userData);
-
-  if (usersFile.is_open()) {
-    usersFile << "UserName"
-              << ",";
-    usersFile << "Password"
-              << ",";
-    usersFile << "Balance"
-              << ",";
-    usersFile << "isHas2FA"
-              << ",";
-    usersFile << "TOTP_Secret"
-              << ",";
-    usersFile << "isSuspended" << endl;
-  }
-}
-
 
 void Files::writeUsersData(unordered_map<string, User *> &User) {
   stringstream usersData;

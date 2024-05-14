@@ -9,7 +9,6 @@
 
 class Files {
 public:
-	static void create();
 	static void writeUsersData(unordered_map<string, User*>& User);
     static void writeTransactionsData( vector<Transaction *> allTransactions);
 	static void readUsersData();
