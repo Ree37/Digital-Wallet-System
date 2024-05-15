@@ -7,7 +7,6 @@
 using namespace std;
 
 class Transaction;
-class Notification;
 
 class User {
 public:
