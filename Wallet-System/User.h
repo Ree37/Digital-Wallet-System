@@ -20,12 +20,12 @@ public:
 
   void setTotpSecret(string secret);
   void setIsHas2FA(bool flag);
-  bool setUsername(string newUsername);
+  void setUsername(string newUsername);
   void setPassword(string newPassword);
   void setBalance(double amount);
   void setSuspendedFlag(bool flag);
 
-  bool isUniqueUsername();
+  
   void addMoney(double value);
 
   vector<Transaction*> getAllTransactions();
@@ -46,7 +46,7 @@ protected:
 private:
   string totpSecret;
   bool isHas2FA = false;
-  double balancee;
+  double balance;
   bool suspendedFlag;
 };
 
