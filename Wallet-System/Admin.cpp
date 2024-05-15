@@ -77,43 +77,6 @@ string Admin::preprocessing(string name) {
 	name = removeAdjacentDuplicates(name);
 	return removeSpecialCharsAndNumbers(name);
 }
-/*
-vector<User*> Admin::search(string name) {
-
-	string preprocessedName = preprocessing(name);
-	int maxNumberOfDifference = 5;
-	vector<User*> expected;
-	unordered_map<char, int> countChars1;
-	for (char c : preprocessedName) {
-		countChars1[c]++;
-	}
-	unordered_map<string, User*>::iterator it2;
-	for(it2=Container::Users.begin();it2!= Container::Users.end();it2++){
-		string preprocessedName2 = preprocessing(it2->first);
-		unordered_map<char, int> countChars2;
-		for (char c : preprocessedName2) {
-			countChars2[c]++;
-		}
-
-		int numberOfDifference = 0;
-		for (auto it = countChars2.begin(); it != countChars2.end(); it++) {
-			if (countChars1.count(it->first)) {
-				numberOfDifference += abs(countChars1[it->first] - it->second);
-			}
-			else {
-				numberOfDifference += it->second;
-			}
-		}
-
-		numberOfDifference += abs(static_cast<int>(preprocessedName2.size() - preprocessedName.size())); // Add the size difference
-		if (numberOfDifference <= maxNumberOfDifference) {
-			expected.push_back(it2->second);
-		}
-	}
-
-	return expected;
-}
-*/
 
 
 vector<User*> Admin::search(string name)
