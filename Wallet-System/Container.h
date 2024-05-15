@@ -9,7 +9,6 @@
 class Admin;
 class Container {
 public:
-	//static Admin adminn;
 	static User* admin;
 	static unordered_map<string, User*> Users;
     static vector<Transaction*> allTransactions;
