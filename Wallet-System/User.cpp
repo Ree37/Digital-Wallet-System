@@ -17,8 +17,8 @@ User::User(string username, string password) {
   }
 
   this->suspendedFlag = false;
-  this->balance = 0.0;
-  setUsername(username);
+  this->balancee = 0.0;
+  this->username = username;
   this->password = password;
 }
 
@@ -28,13 +28,17 @@ string User::getUsername() { return username; };
 
 string User::getPassword() { return password; };
 
-double User::getBalance() { return balance; }
+double User::getBalance() { return balancee; }
 
 bool User::getSuspendedFlag() { return suspendedFlag; }
 
-void User::setUsername(string newUsername) {
-    Container::checkValidUser(newUsername);
-    this->username = newUsername;
+bool User::setUsername(string newUsername) {
+  if (Container::Users.count(newUsername)) {
+    return false;
+  }
+
+  username = newUsername;
+  return true;
 }
 
 void User::setPassword(string newPassword) { password = newPassword; }
@@ -50,7 +54,7 @@ void User::setBalance(double amount) {
         throw invalid_argument("Balance Can't be infinity or nan");
     }
 
-    this->balance = amount;
+    this->balancee = amount;
 }
 
 void User::setSuspendedFlag(bool flag) { suspendedFlag = flag; }
@@ -63,6 +67,12 @@ void User::setTotpSecret(string secret) { this->totpSecret = secret; }
 
 void User::setIsHas2FA(bool flag) { this->isHas2FA = flag; }
 
+bool User::isUniqueUsername()
+{
+    auto uniqueUsername = Container::Users.find(this->username);
+    return (uniqueUsername == Container::Users.end());
+}
+
 void User::addMoney(double value) {
     value = round(value * 100) / 100;
     if (suspendedFlag) {
@@ -72,12 +82,12 @@ void User::addMoney(double value) {
         throw invalid_argument("Enter valid amount!");
     }
 
-    if (value + balance > 100000)
+    if (value + balancee > 100000)
     {
         throw invalid_argument("Maximum Balance Reached : 100,000");
     }
   
-    setBalance(balance + value);
+    setBalance(balancee + value);
   
 }
 
@@ -219,11 +229,6 @@ void User::makeRequest(string requested, double amount) {
     }
 }
 
-bool User::compareByUsername(const User* a, const User* b) {
-    return a->username < b->username;
-}
-
-
 // Transaction functions
 Transaction::Transaction() {
     this->sender = "";
@@ -351,3 +356,6 @@ bool Transaction::recentDate(Transaction* t1, Transaction* t2) {
 }
 
 
+ bool User::compareByUsername(const User* a, const User* b) {
+    return a->username < b->username;
+}
